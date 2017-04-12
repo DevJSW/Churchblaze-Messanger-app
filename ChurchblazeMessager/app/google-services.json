@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "225746451895",
+    "firebase_url": "https://churchblaze-messanger.firebaseio.com",
+    "project_id": "churchblaze-messanger",
+    "storage_bucket": "churchblaze-messanger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225746451895:android:c85b684568ee59a9",
+        "android_client_info": {
+          "package_name": "com.churchblaze.churchblazemessager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225746451895-f9lt642i7r0ser08mdp1rd004csr2s4g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBO6nbcUKZc8Y5FKyxLpqiF8Mg-0GktDSU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
