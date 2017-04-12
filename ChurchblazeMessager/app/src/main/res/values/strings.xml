@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">"Churchblaze Messager "</string>
-
+    Enter your information and take a photo which will be visible on your profile.
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
+    <string name="enter_image_profie">Enter your information and take a photo which will be visible on your profile.</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
     <string name="change_email">Change Email</string>

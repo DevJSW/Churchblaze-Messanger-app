@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // change google btn color
-               // mGoogleBtn.setImageResource(R.drawable.google_btn_img_on);
+                mGoogleBtn.setImageResource(R.drawable.google_btn_img_on);
                 signIn();
                 mGoogleBtn.setImageResource(R.drawable.google_btn_img);
             }
@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
 
