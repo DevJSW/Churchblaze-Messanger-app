@@ -30,5 +30,25 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to send you password reset instructions.</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">Welcome to Churchblaze messenger!</string>
+    <string name="slide_1_desc">The easiest way to connect, share &amp; chat!</string>
+
+    <string name="slide_2_title">Join your Church members</string>
+    <string name="slide_2_desc">Select your church &amp; and begin connecting ASAP!</string>
+
+    <string name="slide_3_title">Chat directly with fellow members</string>
+    <string name="slide_3_desc">Start private chat with a church member!</string>
+
+    <string name="slide_4_title">Group Chat</string>
+    <string name="slide_4_desc">Start group chats with fellow church members!</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+
+
 
 </resources>

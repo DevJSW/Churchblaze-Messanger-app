@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.churchblaze.churchblazemessager">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -32,7 +34,10 @@
             android:label="Signup" />
         <activity
             android:name=".ResetPasswordActivity"
-            android:label="Reset"/>
+            android:label="Reset" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
