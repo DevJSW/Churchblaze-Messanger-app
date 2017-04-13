@@ -3,7 +3,6 @@ package com.churchblaze.churchblazemessager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.roughike.bottombar.BottomBar;
@@ -33,15 +32,15 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItemId == R.id.bottomBarItemTwo) {
                     // The user reselected item number one, scroll your content to top.
 
-                    ProfileFragment profileFragment = new ProfileFragment();
-                    FragmentManager manager = getSupportFragmentManager();
-                    manager.beginTransaction().replace(R.id.relativelayout_for_fragments, profileFragment).commit();
+                    //ProfileFragment profileFragment = new ProfileFragment();
+                   // FragmentManager manager = getSupportFragmentManager();
+                   // manager.beginTransaction().replace(R.id.relativelayout_for_fragments, profileFragment).commit();
                 }
 
                 if (menuItemId == R.id.bottomBarItemThree) {
                     // The user reselected item number one, scroll your content to top.
 
-                    startActivity(new Intent(MainActivity.this, ChatsActivity.class));
+                    startActivity(new Intent(MainActivity.this, CameraActivity.class));
                 }
 
                 if (menuItemId == R.id.bottomBarItemFour) {
@@ -62,9 +61,15 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItemId == R.id.bottomBarItemTwo) {
                     // The user reselected item number one, scroll your content to top.
 
-                    ProfileFragment profileFragment = new ProfileFragment();
-                    FragmentManager manager = getSupportFragmentManager();
-                    manager.beginTransaction().replace(R.id.relativelayout_for_fragments, profileFragment).commit();
+                  //  ProfileFragment profileFragment = new ProfileFragment();
+                   // FragmentManager manager = getSupportFragmentManager();
+                   // manager.beginTransaction().replace(R.id.relativelayout_for_fragments, profileFragment).commit();
+                }
+
+                if (menuItemId == R.id.bottomBarItemThree) {
+
+                    startActivity(new Intent(MainActivity.this, CameraActivity.class));
+
                 }
             }
 

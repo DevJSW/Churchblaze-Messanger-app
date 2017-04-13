@@ -6,27 +6,27 @@
     <item
         android:id="@+id/bottomBarItemOne"
         android:title="Home"
-        android:icon="@drawable/ic_home_white_2"
+        android:icon="@drawable/ic_home_bb"
         app:showAsAction="always"/>
     <item
         android:id="@+id/bottomBarItemTwo"
-        android:title="Profile"
-        android:icon="@drawable/ic_person_white"
+        android:title="Chats"
+        android:icon="@drawable/ic_chat_bb"
         app:showAsAction="always" />
     <item
         android:id="@+id/bottomBarItemThree"
-        android:title="Chats"
-        android:icon="@drawable/ic_forum_white_1"
+        android:title="Camera"
+        android:icon="@drawable/ic_camera_bb"
         app:showAsAction="always" />
     <item
         android:id="@+id/bottomBarItemFour"
-        android:title="Group chat"
-        android:icon="@drawable/ic_group_add_white_2"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile_bb"
         app:showAsAction="always" />
     <item
         android:id="@+id/bottomBarItemFive"
         android:title="Settings"
-        android:icon="@drawable/ic_settings_white_2"
+        android:icon="@drawable/ic_settings_bb"
         app:showAsAction="always" />
    
 </menu>

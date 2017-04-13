@@ -3,6 +3,11 @@
     package="com.churchblaze.churchblazemessager">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -38,7 +43,13 @@
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChatsActivity"></activity>
+        <activity
+            android:name=".ChatsActivity"
+            android:label="Chats"/>
+        <activity
+            android:name=".CameraActivity"
+            android:theme="@style/AppTheme.ActionBar.Transparent"
+            android:label="Camera"/>
     </application>
 
 </manifest>
