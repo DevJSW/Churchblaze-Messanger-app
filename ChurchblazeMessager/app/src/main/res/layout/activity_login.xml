@@ -17,7 +17,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:id="@+id/topImg"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="35dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/icon"
             android:layout_marginBottom="20dp"
@@ -37,8 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:weightSum="3"
-            >
+            android:weightSum="3">
 
             <ImageView android:id="@+id/googleBtn"
                 android:layout_width="60dp"
@@ -122,6 +121,15 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <CheckBox
+                android:id="@+id/saveLoginCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_below="@+id/password"
+                android:text="Remember me?"
+                android:textColor="@color/colorPrimary" />
+
             <Button
                 android:id="@+id/btn_login"
                 style="?android:textAppearanceSmall"
@@ -133,27 +141,44 @@
                 android:textColor="#fff"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btn_reset_password"
-                android:layout_width="fill_parent"
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
-                android:background="@null"
-                android:text="@string/btn_forgot_password"
-                android:textAllCaps="false"
-                android:textColor="@color/colorAccent" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-            <!-- Link to Login Screen -->
+                <!-- Link to Login Screen -->
 
-            <Button
-                android:id="@+id/btn_signup"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:text="Create Account"
-                android:textAllCaps="false"
-                android:textColor="#121111"
-                android:textSize="15dp" />
+                <Button
+                    android:id="@+id/btn_signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:text="Dont have an account?"
+                    android:textAllCaps="false"
+                    android:textColor="#121111"
+                    android:textSize="14dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="left"
+                    android:src="@drawable/fb_btn_img" />
+
+                <Button
+                    android:id="@+id/btn_reset_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:text="@string/btn_forgot_password"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorAccent"
+                    android:layout_weight="1"
+                    android:layout_gravity="right" />
+
+
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

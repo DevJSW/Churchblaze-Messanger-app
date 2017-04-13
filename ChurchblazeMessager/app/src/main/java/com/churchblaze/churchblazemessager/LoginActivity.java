@@ -1,6 +1,7 @@
 package com.churchblaze.churchblazemessager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -36,6 +38,10 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView mIcon;
     private static int RC_SIGN_IN = 1;
     private GoogleApiClient mGoogleApiClient;
+    private CheckBox saveLoginCheckBox;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+    private Boolean saveLogin;
     private static final String TAG = "LoginActivity";
 
 
@@ -67,6 +73,10 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+        saveLoginCheckBox = (CheckBox)findViewById(R.id.saveLoginCheckBox);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        saveLogin = loginPreferences.getBoolean("saveLogin", false);
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
@@ -88,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+                  startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
             }
         });
 
@@ -97,6 +107,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = inputEmail.getText().toString();
                 final String password = inputPassword.getText().toString();
+
+                // remember me functionality
+                if (saveLoginCheckBox.isChecked()) {
+                    loginPrefsEditor.putBoolean("saveLogin", true);
+                    loginPrefsEditor.putString("email", email);
+                    loginPrefsEditor.putString("password", password);
+                    loginPrefsEditor.apply();
+                } else {
+                    loginPrefsEditor.clear();
+                    loginPrefsEditor.apply();
+                }
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
