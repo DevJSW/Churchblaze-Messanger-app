@@ -118,16 +118,7 @@
 
         </LinearLayout>
     </ScrollView>
-    <Button
-        android:id="@+id/btn_login"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="#00ffffff"
-        android:layout_gravity="bottom"
-        android:textColor="#fff"
-        android:textStyle="bold" />
+
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content">
+
+    <item
+        android:id="@+id/bottomBarItemOne"
+        android:title="Home"
+        android:icon="@drawable/ic_home_white_2"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/bottomBarItemTwo"
+        android:title="Profile"
+        android:icon="@drawable/ic_person_white"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/bottomBarItemThree"
+        android:title="Chats"
+        android:icon="@drawable/ic_forum_white_1"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/bottomBarItemFour"
+        android:title="Group chat"
+        android:icon="@drawable/ic_group_add_white_2"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/bottomBarItemFive"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings_white_2"
+        app:showAsAction="always" />
+   
+</menu>

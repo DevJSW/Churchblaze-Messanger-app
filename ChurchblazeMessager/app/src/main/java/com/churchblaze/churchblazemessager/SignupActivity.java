@@ -65,6 +65,8 @@ public class SignupActivity extends AppCompatActivity {
 
         mprogress = new ProgressDialog(this);
 
+
+
         inputName = (EditText) findViewById(R.id.name);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
@@ -76,6 +78,8 @@ public class SignupActivity extends AppCompatActivity {
 
 
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -118,7 +122,7 @@ public class SignupActivity extends AppCompatActivity {
                     Date date = new Date();
                     final String stringDate = DateFormat.getDateInstance().format(date);
 
-                    final String user_id = auth.getCurrentUser().getUid();
+                    //final String user_id = auth.getCurrentUser().getUid();
 
                     if (TextUtils.isEmpty(name)) {
                         Toast.makeText(getApplicationContext(), "Enter name!", Toast.LENGTH_SHORT).show();
@@ -143,8 +147,6 @@ public class SignupActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Select profile image!", Toast.LENGTH_SHORT).show();
                     }
-
-
 
 
                     progressBar.setVisibility(View.VISIBLE);
@@ -177,10 +179,10 @@ public class SignupActivity extends AppCompatActivity {
 
                                                 final DatabaseReference newPost = mDatabaseUsers;
 
-                                                newPost.child(user_id).child("name").setValue(name);
-                                                newPost.child(user_id).child("image").setValue(downloadUrl.toString());
-                                                newPost.child(user_id).child("date").setValue(stringDate);
-                                                newPost.child(user_id).child("uid").setValue(user_id);
+                                                newPost.child(auth.getCurrentUser().getUid()).child("name").setValue(name);
+                                                newPost.child(auth.getCurrentUser().getUid()).child("image").setValue(downloadUrl.toString());
+                                                newPost.child(auth.getCurrentUser().getUid()).child("date").setValue(stringDate);
+                                                newPost.child(auth.getCurrentUser().getUid()).child("uid").setValue(auth.getCurrentUser().getUid());
 
                                                 Intent cardonClick = new Intent(SignupActivity.this, MainActivity.class);
                                                 cardonClick.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -194,8 +196,6 @@ public class SignupActivity extends AppCompatActivity {
                             });
 
                 }
-
-
         }
         return super.onOptionsItemSelected(item);
     }

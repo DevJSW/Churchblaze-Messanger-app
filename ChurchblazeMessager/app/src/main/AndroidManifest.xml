@@ -37,7 +37,8 @@
             android:label="Reset" />
         <activity
             android:name=".WelcomeActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ChatsActivity"></activity>
     </application>
 
 </manifest>

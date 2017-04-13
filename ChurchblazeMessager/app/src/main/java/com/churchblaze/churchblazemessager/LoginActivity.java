@@ -109,10 +109,10 @@ public class LoginActivity extends AppCompatActivity {
                     loginPrefsEditor.putBoolean("saveLogin", true);
                     loginPrefsEditor.putString("email", email);
                     loginPrefsEditor.putString("password", password);
-                    loginPrefsEditor.apply();
+                    loginPrefsEditor.commit();
                 } else {
                     loginPrefsEditor.clear();
-                    loginPrefsEditor.apply();
+                    loginPrefsEditor.commit();
                 }
 
                 if (TextUtils.isEmpty(email)) {
@@ -180,8 +180,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signIn() {
+
+        progressBar.setVisibility(View.VISIBLE);
+
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
