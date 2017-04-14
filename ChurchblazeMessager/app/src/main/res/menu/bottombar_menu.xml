@@ -20,8 +20,8 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/bottomBarItemFour"
-        android:title="Profile"
-        android:icon="@drawable/ic_profile_bb"
+        android:title="Members"
+        android:icon="@drawable/ic_members_bb"
         app:showAsAction="always" />
     <item
         android:id="@+id/bottomBarItemFive"

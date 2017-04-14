@@ -45,11 +45,17 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ChatsActivity"
-            android:label="Chats"/>
+            android:label="Chats" />
         <activity
             android:name=".CameraActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"
-            android:label="Camera"/>
+            android:label="Camera"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".MembersActivity"
+            android:label="Members" />
+        <activity
+            android:name=".ChatroomActivity"
+            android:label=""/>
     </application>
 
 </manifest>

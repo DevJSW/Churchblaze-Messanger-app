@@ -10,12 +10,14 @@ import com.roughike.bottombar.OnMenuTabClickListener;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private BottomBar mBottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         mBottomBar = BottomBar.attach(this, savedInstanceState);
         mBottomBar.setItems(R.menu.bottombar_menu);
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (menuItemId == R.id.bottomBarItemTwo) {
                     // The user reselected item number one, scroll your content to top.
+
+                    startActivity(new Intent(MainActivity.this, ChatsActivity.class));
 
                     //ProfileFragment profileFragment = new ProfileFragment();
                    // FragmentManager manager = getSupportFragmentManager();
@@ -61,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItemId == R.id.bottomBarItemTwo) {
                     // The user reselected item number one, scroll your content to top.
 
+                    // open camera activity
+                    startActivity(new Intent(MainActivity.this, ChatsActivity.class));
+
                   //  ProfileFragment profileFragment = new ProfileFragment();
                    // FragmentManager manager = getSupportFragmentManager();
                    // manager.beginTransaction().replace(R.id.relativelayout_for_fragments, profileFragment).commit();
@@ -77,4 +84,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 }

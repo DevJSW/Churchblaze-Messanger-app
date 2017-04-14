@@ -51,6 +51,8 @@ public class CameraActivity extends AppCompatActivity {
 
         startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
 
+        startActivity(new Intent(CameraActivity.this, MainActivity.class));
+        finish();
 
     }
 
