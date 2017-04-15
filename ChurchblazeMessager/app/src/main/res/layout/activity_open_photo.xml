@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#201f1f"
+    tools:context="com.churchblaze.churchblazemessager.OpenPhotoActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="90dp"
+            android:layout_marginTop="90dp"
+            android:id="@+id/relative"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/inside_view"
+                android:layout_marginTop="2dp"
+                android:adjustViewBounds="true"
+                android:background="#00ffffff"
+                android:scaleType="fitXY" >
+
+                <ProgressBar
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="visible"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/post_photo"
+                android:layout_alignBottom="@id/inside_view"
+                android:layout_alignLeft="@id/inside_view"
+                android:layout_alignTop="@id/inside_view"
+                android:layout_alignRight="@id/inside_view"
+                android:scaleType="fitXY"
+                android:src="@drawable/placeholder_image"
+                android:adjustViewBounds="true"
+                android:background="#00ffffff" />
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

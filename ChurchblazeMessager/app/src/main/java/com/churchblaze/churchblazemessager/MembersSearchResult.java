@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -26,7 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MembersActivity extends AppCompatActivity {
+public class MembersSearchResult extends AppCompatActivity {
 
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -40,7 +39,7 @@ public class MembersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_members);
+        setContentView(R.layout.activity_members_search_result);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -52,26 +51,8 @@ public class MembersActivity extends AppCompatActivity {
             }
         });
 
-        searchInput = (EditText) findViewById(R.id.searchInput);
-        searchBtn = (ImageView) findViewById(R.id.searchBtn);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                String question = searchInput.getText().toString().trim();
-
-                Intent cardonClick = new Intent(MembersActivity.this, MembersSearchResult.class);
-                cardonClick.putExtra("heartraise_id", question );
-                startActivity(cardonClick);
-
-            }
-
-        });
-
-        String question = searchInput.getText().toString().trim();
-        //mQueryMembers = mDatabaseUsers.orderByChild("name").startAt(question);
-
+        mPostKey = getIntent().getExtras().getString("heartraise_id");
+        mQueryMembers = mDatabaseUsers.orderByChild("name").startAt(mPostKey);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -110,7 +91,7 @@ public class MembersActivity extends AppCompatActivity {
                 People.class,
                 R.layout.member_row,
                 LetterViewHolder.class,
-                mDatabaseUsers
+                mQueryMembers
 
 
         ) {
@@ -126,7 +107,7 @@ public class MembersActivity extends AppCompatActivity {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent cardonClick = new Intent(MembersActivity.this, ChatroomActivity.class);
+                        Intent cardonClick = new Intent(MembersSearchResult.this, ChatroomActivity.class);
                         cardonClick.putExtra("heartraise_id", post_key );
                         startActivity(cardonClick);
                     }
@@ -146,8 +127,6 @@ public class MembersActivity extends AppCompatActivity {
 
         View mView;
 
-        Button mChatBtn;
-
         ProgressBar mProgressBar;
 
         public LetterViewHolder(View itemView) {
@@ -155,7 +134,6 @@ public class MembersActivity extends AppCompatActivity {
 
             mView = itemView;
 
-            mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 
         }
@@ -203,3 +181,4 @@ public class MembersActivity extends AppCompatActivity {
     }
 
 }
+

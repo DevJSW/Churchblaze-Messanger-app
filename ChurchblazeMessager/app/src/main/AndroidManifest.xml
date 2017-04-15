@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="Messanger">
+            android:label="Chats">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,15 +47,15 @@
             android:name=".ChatsActivity"
             android:label="Chats" />
         <activity
-            android:name=".CameraActivity"
-            android:label="Camera"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
-        <activity
             android:name=".MembersActivity"
             android:label="Members" />
         <activity
             android:name=".ChatroomActivity"
-            android:label=""/>
+            android:label="" />
+        <activity
+            android:name=".OpenPhotoActivity"
+            android:label="" />
+        <activity android:name=".MembersSearchResult"></activity>
     </application>
 
 </manifest>

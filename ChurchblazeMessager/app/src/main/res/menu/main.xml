@@ -4,6 +4,6 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="settings"
+        android:title="Sign out"
         app:showAsAction="never" />
 </menu>

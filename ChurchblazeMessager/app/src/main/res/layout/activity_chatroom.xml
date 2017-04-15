@@ -5,4 +5,104 @@
     android:layout_height="match_parent"
     tools:context="com.churchblaze.churchblazemessager.ChatroomActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/EditField"
+        android:orientation="vertical">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/comment_list"
+                android:layout_marginBottom="2dp"
+                android:layout_above="@+id/EditField"
+                android:layout_alignParentTop="true">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:id="@+id/EditField"
+        android:layout_marginBottom="5dp">
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/commentField_"
+            android:layout_marginTop="6dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/sendBtn"
+            android:layout_toStartOf="@+id/sendBtn"
+            android:layout_marginLeft="3dp"
+            android:paddingLeft="5dp"
+            android:textSize="15dp">
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="Type a message..."
+                android:id="@+id/commentField"
+                android:layout_marginTop="6dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:drawableRight="@drawable/ic_camera_bb"
+                android:paddingRight="24dp"
+                android:background="@drawable/bg_send_bubble"
+                android:paddingLeft="5dp"
+                android:textSize="15dp" />
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:id="@+id/sendBtn"
+            android:adjustViewBounds="true"
+            android:background="#00ffffff"
+            android:scaleType="fitXY"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/ic_sender"
+            android:layout_marginRight="10dp" />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No comments."
+        android:textSize="15dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_margin="30dp"
+        android:id="@+id/noPostTxt"
+        android:textColor="@color/colorPrimary"/>
+
+
 </RelativeLayout>

@@ -3,21 +3,23 @@ package com.churchblaze.churchblazemessager;
 /**
  * Created by John on 31-Oct-16.
  */
-public class People {
+public class Chat {
 
-    private String name, image, date, status;
+    private String name, image, photo, date, message;
 
-    public People() {
+    public Chat() {
 
     }
 
-    public People(String name, String image, String date, String status) {
+    public Chat(String name, String photo, String image, String date, String message) {
         this.name = name;
-
         this.image = image;
+
+        this.photo = photo;
         this.date = date;
-        this.status = status;
+        this.message = message;
     }
+
 
     public String getName() {
         return name;
@@ -35,6 +37,13 @@ public class People {
         this.image = image;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public String getDate() {
         return date;
     }
@@ -43,11 +52,11 @@ public class People {
         this.date = date;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMessage() {
+        return message;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
