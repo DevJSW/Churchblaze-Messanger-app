@@ -55,7 +55,10 @@
         <activity
             android:name=".OpenPhotoActivity"
             android:label="" />
-        <activity android:name=".MembersSearchResult"></activity>
+        <activity android:name=".MembersSearchResult" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="Profile"/>
     </application>
 
 </manifest>
