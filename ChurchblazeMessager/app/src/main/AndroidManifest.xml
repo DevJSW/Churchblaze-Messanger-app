@@ -58,7 +58,10 @@
         <activity android:name=".MembersSearchResult" />
         <activity
             android:name=".ProfileActivity"
-            android:label="Profile"/>
+            android:label="Profile" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"/>
     </application>
 
 </manifest>

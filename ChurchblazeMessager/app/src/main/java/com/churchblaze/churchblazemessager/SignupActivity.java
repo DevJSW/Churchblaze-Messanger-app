@@ -32,7 +32,7 @@ import java.util.Date;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword, inputName;
+    private EditText inputEmail, inputPassword, inputName, inputStatus;
     private ImageView mUserImg;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private DatabaseReference mDatabaseUsers;
@@ -68,6 +68,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
         inputName = (EditText) findViewById(R.id.name);
+        inputStatus = (EditText) findViewById(R.id.status);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -116,6 +117,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (id == R.id.action_next) {
 
                     final String name = inputName.getText().toString().trim();
+                    final String status = inputStatus.getText().toString().trim();
                     String email = inputEmail.getText().toString().trim();
                     String password = inputPassword.getText().toString().trim();
 
@@ -129,6 +131,10 @@ public class SignupActivity extends AppCompatActivity {
 
                     }
 
+                    if (TextUtils.isEmpty(status)) {
+                        Toast.makeText(getApplicationContext(), "Enter your status", Toast.LENGTH_SHORT).show();
+
+                    }
 
                     if (TextUtils.isEmpty(email)) {
                         Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -180,6 +186,7 @@ public class SignupActivity extends AppCompatActivity {
                                                 final DatabaseReference newPost = mDatabaseUsers;
 
                                                 newPost.child(auth.getCurrentUser().getUid()).child("name").setValue(name);
+                                                newPost.child(auth.getCurrentUser().getUid()).child("status").setValue(status);
                                                 newPost.child(auth.getCurrentUser().getUid()).child("image").setValue(downloadUrl.toString());
                                                 newPost.child(auth.getCurrentUser().getUid()).child("date").setValue(stringDate);
                                                 newPost.child(auth.getCurrentUser().getUid()).child("uid").setValue(auth.getCurrentUser().getUid());

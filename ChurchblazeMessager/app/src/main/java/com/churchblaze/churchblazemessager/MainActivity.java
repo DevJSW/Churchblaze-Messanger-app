@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItemId == R.id.bottomBarItemThree) {
                     // The user reselected item number one, scroll your content to top.
 
-
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 }
 
             }
@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (menuItemId == R.id.bottomBarItemThree) {
+
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
 
                 }
 
@@ -155,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
                 final String post_key = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
-                viewHolder.setDate(model.getDate());
                 viewHolder.setStatus(model.getStatus());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
@@ -204,11 +205,6 @@ public class MainActivity extends AppCompatActivity {
             post_name.setText(name);
         }
 
-        public void setDate(String date) {
-
-            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
-            post_date.setText(date);
-        }
 
         public void setStatus(String status) {
 

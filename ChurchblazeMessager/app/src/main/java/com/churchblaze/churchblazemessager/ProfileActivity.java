@@ -1,9 +1,12 @@
 package com.churchblaze.churchblazemessager;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +40,29 @@ public class ProfileActivity extends AppCompatActivity {
 
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
         auth = FirebaseAuth.getInstance();
+
+        LinearLayout openSettings = (LinearLayout) findViewById(R.id.lin_settings);
+        openSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+            }
+        });
+
+        LinearLayout openShare = (LinearLayout) findViewById(R.id.lin_share);
+        openShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                String shareBody ="Download Churchblaze messenger on google play store today";
+                String shareSub = "Dear ";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT,shareBody);
+                myIntent.putExtra(Intent.EXTRA_TEXT,shareBody);
+                startActivity(Intent.createChooser(myIntent,"Share app"));
+            }
+        });
 
         mDatabaseUser.child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
