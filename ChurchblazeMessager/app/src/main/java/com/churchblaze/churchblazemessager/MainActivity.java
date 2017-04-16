@@ -2,6 +2,8 @@ package com.churchblaze.churchblazemessager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,11 +16,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 import com.squareup.picasso.Callback;
@@ -34,12 +40,14 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseUsers;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
+    private ProgressBar mProgressBar;
     private BottomBar mBottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -50,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
@@ -100,9 +108,6 @@ public class MainActivity extends AppCompatActivity {
                     // open search members activity
                     startActivity(new Intent(MainActivity.this, MembersActivity.class));
 
-                  //  ProfileFragment profileFragment = new ProfileFragment();
-                   // FragmentManager manager = getSupportFragmentManager();
-                   // manager.beginTransaction().replace(R.id.relativelayout_for_fragments, profileFragment).commit();
                 }
 
                 if (menuItemId == R.id.bottomBarItemThree) {
@@ -117,7 +122,69 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        checkForNetwork();
+        checkUserExists();
+
     }
+
+    // check for available network
+    private void checkForNetwork() {
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo ninfo = cm.getActiveNetworkInfo();
+
+        if (ninfo != null && ninfo.isConnected()) {
+
+
+        } else {
+
+            Toast.makeText(MainActivity.this, "You are not connected to Internet... Please Enable Internet!", Toast.LENGTH_LONG)
+                    .show();
+
+        }
+    }
+
+    // if user does not exist, take them to signup activity
+    private void checkUserExists() {
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        final String user_id = mAuth.getCurrentUser().getUid();
+
+        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                if (!dataSnapshot.hasChild(user_id)) {
+
+                    mProgressBar.setVisibility(View.GONE);
+
+                    Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+
+                }else {
+
+
+                        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    mProgressBar.setVisibility(View.GONE);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
 
     void refreshItems() {
         // Load items
