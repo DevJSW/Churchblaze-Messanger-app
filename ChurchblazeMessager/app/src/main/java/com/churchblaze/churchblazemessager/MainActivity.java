@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
     private ProgressBar mProgressBar;
+    private Query mQueryPostChats;
     private BottomBar mBottomBar;
 
     @Override
@@ -229,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+
             }
 
         };
@@ -244,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
         View mView;
 
+        ImageView mConnected;
         Button mChatBtn;
 
         ProgressBar mProgressBar;
@@ -253,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
             mView = itemView;
 
+            mConnected = (ImageView) mView.findViewById(R.id.post_connected);
             mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 

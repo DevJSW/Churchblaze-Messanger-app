@@ -151,6 +151,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                     name.setText(username);
                                     name2.setText(username2);
                                     hello.setVisibility(View.VISIBLE);
+
                                 } else {
                                     hello.setVisibility(View.GONE);
                                 }
@@ -416,7 +417,7 @@ public class ChatroomActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.chatroom_menu, menu);
         this.menu = menu;
         return true;
     }

@@ -27,6 +27,22 @@
                     app:civ_border_color="#fff"
                     android:src="@drawable/placeholder_image"/>
 
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:id="@+id/post_connected"
+                android:paddingTop="35dp"
+                android:paddingLeft="35dp"
+                android:paddingBottom="4dp"
+                android:paddingRight="4dp"
+                android:layout_alignBottom="@id/post_image"
+                android:layout_alignLeft="@id/post_image"
+                android:layout_alignTop="@id/post_image"
+                android:layout_alignRight="@id/post_image"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_connected"
+                android:adjustViewBounds="true" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -58,6 +74,7 @@
 
 
         </LinearLayout>
+
 
 
     </LinearLayout>
