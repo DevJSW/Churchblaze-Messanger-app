@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.churchblaze.churchblazemessager.ChatroomActivity">
 
     <LinearLayout
@@ -29,6 +30,7 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -89,20 +91,75 @@
             android:layout_marginRight="10dp" />
 
 
+
+
     </RelativeLayout>
 
-    <TextView
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No comments."
-        android:textSize="15dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_margin="30dp"
-        android:id="@+id/noPostTxt"
-        android:textColor="@color/colorPrimary"/>
+        android:id="@+id/hello"
+        android:gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="5dp"
+            android:id="@+id/post_image"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#fff"
+            android:src="@drawable/placeholder_image"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:id="@+id/post_name"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/post_image"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/post_image"
+            android:background="@drawable/shape_bg_incoming_bubble"
+            android:layout_below="@+id/post_name">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:id="@+id/helloUser"
+                android:text="Hey"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_name2"
+                android:layout_toRightOf="@+id/helloUser"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="name"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/post_name2"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:text=", lets chat"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

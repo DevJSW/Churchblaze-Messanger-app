@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -35,6 +36,8 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChatroomActivity extends AppCompatActivity {
 
     private String mPostKey = null;
@@ -45,6 +48,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabaseComment;
     private DatabaseReference mDatabaseUser;
+    private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
     private Query mQueryPostChats;
     private FirebaseUser mCurrentUser;
@@ -69,7 +73,8 @@ public class ChatroomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+        //mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+        final RelativeLayout hello = (RelativeLayout) findViewById(R.id.hello);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -91,6 +96,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+        mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Users");
         mCommentList = (RecyclerView) findViewById(R.id.comment_list);
         mCommentList.setHasFixedSize(true);
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
@@ -109,15 +115,10 @@ public class ChatroomActivity extends AppCompatActivity {
         });
 
 
-        mQueryPostChats.addValueEventListener(new ValueEventListener() {
+        mDatabasePostChats.child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null){
 
-                    mNoPostTxt.setVisibility(View.VISIBLE);
-                } else {
-                    mNoPostTxt.setVisibility(View.GONE);
-                }
             }
 
             @Override
@@ -126,15 +127,51 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
-        mQueryPostChats.addValueEventListener(new ValueEventListener() {
+        mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null){
+
+                final String userimg = (String) dataSnapshot.child("image").getValue();
+                final String username = (String) dataSnapshot.child("name").getValue();
+                final CircleImageView civ = (CircleImageView) findViewById(R.id.post_image);
+                final TextView name = (TextView) findViewById(R.id.post_name);
+
+                mDatabaseUser2.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String username2 = (String) dataSnapshot.child("name").getValue();
+                        final TextView name2 = (TextView) findViewById(R.id.post_name2);
+
+                        mQueryPostChats.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() == null){
+                                    Picasso.with(ChatroomActivity.this).load(userimg).into(civ);
+                                    name.setText(username);
+                                    name2.setText(username2);
+                                    hello.setVisibility(View.VISIBLE);
+                                } else {
+                                    hello.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
 
-                } else {
-                    mNoPostTxt.setVisibility(View.GONE);
-                }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
 
             @Override
@@ -142,7 +179,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
             }
         });
-
 
         mDatabaseComment.keepSynced(true);
         mDatabase.keepSynced(true);

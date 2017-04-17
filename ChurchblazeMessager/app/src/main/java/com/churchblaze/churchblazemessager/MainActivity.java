@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItemId == R.id.bottomBarItemOne) {
                     // The user selected item number one.
 
-
-
                 }
 
                 if (menuItemId == R.id.bottomBarItemTwo) {
@@ -165,15 +163,9 @@ public class MainActivity extends AppCompatActivity {
                     finish();
 
                 }else {
-
-
-                        Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
+                    
                     mProgressBar.setVisibility(View.GONE);
                 }
-
 
             }
 
