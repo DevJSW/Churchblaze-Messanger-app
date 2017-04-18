@@ -289,6 +289,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setDate(model.getDate());
+                viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 mDatabasePostChats.child(mPostKey).addValueEventListener(new ValueEventListener() {
@@ -389,6 +390,14 @@ public class ChatroomActivity extends AppCompatActivity {
 
             TextView post_message2 = (TextView) mView.findViewById(R.id.post_message2);
             post_message2.setText(message);
+
+        }
+
+        public void setName(String name) {
+
+            TextView post_name = (TextView) mView.findViewById(R.id.post_name);
+            post_name.setText(name);
+
 
         }
 

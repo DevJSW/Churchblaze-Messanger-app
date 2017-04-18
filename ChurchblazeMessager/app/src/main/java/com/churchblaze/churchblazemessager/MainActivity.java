@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItemId == R.id.bottomBarItemTwo) {
                     // The user reselected item number one, scroll your content to top.
 
-                    startActivity(new Intent(MainActivity.this, MembersActivity.class));
+                    startActivity(new Intent(MainActivity.this, ChatResultActivity.class));
 
                 }
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     // The user reselected item number one, scroll your content to top.
 
                     // open search members activity
-                    startActivity(new Intent(MainActivity.this, MembersActivity.class));
+                    startActivity(new Intent(MainActivity.this,  ChatResultActivity.class));
 
                 }
 

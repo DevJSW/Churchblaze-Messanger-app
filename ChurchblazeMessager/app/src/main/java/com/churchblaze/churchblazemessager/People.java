@@ -5,17 +5,18 @@ package com.churchblaze.churchblazemessager;
  */
 public class People {
 
-    private String name, image, date, status;
+    private String name, image, date, message, status;
 
     public People() {
 
     }
 
-    public People(String name, String image, String date, String status) {
+    public People(String name, String image, String date, String message, String status) {
         this.name = name;
 
         this.image = image;
         this.date = date;
+        this.message = message;
         this.status = status;
     }
 
@@ -41,6 +42,14 @@ public class People {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getStatus() {
