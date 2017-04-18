@@ -62,7 +62,13 @@
         <activity
             android:name=".SettingsActivity"
             android:label="Settings" />
-        <activity android:name=".SendPhotoActivity"></activity>
+        <activity
+            android:name=".SendPhotoActivity"
+            android:label="Send photo"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".ChatResultActivity"
+            android:label="Chat"/>
     </application>
 
 </manifest>

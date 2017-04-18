@@ -255,7 +255,6 @@ public class ChatroomActivity extends AppCompatActivity {
                         }
                     });
 
-
                 }
 
                 @Override
@@ -326,9 +325,7 @@ public class ChatroomActivity extends AppCompatActivity {
                         if (post_photo != null) {
 
                             viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-
                             viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
-                            viewHolder.mProgressBar.setVisibility(View.VISIBLE);
 
                         } else {
 
@@ -382,7 +379,6 @@ public class ChatroomActivity extends AppCompatActivity {
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
 
-            mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 
         }
 
@@ -483,7 +479,12 @@ public class ChatroomActivity extends AppCompatActivity {
                 this.finish();
                 return true;
             default:
+                if (id == R.id.action_settings) {
 
+                    Intent cardonClick = new Intent(ChatroomActivity.this, SendPhotoActivity.class);
+                    cardonClick.putExtra("heartraise_id", mPostKey );
+                    startActivity(cardonClick);
+                }
 
                 return super.onOptionsItemSelected(item);
         }
