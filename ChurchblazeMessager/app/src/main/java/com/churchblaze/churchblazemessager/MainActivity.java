@@ -38,9 +38,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    String post_key = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
+    private DatabaseReference mDatabaseChats;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
     private ProgressBar mProgressBar;
@@ -65,13 +66,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mDatabaseChats = FirebaseDatabase.getInstance().getReference().child("Chats");
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        //mQueryPostChats = mDatabaseChats.orderByChild("post_key").equalTo(post_key);
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(this));
         mMembersList.setHasFixedSize(true);
-
+        mDatabaseChats.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
 
         mBottomBar = BottomBar.attach(this, savedInstanceState);
@@ -231,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
             protected void populateViewHolder(final LetterViewHolder viewHolder, final People model, int position) {
 
                 final String post_key = getRef(position).getKey();
+                final String PostKey = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
                 viewHolder.setStatus(model.getStatus());
@@ -241,8 +245,28 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent cardonClick = new Intent(MainActivity.this, ChatroomActivity.class);
-                        cardonClick.putExtra("heartraise_id", post_key );
+                        cardonClick.putExtra("heartraise_id", PostKey );
                         startActivity(cardonClick);
+                    }
+                });
+
+                mQueryPostChats = mDatabaseChats.orderByChild("post_key").equalTo(post_key);
+                mQueryPostChats.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null){
+
+                            viewHolder.mConnected.setVisibility(View.GONE);
+
+                        } else {
+
+                            viewHolder.mConnected.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
 
@@ -274,6 +298,8 @@ public class MainActivity extends AppCompatActivity {
 
             mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
+            mConnected = (ImageView) mView.findViewById(R.id.icon_connect_img);
+            Query mQueryPostChats;
 
         }
 

@@ -15,7 +15,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/bottomBarItemFour"
-        android:title="Chats"
+        android:title="List"
         android:icon="@drawable/ic_members_bb"
         app:showAsAction="always" />
     <item

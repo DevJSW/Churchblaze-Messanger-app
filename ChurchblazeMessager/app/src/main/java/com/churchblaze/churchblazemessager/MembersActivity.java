@@ -70,7 +70,6 @@ public class MembersActivity extends AppCompatActivity {
         });
 
         String question = searchInput.getText().toString().trim();
-        //mQueryMembers = mDatabaseUsers.orderByChild("name").startAt(question);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -120,17 +119,11 @@ public class MembersActivity extends AppCompatActivity {
                 final String post_key = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
+                viewHolder.setStatus(model.getStatus());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 // open chatroom activity
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(MembersActivity.this, ChatroomActivity.class);
-                        cardonClick.putExtra("heartraise_id", post_key );
-                        startActivity(cardonClick);
-                    }
-                });
+
 
             }
 
@@ -164,6 +157,12 @@ public class MembersActivity extends AppCompatActivity {
 
             TextView post_name = (TextView) mView.findViewById(R.id.post_name);
             post_name.setText(name);
+        }
+
+        public void setStatus(String status) {
+
+            TextView post_status = (TextView) mView.findViewById(R.id.status);
+            post_status.setText(status);
         }
 
         public void setImage(final Context ctx, final String image) {

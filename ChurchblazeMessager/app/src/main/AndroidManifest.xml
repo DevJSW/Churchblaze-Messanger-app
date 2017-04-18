@@ -54,8 +54,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".OpenPhotoActivity"
+            android:theme="@style/AppTheme.ActionBar.Transparent"
             android:label="" />
-        <activity android:name=".MembersSearchResult" />
+        <activity
+            android:name=".MembersSearchResult"
+            android:label=""/>
         <activity
             android:name=".ProfileActivity"
             android:label="Profile" />

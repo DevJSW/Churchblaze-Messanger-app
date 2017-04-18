@@ -25,7 +25,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.roughike.bottombar.BottomBar;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -41,7 +40,6 @@ public class ChatResultActivity extends AppCompatActivity {
     private RecyclerView mMembersList;
     private ProgressBar mProgressBar;
     private Query mQueryPostChats;
-    private BottomBar mBottomBar;
     private Query mQueryChats;
 
     @Override

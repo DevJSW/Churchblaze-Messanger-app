@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -27,14 +28,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MembersSearchResult extends AppCompatActivity {
 
+    private String title_id = null;
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private DatabaseReference mDatabaseUsers;
-    private FirebaseAuth mAuth;
     private ImageView searchBtn;
     private EditText searchInput;
-    private Query mQueryMembers;
-    private RecyclerView mMembersList;
+    private DatabaseReference mDatabaseUsers;
+    private DatabaseReference mCurrentDatabaseUser;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private ProgressBar mProgressBar;
+    private RecyclerView mLettersList;
+    private FirebaseUser mCurrentUser;
+
+    private Query mQueryLetters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +59,28 @@ public class MembersSearchResult extends AppCompatActivity {
         });
 
         mPostKey = getIntent().getExtras().getString("heartraise_id");
-        mQueryMembers = mDatabaseUsers.orderByChild("name").startAt(mPostKey);
+
+        searchInput = (EditText) findViewById(R.id.searchInput);
+        //searchBtn = (ImageView) findViewById(R.id.searchBtn);
+
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mMembersList = (RecyclerView) findViewById(R.id.Members_list);
-        mMembersList.setLayoutManager(new LinearLayoutManager(this));
-        mMembersList.setHasFixedSize(true);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Questions");
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
+        mLettersList = (RecyclerView) findViewById(R.id.Members_list);
+        mLettersList.setLayoutManager(new LinearLayoutManager(this));
+        mLettersList.setHasFixedSize(true);
 
+        mDatabase.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
+        //String question = searchInput.getText().toString().trim();
+        mQueryLetters = mDatabaseUsers.orderByChild("name").startAt(mPostKey);
+
+
     }
+
+
 
     void refreshItems() {
         // Load items
@@ -80,6 +99,7 @@ public class MembersSearchResult extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -89,9 +109,9 @@ public class MembersSearchResult extends AppCompatActivity {
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member_row,
+                R.layout.member2_row,
                 LetterViewHolder.class,
-                mQueryMembers
+                mQueryLetters
 
 
         ) {
@@ -101,6 +121,7 @@ public class MembersSearchResult extends AppCompatActivity {
                 final String post_key = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
+                viewHolder.setStatus(model.getStatus());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 // open chatroom activity
@@ -117,7 +138,7 @@ public class MembersSearchResult extends AppCompatActivity {
 
         };
 
-        mMembersList.setAdapter(firebaseRecyclerAdapter);
+        mLettersList.setAdapter(firebaseRecyclerAdapter);
 
     }
 
@@ -143,6 +164,13 @@ public class MembersSearchResult extends AppCompatActivity {
             TextView post_name = (TextView) mView.findViewById(R.id.post_name);
             post_name.setText(name);
         }
+
+        public void setStatus(String status) {
+
+            TextView post_status = (TextView) mView.findViewById(R.id.status);
+            post_status.setText(status);
+        }
+
 
         public void setImage(final Context ctx, final String image) {
 

@@ -59,7 +59,6 @@ public class ChatroomActivity extends AppCompatActivity {
     private EditText mCommentField;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
-    private boolean Anonymous = false;
     private Menu menu;
     Context context = this;
 
@@ -167,8 +166,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
                             }
                         });
-
-
 
                     }
 
@@ -292,6 +289,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
+
                 mDatabasePostChats.child(mPostKey).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -314,6 +312,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
                     }
                 });
+
 
 
                 mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
@@ -366,7 +365,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
         View mView;
 
-        ImageView mCardPhoto, mImage;
+        ImageView mCardPhoto, mImage, mConnectIcon;
         RelativeLayout rely;
         LinearLayout liny;
         ProgressBar mProgressBar;
@@ -377,6 +376,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
+            mConnectIcon = (ImageView) mView.findViewById(R.id.icon_connect_img);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
 
