@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
+        android:layout_margin="14dp"
         android:src="@drawable/ic_group_add_white" />
 
 </RelativeLayout>

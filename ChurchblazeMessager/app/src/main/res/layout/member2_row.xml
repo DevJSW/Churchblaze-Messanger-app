@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -14,6 +14,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/rely_img"
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -30,19 +31,13 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/subscribeBtn"
-            android:layout_toRightOf="@+id/post_image"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_name"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/rely_img"
                 android:textSize="14dp"
                 android:scaleType="fitXY"
                 android:textStyle="bold"
@@ -53,16 +48,22 @@
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
                 android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/rely_img"
+                android:layout_below="@+id/post_name"
                 android:singleLine="true"
                 android:id="@+id/status"
                 android:text="Status"/>
 
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="15dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_connected"/>
 
-        </LinearLayout>
 
-
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

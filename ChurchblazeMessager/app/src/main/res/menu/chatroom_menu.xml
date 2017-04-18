@@ -8,9 +8,4 @@
         android:title="Add Photo"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_video"
-        android:icon="@drawable/ic_videocam_white"
-        android:title="Add video"
-        app:showAsAction="always" />
 </menu>

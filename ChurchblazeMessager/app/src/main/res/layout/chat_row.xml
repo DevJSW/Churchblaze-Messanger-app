@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="0dp"
-    app:cardBackgroundColor="#00ffffff"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/liny"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -21,21 +19,9 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp">
 
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="#00ffffff"
-                android:padding="2dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:layout_gravity="top"
-                android:id="@+id/post_phot" />
-
-
-
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 app:civ_border_width="1dp"
                 app:civ_border_color="#fff"
                 android:layout_marginRight="5dp"
@@ -47,15 +33,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="17dp"
             android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/post_name"
-                    android:layout_marginLeft="5dp"
-                    android:paddingTop="10dp"
-                    android:text="Name"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,4 +88,61 @@
 
         </LinearLayout>
     </LinearLayout>
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/rely"
+       android:visibility="gone"
+       android:layout_margin="5dp">
+
+       <de.hdodenhof.circleimageview.CircleImageView
+           android:layout_width="35dp"
+           android:layout_height="35dp"
+           app:civ_border_width="1dp"
+           android:layout_margin="10dp"
+           android:layout_alignParentRight="true"
+           app:civ_border_color="#fff"
+           android:id="@+id/post_image2"
+           android:src="@drawable/placeholder_image"/>
+
+
+
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="15dp"
+           android:layout_marginTop="17dp"
+           android:layout_toLeftOf="@+id/post_image2"
+           android:background="@drawable/bg_send_bubble"
+           android:layout_below="@+id/post_name2">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:attr/textAppearanceMedium"
+               android:text="Message"
+               android:layout_marginLeft="20dp"
+               android:id="@+id/post_message2"
+               android:textSize="14dp"
+               android:padding="4dp"
+               android:paddingTop="2dp"
+               android:layout_marginRight="5dp"
+               android:textStyle="bold" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="10dp"
+               android:text="date"
+               android:layout_marginRight="15dp"
+               android:layout_marginBottom="3dp"
+               android:layout_below="@+id/post_message2"
+               android:layout_gravity="left"
+               android:id="@+id/post_date2" />
+
+       </RelativeLayout>
+
+   </RelativeLayout>
+
 </LinearLayout>

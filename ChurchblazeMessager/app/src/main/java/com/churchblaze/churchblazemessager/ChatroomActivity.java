@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -70,8 +72,10 @@ public class ChatroomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarChat);
+        setSupportActionBar(my_toolbar);
 
         //mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
         final RelativeLayout hello = (RelativeLayout) findViewById(R.id.hello);
@@ -85,8 +89,6 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Letters");
-        mProgress = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
@@ -102,7 +104,6 @@ public class ChatroomActivity extends AppCompatActivity {
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chats");
         mDatabaseComment.keepSynced(true);
-        mDatabase.keepSynced(true);
         mDatabaseUser.keepSynced(true);
 
         mCommentField = (EditText) findViewById(R.id.commentField);
@@ -114,16 +115,12 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
-
-        mDatabasePostChats.child(mPostKey).addValueEventListener(new ValueEventListener() {
+        // toolbar back button
+        ImageView toolbar_back = (ImageView) findViewById(R.id.toolbar_back);
+        toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onClick(View v) {
+                ChatroomActivity.this.finish();
             }
         });
 
@@ -135,6 +132,14 @@ public class ChatroomActivity extends AppCompatActivity {
                 final String username = (String) dataSnapshot.child("name").getValue();
                 final CircleImageView civ = (CircleImageView) findViewById(R.id.post_image);
                 final TextView name = (TextView) findViewById(R.id.post_name);
+
+                // load image on toolbar
+                CircleImageView userImgToolbar = (CircleImageView) findViewById(R.id.toolbarImg);
+                Picasso.with(ChatroomActivity.this).load(userimg).into(userImgToolbar);
+
+                // set username on toolbar
+                TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
+                toolbar_username.setText(username);
 
                 mDatabaseUser2.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
@@ -182,7 +187,6 @@ public class ChatroomActivity extends AppCompatActivity {
         });
 
         mDatabaseComment.keepSynced(true);
-        mDatabase.keepSynced(true);
 
 
     }
@@ -207,7 +211,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
     private void startPosting() {
-        mProgress.setMessage("Posting...");
+       // mProgress.setMessage("Posting...");
 
         Date date = new Date();
         final String stringDate = DateFormat.getDateTimeInstance().format(date);
@@ -215,7 +219,7 @@ public class ChatroomActivity extends AppCompatActivity {
         final String message_val = mCommentField.getText().toString().trim();
         if (!TextUtils.isEmpty(message_val)) {
 
-            mProgress.show();
+            //mProgress.show();
 
 
             final DatabaseReference newPost = mDatabaseComment.push();
@@ -239,7 +243,7 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                             newPost.child("image").setValue(dataSnapshot.child("image").getValue());
                             newPost.child("sender_uid").setValue(mCurrentUser.getUid());
-                            newPost.child("reciever_uid").setValue(dataSnapshot.child(reciever_uid).getValue());
+                            newPost.child("reciever_uid").setValue(reciever_uid);
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
 
@@ -260,7 +264,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 }
             });
 
-            mProgress.dismiss();
+           // mProgress.dismiss();
 
         }
 
@@ -287,7 +291,30 @@ public class ChatroomActivity extends AppCompatActivity {
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
-                viewHolder.setName(model.getName());
+
+                mDatabasePostChats.child(mPostKey).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String user_uid = (String) dataSnapshot.child("uid").getValue();
+
+                        if (user_uid == mAuth.getCurrentUser().getUid()) {
+
+                            viewHolder.liny.setVisibility(View.GONE);
+                            viewHolder.rely.setVisibility(View.VISIBLE);
+                        } else {
+                            viewHolder.liny.setVisibility(View.VISIBLE);
+                            viewHolder.rely.setVisibility(View.GONE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
                 mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
 
@@ -342,6 +369,8 @@ public class ChatroomActivity extends AppCompatActivity {
         View mView;
 
         ImageView mCardPhoto, mImage;
+        RelativeLayout rely;
+        LinearLayout liny;
         ProgressBar mProgressBar;
 
         public CommentViewHolder(View itemView) {
@@ -350,6 +379,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
+            liny = (LinearLayout) mView.findViewById(R.id.liny);
+            rely = (RelativeLayout) mView.findViewById(R.id.rely);
 
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 
@@ -360,18 +391,19 @@ public class ChatroomActivity extends AppCompatActivity {
             TextView post_message = (TextView) mView.findViewById(R.id.post_message);
             post_message.setText(message);
 
+            TextView post_message2 = (TextView) mView.findViewById(R.id.post_message2);
+            post_message2.setText(message);
+
         }
 
-        public void setName(String name) {
-
-            TextView post_name = (TextView) mView.findViewById(R.id.post_name);
-            post_name.setText(name);
-        }
 
         public void setDate(String date) {
 
             TextView post_date = (TextView) mView.findViewById(R.id.post_date);
             post_date.setText(date);
+
+            TextView post_date2 = (TextView) mView.findViewById(R.id.post_date2);
+            post_date2.setText(date);
         }
 
         public void setImage(final Context ctx, final String image) {
@@ -391,6 +423,24 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
                             Picasso.with(ctx).load(image).into(post_image);
+                        }
+                    });
+            final ImageView post_image2 = (ImageView) mView.findViewById(R.id.post_image2);
+
+            Picasso.with(ctx)
+                    .load(image)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(post_image, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+
+
+                            Picasso.with(ctx).load(image).into(post_image2);
                         }
                     });
         }

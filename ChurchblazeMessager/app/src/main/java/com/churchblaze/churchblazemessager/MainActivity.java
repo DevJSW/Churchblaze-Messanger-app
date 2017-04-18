@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbar);
+        setSupportActionBar(my_toolbar);
 
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -93,13 +97,18 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 }
 
+                if (menuItemId == R.id.bottomBarItemFour) {
+                    // The user reselected item number one, scroll your content to top.
+
+                    startActivity(new Intent(MainActivity.this, MembersActivity.class));
+                }
+
             }
 
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 if (menuItemId == R.id.bottomBarItemOne) {
                     // The user reselected item number one, scroll your content to top.
-
 
                 }
 
@@ -117,6 +126,11 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
+                if (menuItemId == R.id.bottomBarItemFour) {
+                    // The user reselected item number one, scroll your content to top.
+
+                    startActivity(new Intent(MainActivity.this, MembersActivity.class));
+                }
 
             }
 
@@ -207,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member_row,
+                R.layout.member2_row,
                 LetterViewHolder.class,
                 mDatabaseUsers
 
@@ -258,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
 
             mView = itemView;
 
-            mConnected = (ImageView) mView.findViewById(R.id.post_connected);
             mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 

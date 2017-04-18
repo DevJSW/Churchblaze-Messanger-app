@@ -108,7 +108,7 @@ public class MembersActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member_row,
+                R.layout.member2_row,
                 LetterViewHolder.class,
                 mDatabaseUsers
 

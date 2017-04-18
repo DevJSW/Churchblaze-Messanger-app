@@ -10,7 +10,12 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/bottomBarItemTwo"
-        android:title="Members"
+        android:title="Chats"
+        android:icon="@drawable/ic_chat_bb"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/bottomBarItemFour"
+        android:title="Chats"
         android:icon="@drawable/ic_members_bb"
         app:showAsAction="always" />
     <item
