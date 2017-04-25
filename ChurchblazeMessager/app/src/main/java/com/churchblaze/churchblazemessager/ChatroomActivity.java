@@ -93,7 +93,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chats");
-        mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
+        mQueryPostChats = mDatabasePostChats.orderByChild("reciever_uid").equalTo(mAuth.getCurrentUser().getUid());
 
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
@@ -241,6 +241,7 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("image").setValue(dataSnapshot.child("image").getValue());
                             newPost.child("sender_uid").setValue(mCurrentUser.getUid());
                             newPost.child("reciever_uid").setValue(reciever_uid);
+                            newPost.child("reciever_uid").setValue(mCurrentUser.getUid());
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
 
