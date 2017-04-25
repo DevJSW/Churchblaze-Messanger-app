@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">"Churchblaze Messanger "</string>
+    <string name="app_name">"cb talker "</string>
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
     <string name="enter_image_profie">Enter your information and take a photo which will be visible on your profile.</string>

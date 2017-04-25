@@ -35,6 +35,7 @@ public class tab1chats extends Fragment {
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
+    private TextView mNoPostTxt;
     private DatabaseReference mDatabaseChats;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
@@ -56,6 +57,7 @@ public class tab1chats extends Fragment {
             }
         });
 
+        mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -68,7 +70,22 @@ public class tab1chats extends Fragment {
         mDatabaseChats.keepSynced(true);
 
         mQueryChats = mDatabaseChats.orderByChild("reciever_uid").equalTo(mAuth.getCurrentUser().getUid());
+        mQueryChats.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null){
 
+                    mNoPostTxt.setVisibility(View.VISIBLE);
+                } else {
+                    mNoPostTxt.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         checkUserExists();
 
         return v;

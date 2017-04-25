@@ -81,7 +81,7 @@ public class Main2Activity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_search){
 
-            Intent cardonClick = new Intent(Main2Activity.this, ChatroomActivity.class);
+            Intent cardonClick = new Intent(Main2Activity.this, MembersActivity.class);
             startActivity(cardonClick);
         }
 

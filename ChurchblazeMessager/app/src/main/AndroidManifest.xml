@@ -47,7 +47,7 @@
             android:label="Chats" />
         <activity
             android:name=".MembersActivity"
-            android:label="Members" />
+            android:label="Search" />
         <activity
             android:name=".ChatroomActivity"
             android:label=""
