@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#fff"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <ImageView android:id="@+id/googleBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/chat_icon"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:layout_gravity="left" />
+
+        <ImageView android:id="@+id/fbBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:src="@drawable/list_menu" />
+
+        <ImageView
+            android:id="@+id/twitterBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:layout_gravity="right"
+            android:src="@drawable/profile_icon" />
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.Toolbar>

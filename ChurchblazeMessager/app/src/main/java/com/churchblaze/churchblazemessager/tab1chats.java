@@ -3,53 +3,51 @@ package com.churchblaze.churchblazemessager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MembersSearchResult extends AppCompatActivity {
+/**
+ * Created by John on 25-Apr-17.
+ */
+public class tab1chats extends Fragment {
 
-    private String title_id = null;
-    private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView searchBtn;
-    private EditText searchInput;
     private DatabaseReference mDatabaseUsers;
-    private DatabaseReference mCurrentDatabaseUser;
+    private DatabaseReference mDatabaseChats;
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    private RecyclerView mMembersList;
     private ProgressBar mProgressBar;
-    private RecyclerView mLettersList;
-    private FirebaseUser mCurrentUser;
-
-    private Query mQueryLetters;
+    private Query mQueryPostChats;
+    private Query mQueryChats;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_members_search_result);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.tab1chats, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -58,26 +56,59 @@ public class MembersSearchResult extends AppCompatActivity {
             }
         });
 
-        mPostKey = getIntent().getExtras().getString("heartraise_id");
-
-        searchInput = (EditText) findViewById(R.id.searchInput);
-
+        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Questions");
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
-        mLettersList = (RecyclerView) findViewById(R.id.Members_list);
-        mLettersList.setLayoutManager(new LinearLayoutManager(this));
-        mLettersList.setHasFixedSize(true);
+        mDatabaseChats = FirebaseDatabase.getInstance().getReference().child("Chats");
+        mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
+        mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mMembersList.setHasFixedSize(true);
 
-        mDatabase.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
-        //String question = searchInput.getText().toString().trim();
-        mQueryLetters = mDatabaseUsers.orderByChild("name").startAt(mPostKey);
+        mDatabaseChats.keepSynced(true);
 
+        mQueryChats = mDatabaseChats.orderByChild("reciever_uid").equalTo(mAuth.getCurrentUser().getUid());
 
+        checkUserExists();
+
+        return v;
     }
 
+
+
+    // if user does not exist, take them to signup activity
+    private void checkUserExists() {
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        final String user_id = mAuth.getCurrentUser().getUid();
+
+        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                if (!dataSnapshot.hasChild(user_id)) {
+
+                    mProgressBar.setVisibility(View.GONE);
+
+                    Intent intent = new Intent(getActivity(), SignupActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                }else {
+
+                    mProgressBar.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+    }
 
 
     void refreshItems() {
@@ -97,9 +128,8 @@ public class MembersSearchResult extends AppCompatActivity {
     }
 
 
-
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
 
 
@@ -107,9 +137,9 @@ public class MembersSearchResult extends AppCompatActivity {
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member2_row,
+                R.layout.member3_row,
                 LetterViewHolder.class,
-                mQueryLetters
+                mQueryChats
 
 
         ) {
@@ -119,24 +149,27 @@ public class MembersSearchResult extends AppCompatActivity {
                 final String post_key = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
-                viewHolder.setStatus(model.getStatus());
-                viewHolder.setImage(getApplicationContext(), model.getImage());
+                viewHolder.setMessage(model.getMessage());
+                viewHolder.setDate(model.getDate());
+                viewHolder.setImage(getContext(), model.getImage());
 
                 // open chatroom activity
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent cardonClick = new Intent(MembersSearchResult.this, ChatroomActivity.class);
+                        Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
                         cardonClick.putExtra("heartraise_id", post_key );
                         startActivity(cardonClick);
                     }
                 });
 
+
             }
 
         };
 
-        mLettersList.setAdapter(firebaseRecyclerAdapter);
+        mMembersList.setAdapter(firebaseRecyclerAdapter);
+
 
     }
 
@@ -146,6 +179,8 @@ public class MembersSearchResult extends AppCompatActivity {
 
         View mView;
 
+        Button mChatBtn;
+
         ProgressBar mProgressBar;
 
         public LetterViewHolder(View itemView) {
@@ -153,6 +188,7 @@ public class MembersSearchResult extends AppCompatActivity {
 
             mView = itemView;
 
+            mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 
         }
@@ -163,12 +199,17 @@ public class MembersSearchResult extends AppCompatActivity {
             post_name.setText(name);
         }
 
-        public void setStatus(String status) {
+        public void setDate(String date) {
 
-            TextView post_status = (TextView) mView.findViewById(R.id.status);
-            post_status.setText(status);
+            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
+            post_date.setText(date);
         }
 
+        public void setMessage(String message) {
+
+            TextView post_message = (TextView) mView.findViewById(R.id.post_message);
+            post_message.setText(message);
+        }
 
         public void setImage(final Context ctx, final String image) {
 
@@ -191,20 +232,4 @@ public class MembersSearchResult extends AppCompatActivity {
 
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 }
-

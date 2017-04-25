@@ -54,11 +54,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".OpenPhotoActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"
-            android:label="" />
+            android:label=""
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".MembersSearchResult"
-            android:label=""/>
+            android:label="" />
         <activity
             android:name=".ProfileActivity"
             android:label="Profile" />
@@ -71,7 +71,11 @@
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".ChatResultActivity"
-            android:label="Chat"/>
+            android:label="Chat" />
+        <activity
+            android:name=".Main2Activity"
+            android:label="cb talker"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
