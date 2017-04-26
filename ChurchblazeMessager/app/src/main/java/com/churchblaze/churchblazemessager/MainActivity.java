@@ -298,7 +298,6 @@ public class MainActivity extends AppCompatActivity {
 
             mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
-            mConnected = (ImageView) mView.findViewById(R.id.icon_connect_img);
             Query mQueryPostChats;
 
         }

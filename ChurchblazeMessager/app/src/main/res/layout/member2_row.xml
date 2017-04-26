@@ -54,15 +54,7 @@
                 android:id="@+id/status"
                 android:text="Status"/>
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_margin="15dp"
-            android:visibility="gone"
-            android:id="@+id/icon_connect_img"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_connected"/>
+
 
 
     </RelativeLayout>

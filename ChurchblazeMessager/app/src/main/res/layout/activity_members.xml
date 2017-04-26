@@ -20,11 +20,20 @@
             android:background="#d4d0d0"
             android:layout_gravity="center"
             android:gravity="center">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="6dp"
+                android:id="@+id/backBtn"
+                android:src="@drawable/ic_arrow_back"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00ffffff"
                 android:layout_marginRight="40dp"
+                android:layout_toRightOf="@+id/backBtn"
                 android:textSize="16dp"
                 android:padding="8dp"
                 android:hint="Search members..."

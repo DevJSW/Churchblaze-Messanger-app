@@ -112,11 +112,11 @@ public class tab2members extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() == null){
 
-                            viewHolder.mConnected.setVisibility(View.GONE);
+                          //  viewHolder.mConnected.setVisibility(View.GONE);
 
                         } else {
 
-                            viewHolder.mConnected.setVisibility(View.VISIBLE);
+                          //  viewHolder.mConnected.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -169,7 +169,6 @@ public class tab2members extends Fragment {
 
             mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
-            mConnected = (ImageView) mView.findViewById(R.id.icon_connect_img);
             Query mQueryPostChats;
 
         }
