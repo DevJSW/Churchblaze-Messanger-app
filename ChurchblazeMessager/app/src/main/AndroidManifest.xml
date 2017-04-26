@@ -47,6 +47,7 @@
             android:label="Chats" />
         <activity
             android:name=".MembersActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="Search" />
         <activity
             android:name=".ChatroomActivity"
@@ -58,7 +59,6 @@
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".MembersSearchResult"
-            android:theme="@style/AppTheme.NoActionBar"
             android:label="" />
         <activity
             android:name=".ProfileActivity"

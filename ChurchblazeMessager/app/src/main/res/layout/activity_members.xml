@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
-            android:layout_margin="5dp"
             android:id="@+id/liny"
             android:background="#d4d0d0"
             android:layout_gravity="center"
@@ -23,8 +22,9 @@
 
             <ImageView
                 android:layout_width="30dp"
-                android:layout_height="35dp"
+                android:layout_height="25dp"
                 android:layout_marginLeft="6dp"
+                android:layout_marginTop="5dp"
                 android:id="@+id/backBtn"
                 android:src="@drawable/ic_arrow_back"/>
 
