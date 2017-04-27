@@ -31,7 +31,7 @@ public class MembersActivity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
     private FirebaseAuth mAuth;
-    private ImageView searchBtn;
+    private ImageView searchBtn, backBtn;
     private EditText searchInput;
     private Query mQueryMembers;
     private RecyclerView mMembersList;
@@ -48,6 +48,15 @@ public class MembersActivity extends AppCompatActivity {
             public void onRefresh() {
                 // Refresh items
                 refreshItems();
+            }
+        });
+
+        backBtn = (ImageView) findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MembersActivity.this.finish();
+
             }
         });
 

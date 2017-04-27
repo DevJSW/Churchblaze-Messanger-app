@@ -43,7 +43,7 @@
     <string name="slide_3_title">Chat directly with fellow members</string>
     <string name="slide_3_desc">Start private chat with a church member!</string>
 
-    <string name="slide_4_title">Group Chat</string>
+    <string name="slide_4_title">Members</string>
     <string name="slide_4_desc">Start group chats with fellow church members!</string>
 
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>

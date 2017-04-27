@@ -12,10 +12,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/img_width_height"
-            android:layout_height="@dimen/img_width_height"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitXY"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_group_add_white" />
+            android:src="@drawable/church" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -2,19 +2,19 @@
 <resources>
     <color name="colorPrimary">#5E2B86</color>
     <color name="colorPrimaryDark">#5E2B86</color>
-    <color name="colorAccent">#361e39</color>
+    <color name="colorAccent">#bcbabc</color>
 
     <!-- Screens background color-->
-    <color name="bg_screen1">#f64c73</color>
-    <color name="bg_screen2">#EA3D20</color>
+    <color name="bg_screen1">#5E2B86</color>
+    <color name="bg_screen2">#ea6d20</color>
     <color name="bg_screen3">#3395ff</color>
-    <color name="bg_screen4">#c873f4</color>
+    <color name="bg_screen4">#535bf1</color>
 
     <!-- dots inactive colors -->
-    <color name="dot_dark_screen1">#d1395c</color>
-    <color name="dot_dark_screen2">#ed4c31</color>
+    <color name="dot_dark_screen1">#8539d1</color>
+    <color name="dot_dark_screen2">#e47c3d</color>
     <color name="dot_dark_screen3">#2278d4</color>
-    <color name="dot_dark_screen4">#a854d4</color>
+    <color name="dot_dark_screen4">#656ced</color>
 
     <!-- dots active colors -->
     <color name="dot_light_screen1">#f98da5</color>
