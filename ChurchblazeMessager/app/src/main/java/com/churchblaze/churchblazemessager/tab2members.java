@@ -37,7 +37,7 @@ public class tab2members extends Fragment {
     String post_key = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
-    private DatabaseReference mDatabaseChats;
+    private DatabaseReference mDatabaseChatrooms;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
@@ -57,7 +57,7 @@ public class tab2members extends Fragment {
             }
         });
 
-        mDatabaseChats = FirebaseDatabase.getInstance().getReference().child("Chats");
+        mDatabaseChatrooms = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -65,7 +65,7 @@ public class tab2members extends Fragment {
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
-        mDatabaseChats.keepSynced(true);
+        mDatabaseChatrooms.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
 
         return v;
@@ -106,7 +106,7 @@ public class tab2members extends Fragment {
                     }
                 });
 
-                mQueryPostChats = mDatabaseChats.orderByChild("post_key").equalTo(post_key);
+                mQueryPostChats = mDatabaseChatrooms.orderByChild("post_key").equalTo(post_key);
                 mQueryPostChats.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -132,9 +132,42 @@ public class tab2members extends Fragment {
         };
 
         mMembersList.setAdapter(firebaseRecyclerAdapter);
-
+        checkUserExists();
 
     }
+
+    private void checkUserExists() {
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        final String user_id = mAuth.getCurrentUser().getUid();
+
+        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                if (!dataSnapshot.hasChild(user_id)) {
+
+                    mProgressBar.setVisibility(View.GONE);
+
+
+                }else {
+
+                    mProgressBar.setVisibility(View.GONE);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
     void refreshItems() {
         // Load items
         // ...

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,15 +34,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class tab1chats extends Fragment {
 
+    String myCurrentChats = null;
+    String post_key = null;
+    private TextView mNoPostTxt;
+    private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
-    private TextView mNoPostTxt;
-    private DatabaseReference mDatabaseChats;
+    private DatabaseReference mDatabaseChatroom, mDatabaseChatroomsShot;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
-    private ProgressBar mProgressBar;
     private Query mQueryPostChats;
-    private Query mQueryChats;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,26 +60,28 @@ public class tab1chats extends Fragment {
             }
         });
 
+        mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
+        mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mDatabaseChats = FirebaseDatabase.getInstance().getReference().child("Chats");
+        mQueryPostChats = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
-
+        mDatabaseChatroom.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
-        mDatabaseChats.keepSynced(true);
 
-        mQueryChats = mDatabaseChats.orderByChild("reciever_uid").equalTo(mAuth.getCurrentUser().getUid());
-        mQueryChats.addValueEventListener(new ValueEventListener() {
+        mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null){
 
+                    mNoPostImg.setVisibility(View.VISIBLE);
                     mNoPostTxt.setVisibility(View.VISIBLE);
                 } else {
+                    mNoPostImg.setVisibility(View.GONE);
                     mNoPostTxt.setVisibility(View.GONE);
                 }
             }
@@ -86,14 +91,57 @@ public class tab1chats extends Fragment {
 
             }
         });
-        checkUserExists();
+
+        mDatabaseChatroomsShot = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mAuth.getCurrentUser().getUid());
 
         return v;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
 
 
-    // if user does not exist, take them to signup activity
+
+        FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
+
+                People.class,
+                R.layout.member3_row,
+                LetterViewHolder.class,
+                mQueryPostChats
+
+
+        ) {
+            @Override
+            protected void populateViewHolder(final LetterViewHolder viewHolder, final People model, int position) {
+
+                final String post_key = getRef(position).getKey();
+                final String PostKey = getRef(position).getKey();
+
+                viewHolder.setName(model.getName());
+                viewHolder.setMessage(model.getMessage());
+                viewHolder.setImage(getContext(), model.getImage());
+
+                // open chatroom activity
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
+                        cardonClick.putExtra("heartraise_id", PostKey );
+                        startActivity(cardonClick);
+                    }
+                });
+
+
+            }
+
+        };
+
+        mMembersList.setAdapter(firebaseRecyclerAdapter);
+        checkUserExists();
+
+    }
+
     private void checkUserExists() {
 
         mProgressBar.setVisibility(View.VISIBLE);
@@ -108,14 +156,12 @@ public class tab1chats extends Fragment {
 
                     mProgressBar.setVisibility(View.GONE);
 
-                    Intent intent = new Intent(getActivity(), SignupActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
 
                 }else {
 
                     mProgressBar.setVisibility(View.GONE);
                 }
+
 
             }
 
@@ -145,57 +191,12 @@ public class tab1chats extends Fragment {
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
-
-        FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
-
-                People.class,
-                R.layout.member3_row,
-                LetterViewHolder.class,
-                mQueryChats
-
-
-        ) {
-            @Override
-            protected void populateViewHolder(final LetterViewHolder viewHolder, final People model, int position) {
-
-                final String PostKey = getRef(position).getKey();
-
-                viewHolder.setName(model.getName());
-                viewHolder.setMessage(model.getMessage());
-                viewHolder.setDate(model.getDate());
-                viewHolder.setImage(getContext(), model.getImage());
-
-                // open chatroom activity
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
-                        cardonClick.putExtra("heartraise_id", PostKey );
-                        startActivity(cardonClick);
-                    }
-                });
-
-
-            }
-
-        };
-
-        mMembersList.setAdapter(firebaseRecyclerAdapter);
-
-
-    }
-
-
 
     public static class LetterViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
 
+        ImageView mConnected;
         Button mChatBtn;
 
         ProgressBar mProgressBar;
@@ -207,6 +208,7 @@ public class tab1chats extends Fragment {
 
             mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
+            Query mQueryPostChats;
 
         }
 
@@ -216,11 +218,6 @@ public class tab1chats extends Fragment {
             post_name.setText(name);
         }
 
-        public void setDate(String date) {
-
-            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
-            post_date.setText(date);
-        }
 
         public void setMessage(String message) {
 

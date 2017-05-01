@@ -191,7 +191,7 @@ public class SignupActivity extends AppCompatActivity {
                                                 newPost.child(auth.getCurrentUser().getUid()).child("date").setValue(stringDate);
                                                 newPost.child(auth.getCurrentUser().getUid()).child("uid").setValue(auth.getCurrentUser().getUid());
 
-                                                Intent cardonClick = new Intent(SignupActivity.this, MainActivity.class);
+                                                Intent cardonClick = new Intent(SignupActivity.this, Main2Activity.class);
                                                 cardonClick.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 startActivity(cardonClick);
 

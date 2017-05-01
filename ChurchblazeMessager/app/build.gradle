@@ -19,6 +19,9 @@ android {
     productFlavors {
     }
 }
+repositories {
+    maven { url "https://dl.bintray.com/hani-momanii/maven"}
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -43,5 +46,7 @@ dependencies {
     compile 'com.jaredrummler:material-spinner:1.1.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support:support-v4:24.2.1'
+    compile 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
+
 }
 apply plugin: 'com.google.gms.google-services'

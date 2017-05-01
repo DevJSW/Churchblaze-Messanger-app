@@ -11,11 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -39,29 +39,38 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 public class ChatroomActivity extends AppCompatActivity {
 
+    private static final String TAG = ChatResultActivity.class.getSimpleName();
     private String mPostKey = null;
     private TextView mNoPostTxt;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment;
+    private DatabaseReference mDatabaseComment, mDatabaseChatroom;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
     private Query mQueryPostChats;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mAuth;
-    private ImageButton mSendBtn;
+    private ImageView mSendBtn;
     private EditText mCommentField;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
     private Menu menu;
     Context context = this;
 
+    EmojiconEditText emojiconEditText;
+    EmojiconTextView textView;
+    ImageView emojiImageView;
+    EmojIconActions emojIcon;
+    View rootView;
     private Query mQueryChats;
 
 
@@ -71,11 +80,25 @@ public class ChatroomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarChat);
         setSupportActionBar(my_toolbar);
+        rootView = findViewById(R.id.root_view);
+        emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
+        emojiconEditText = (EmojiconEditText) findViewById(R.id.emojicon_edit_text);
+        emojIcon = new EmojIconActions(this, rootView, emojiconEditText, emojiImageView);
+        emojIcon.ShowEmojIcon();
+        emojIcon.setIconsIds(R.drawable.ic_action_keyboard, R.drawable.smiley);
+        emojIcon.setKeyboardListener(new EmojIconActions.KeyboardListener() {
+            @Override
+            public void onKeyboardOpen() {
+                Log.e(TAG, "Keyboard opened!");
+            }
 
+            @Override
+            public void onKeyboardClose() {
+                Log.e(TAG, "Keyboard closed");
+            }
+        });
         //mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
         final RelativeLayout hello = (RelativeLayout) findViewById(R.id.hello);
 
@@ -93,7 +116,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chats");
-        mQueryPostChats = mDatabasePostChats.orderByChild("reciever_uid").equalTo(mAuth.getCurrentUser().getUid());
+        //mQueryPostChats = mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).orderByChild("post_key").equalTo(mPostKey);
 
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
@@ -103,10 +126,14 @@ public class ChatroomActivity extends AppCompatActivity {
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chats");
         mDatabaseComment.keepSynced(true);
+        mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseChatroom.keepSynced(true);
         mDatabaseUser.keepSynced(true);
 
-        mCommentField = (EditText) findViewById(R.id.commentField);
-        mSendBtn = (ImageButton) findViewById(R.id.sendBtn);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child(mAuth.getCurrentUser().getUid());
+
+       // mCommentField = (EditText) findViewById(R.id.commentField);
+        mSendBtn = (ImageView) findViewById(R.id.sendBtn);
         mSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +174,7 @@ public class ChatroomActivity extends AppCompatActivity {
                         final String username2 = (String) dataSnapshot.child("name").getValue();
                         final TextView name2 = (TextView) findViewById(R.id.post_name2);
 
-                        mQueryPostChats.addValueEventListener(new ValueEventListener() {
+                        mDatabase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() == null){
@@ -218,8 +245,13 @@ public class ChatroomActivity extends AppCompatActivity {
 
             //mProgress.show();
 
+            //pushing chats into chatroom on the database inside my uid
 
-            final DatabaseReference newPost = mDatabaseComment.push();
+            //sender chat screen
+            final DatabaseReference newPost = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
+
+            // reciever chat screen
+            final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).push();
 
 
             mDatabaseUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
@@ -235,6 +267,7 @@ public class ChatroomActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
+                            // reciever chat
                             newPost.child("message").setValue(message_val);
                             newPost.child("uid").setValue(mCurrentUser.getUid());
                             newPost.child("name").setValue(dataSnapshot.child("name").getValue());
@@ -244,6 +277,18 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("reciever_uid").setValue(mCurrentUser.getUid());
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
+
+
+                            //current user (sender) chat
+                            newPost2.child("message").setValue(message_val);
+                            newPost2.child("uid").setValue(mCurrentUser.getUid());
+                            newPost2.child("name").setValue(dataSnapshot.child("name").getValue());
+                            newPost2.child("image").setValue(dataSnapshot.child("image").getValue());
+                            newPost2.child("sender_uid").setValue(mCurrentUser.getUid());
+                            newPost2.child("reciever_uid").setValue(reciever_uid);
+                            newPost2.child("reciever_uid").setValue(mCurrentUser.getUid());
+                            newPost2.child("date").setValue(stringDate);
+                            newPost2.child("post_key").setValue(mPostKey);
 
                         }
 
@@ -276,7 +321,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 Chat.class,
                 R.layout.chat_row,
                 CommentViewHolder.class,
-                mQueryPostChats
+                mDatabase
 
 
         ) {

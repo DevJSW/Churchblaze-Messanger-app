@@ -41,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
         auth = FirebaseAuth.getInstance();
 
+
         LinearLayout openSettings = (LinearLayout) findViewById(R.id.lin_settings);
         openSettings.setOnClickListener(new View.OnClickListener() {
             @Override

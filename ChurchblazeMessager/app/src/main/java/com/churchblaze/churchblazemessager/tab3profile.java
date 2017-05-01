@@ -27,6 +27,14 @@ public class tab3profile extends Fragment {
             }
         });
 
+        LinearLayout openEditProfile = (LinearLayout) v.findViewById(R.id.lin_editprofile);
+        openEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(new Intent(getActivity(), EditProfileActivity.class)));
+            }
+        });
+
         LinearLayout openShare = (LinearLayout) v.findViewById(R.id.lin_share);
         openShare.setOnClickListener(new View.OnClickListener() {
             @Override
