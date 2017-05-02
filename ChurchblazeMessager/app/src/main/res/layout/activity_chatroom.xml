@@ -63,7 +63,7 @@
         android:layout_marginBottom="5dp"
         android:hint="Type a message"
         android:padding="5dp"
-        android:background="@drawable/bg_send_bubble"
+        android:background="@drawable/bg_send_bubble2"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@id/sendBtn"
         android:layout_toRightOf="@id/emoji_btn"

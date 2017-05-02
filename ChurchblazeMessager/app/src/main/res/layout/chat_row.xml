@@ -125,7 +125,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_marginLeft="15dp"
-           android:layout_marginTop="17dp"
+           android:layout_marginTop="20dp"
            android:layout_toLeftOf="@+id/post_image2"
            android:background="@drawable/bg_send_bubble"
            android:layout_below="@+id/post_name2">
@@ -148,10 +148,11 @@
                android:layout_height="wrap_content"
                android:layout_marginLeft="10dp"
                android:text="date"
-               android:layout_marginRight="15dp"
+               android:layout_marginRight="25dp"
                android:layout_marginBottom="3dp"
                android:layout_below="@+id/post_message2"
-               android:layout_gravity="left"
+               android:layout_alignParentRight="true"
+               android:layout_gravity="right"
                android:id="@+id/post_date2" />
 
        </RelativeLayout>

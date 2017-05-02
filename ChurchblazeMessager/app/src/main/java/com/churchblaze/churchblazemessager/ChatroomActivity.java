@@ -115,7 +115,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
-        mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chats");
+        mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         //mQueryPostChats = mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).orderByChild("post_key").equalTo(mPostKey);
 
         mCurrentUser = mAuth.getCurrentUser();
@@ -124,7 +124,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mCommentList = (RecyclerView) findViewById(R.id.comment_list);
         mCommentList.setHasFixedSize(true);
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
-        mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chats");
+        mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseComment.keepSynced(true);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseChatroom.keepSynced(true);
@@ -334,48 +334,41 @@ public class ChatroomActivity extends AppCompatActivity {
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
-
-                mDatabasePostChats.child(mPostKey).addValueEventListener(new ValueEventListener() {
+                mDatabaseUser.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        final String user_uid = (String) dataSnapshot.child("uid").getValue();
+                        final String current_user_uid = (String) dataSnapshot.child("uid").getValue();
 
-                        if (user_uid == mAuth.getCurrentUser().getUid()) {
+                        mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
 
-                            viewHolder.liny.setVisibility(View.GONE);
-                            viewHolder.rely.setVisibility(View.VISIBLE);
-                        } else {
-                            viewHolder.liny.setVisibility(View.VISIBLE);
-                            viewHolder.rely.setVisibility(View.GONE);
-                        }
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    }
+                                final String post_photo = (String) dataSnapshot.child("photo").getValue();
+                                final String user_uid = (String) dataSnapshot.child("uid").getValue();
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                                if (post_photo != null) {
 
-                    }
-                });
+                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
+                                    viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
 
+                                } else if (user_uid == current_user_uid){
 
+                                    viewHolder.rely.setVisibility(View.VISIBLE);
 
-                mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
+                                } else {
 
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                    viewHolder.rely.setVisibility(View.GONE);
+                                }
 
-                        final String post_photo = (String) dataSnapshot.child("photo").getValue();
+                            }
 
-                        if (post_photo != null) {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                            viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                            viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
-
-                        } else {
-
-
-                        }
+                            }
+                        });
 
                     }
 
@@ -410,6 +403,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
         View mView;
 
+        DatabaseReference mDatabaseUser;
+        FirebaseAuth mAuth;
         ImageView mCardPhoto, mImage;
         RelativeLayout rely;
         LinearLayout liny;
@@ -423,6 +418,8 @@ public class ChatroomActivity extends AppCompatActivity {
             mImage = (ImageView) mView.findViewById(R.id.post_image);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
+            //mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+           // mAuth = FirebaseAuth.getInstance();
 
 
         }
@@ -479,7 +476,7 @@ public class ChatroomActivity extends AppCompatActivity {
             Picasso.with(ctx)
                     .load(image)
                     .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(post_image, new Callback() {
+                    .into(post_image2, new Callback() {
                         @Override
                         public void onSuccess() {
 
