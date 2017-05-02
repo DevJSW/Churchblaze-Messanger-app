@@ -124,6 +124,7 @@
        <RelativeLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:id="@+id/chat_balloon"
            android:layout_marginLeft="15dp"
            android:layout_marginTop="20dp"
            android:layout_toLeftOf="@+id/post_image2"
@@ -135,7 +136,7 @@
                android:layout_height="wrap_content"
                android:textAppearance="?android:attr/textAppearanceMedium"
                android:text="Message"
-               android:layout_marginLeft="20dp"
+               android:layout_marginLeft="17dp"
                android:id="@+id/post_message2"
                android:textSize="14dp"
                android:padding="4dp"
@@ -143,19 +144,51 @@
                android:layout_marginRight="5dp"
                android:textStyle="bold" />
 
-           <TextView
+           <LinearLayout
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_marginLeft="10dp"
-               android:text="date"
-               android:layout_marginRight="25dp"
-               android:layout_marginBottom="3dp"
                android:layout_below="@+id/post_message2"
+               android:layout_marginBottom="3dp"
                android:layout_alignParentRight="true"
-               android:layout_gravity="right"
-               android:id="@+id/post_date2" />
+               android:layout_marginRight="25dp"
+               android:orientation="horizontal">
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="10dp"
+                   android:text="date"
+                   android:paddingTop="1dp"
+                   android:layout_marginRight="5dp"
+                   android:layout_gravity="right"
+                   android:id="@+id/post_date2" />
+               <ImageView
+                   android:layout_width="15dp"
+                   android:layout_height="20dp"
+                   android:scaleType="fitXY"
+                   android:src="@drawable/ic_check_white"
+                   android:paddingBottom="3dp"
+                   android:layout_toRightOf="@+id/post_date2"/>
 
+           </LinearLayout>
        </RelativeLayout>
+
+       <ImageView
+           android:layout_width="150dp"
+           android:layout_height="100dp"
+           android:id="@+id/post_photo2"
+           android:scaleType="fitXY"
+           android:background="@drawable/bg_send_bubble"
+           android:visibility="gone"
+           android:layout_below="@+id/chat_balloon"
+           android:paddingLeft="13dp"
+           android:paddingRight="20dp"
+           android:paddingTop="10dp"
+           android:layout_marginTop="2dp"
+           android:paddingBottom="10dp"
+           android:layout_marginLeft="15dp"
+           android:layout_gravity="right"
+           android:src="@drawable/placeholder_image"/>
+
 
    </RelativeLayout>
 
