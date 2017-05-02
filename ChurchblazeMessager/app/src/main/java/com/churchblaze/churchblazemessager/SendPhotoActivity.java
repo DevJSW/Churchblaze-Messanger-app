@@ -66,20 +66,20 @@ public class SendPhotoActivity extends AppCompatActivity {
         mCaption = (EditText) findViewById(R.id.captionInput);
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mProgress = new ProgressDialog(this);
 
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
-        mDatabasePostComments = FirebaseDatabase.getInstance().getReference().child("Chats");
+        mDatabasePostComments = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mQueryPostComment = mDatabasePostComments.orderByChild("post_key").equalTo(mPostKey);
 
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
         mCommentList = (RecyclerView) findViewById(R.id.comment_list);
-        mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chats");
+        mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseComment.keepSynced(true);
         mStorage = FirebaseStorage.getInstance().getReference();
         mDatabasePostUser = FirebaseDatabase.getInstance().getReference().child("Users");

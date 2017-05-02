@@ -71,7 +71,6 @@
             android:name=".AddGroupActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EditProfileActivity" />
-        <activity android:name=".Chatroom2Activity"></activity>
     </application>
 
 </manifest>

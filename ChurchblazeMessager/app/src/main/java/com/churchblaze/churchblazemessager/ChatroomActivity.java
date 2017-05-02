@@ -45,7 +45,7 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 public class ChatroomActivity extends AppCompatActivity {
 
-    private static final String TAG = ChatResultActivity.class.getSimpleName();
+    private static final String TAG = ChatroomActivity.class.getSimpleName();
     private String mPostKey = null;
     private TextView mNoPostTxt;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -240,7 +240,7 @@ public class ChatroomActivity extends AppCompatActivity {
         Date date = new Date();
         final String stringDate = DateFormat.getDateTimeInstance().format(date);
 
-        final String message_val = mCommentField.getText().toString().trim();
+        final String message_val = emojiconEditText.getText().toString().trim();
         if (!TextUtils.isEmpty(message_val)) {
 
             //mProgress.show();
@@ -262,7 +262,6 @@ public class ChatroomActivity extends AppCompatActivity {
                     final String reciever_uid = (String) dataSnapshot.child("uid").getValue();
 
                     mDatabaseUser.addValueEventListener(new ValueEventListener() {
-
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

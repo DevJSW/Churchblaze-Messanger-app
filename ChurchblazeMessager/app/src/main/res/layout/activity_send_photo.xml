@@ -43,7 +43,7 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom|end"
         android:layout_margin="19dp"
-        android:src="@drawable/ic_sender" />
+        android:src="@drawable/ic_send_white_" />
 
 
 </RelativeLayout>
