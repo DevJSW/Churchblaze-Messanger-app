@@ -352,13 +352,13 @@ public class ChatroomActivity extends AppCompatActivity {
                                     viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                                     viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
 
-                                    // if card has my uid, then change chat balloon
+                                    // if card has my uid, then change chat balloon shape
                                 } else if (user_uid == current_user_uid){
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
                                     viewHolder.liny.setVisibility(View.GONE);
 
-                                } else {
+                                } else if (user_uid != current_user_uid){
 
                                     viewHolder.rely.setVisibility(View.GONE);
                                     viewHolder.liny.setVisibility(View.VISIBLE);
