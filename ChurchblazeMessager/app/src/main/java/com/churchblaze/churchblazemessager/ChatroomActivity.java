@@ -132,7 +132,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child(mAuth.getCurrentUser().getUid());
 
-       // mCommentField = (EditText) findViewById(R.id.commentField);
         mSendBtn = (ImageView) findViewById(R.id.sendBtn);
         mSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,13 +352,16 @@ public class ChatroomActivity extends AppCompatActivity {
                                     viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                                     viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
 
+                                    // if card has my uid, then change chat balloon
                                 } else if (user_uid == current_user_uid){
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
+                                    viewHolder.liny.setVisibility(View.GONE);
 
                                 } else {
 
                                     viewHolder.rely.setVisibility(View.GONE);
+                                    viewHolder.liny.setVisibility(View.VISIBLE);
                                 }
 
                             }
@@ -418,9 +420,6 @@ public class ChatroomActivity extends AppCompatActivity {
             mImage = (ImageView) mView.findViewById(R.id.post_image);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
-            //mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-           // mAuth = FirebaseAuth.getInstance();
-
 
         }
 
