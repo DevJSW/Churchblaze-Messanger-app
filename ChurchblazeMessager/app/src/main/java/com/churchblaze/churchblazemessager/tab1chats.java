@@ -1,6 +1,8 @@
 package com.churchblaze.churchblazemessager;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -66,7 +68,7 @@ public class tab1chats extends Fragment {
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mQueryPostChats = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
+        mQueryPostChats = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).orderByChild("post_key").equalTo(mAuth.getCurrentUser().getUid());
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
@@ -116,19 +118,79 @@ public class tab1chats extends Fragment {
             protected void populateViewHolder(final LetterViewHolder viewHolder, final People model, int position) {
 
                 final String post_key = getRef(position).getKey();
-                final String PostKey = getRef(position).getKey();
+                //final String PostKey = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setImage(getContext(), model.getImage());
 
-                // open chatroom activity
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+
+                mDatabaseChatroom.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
-                        cardonClick.putExtra("heartraise_id", PostKey );
-                        startActivity(cardonClick);
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String PostKey = (String) dataSnapshot.child("post_key").getValue();
+
+                        // open chatroom activity
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
+                                cardonClick.putExtra("heartraise_id", PostKey );
+                                startActivity(cardonClick);
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        AlertDialog diaBox = AskOption();
+                        diaBox.show();
+                        return false;
+                    }
+
+                    private AlertDialog AskOption() {
+
+                        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
+                                //set message, title, and icon
+                                .setTitle("Delete")
+                                .setMessage("Do you want to Delete this post?")
+
+                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        //your deleting code
+
+                                        // mDatabase.child(post_key).removeValue();
+
+                                        dialog.dismiss();
+                                    }
+
+                                })
+
+
+
+                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        dialog.dismiss();
+
+                                    }
+                                })
+                                .create();
+                        return myQuittingDialogBox;
+
+
                     }
                 });
 

@@ -1,6 +1,8 @@
 package com.churchblaze.churchblazemessager;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,7 +39,7 @@ public class tab2members extends Fragment {
     String post_key = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
-    private DatabaseReference mDatabaseChatrooms;
+    private DatabaseReference mDatabaseChats;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
@@ -57,7 +59,7 @@ public class tab2members extends Fragment {
             }
         });
 
-        mDatabaseChatrooms = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseChats = FirebaseDatabase.getInstance().getReference().child("Chats");
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -65,7 +67,7 @@ public class tab2members extends Fragment {
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
-        mDatabaseChatrooms.keepSynced(true);
+        mDatabaseChats.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
 
         return v;
@@ -106,7 +108,52 @@ public class tab2members extends Fragment {
                     }
                 });
 
-                mQueryPostChats = mDatabaseChatrooms.orderByChild("post_key").equalTo(post_key);
+                viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        AlertDialog diaBox = AskOption();
+                        diaBox.show();
+                        return false;
+                    }
+
+                    private AlertDialog AskOption() {
+
+                        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
+                                //set message, title, and icon
+                                .setTitle("Delete")
+                                .setMessage("Do you want to Delete this post?")
+
+                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        //your deleting code
+
+                                        // mDatabase.child(post_key).removeValue();
+
+                                        dialog.dismiss();
+                                    }
+
+                                })
+
+
+
+                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        dialog.dismiss();
+
+                                    }
+                                })
+                                .create();
+                        return myQuittingDialogBox;
+
+
+                    }
+                });
+
+
+                mQueryPostChats = mDatabaseChats.orderByChild("post_key").equalTo(post_key);
                 mQueryPostChats.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -132,42 +179,9 @@ public class tab2members extends Fragment {
         };
 
         mMembersList.setAdapter(firebaseRecyclerAdapter);
-        checkUserExists();
+
 
     }
-
-    private void checkUserExists() {
-
-        mProgressBar.setVisibility(View.VISIBLE);
-        final String user_id = mAuth.getCurrentUser().getUid();
-
-        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                if (!dataSnapshot.hasChild(user_id)) {
-
-                    mProgressBar.setVisibility(View.GONE);
-
-
-                }else {
-
-                    mProgressBar.setVisibility(View.GONE);
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                mProgressBar.setVisibility(View.GONE);
-            }
-        });
-    }
-
-
     void refreshItems() {
         // Load items
         // ...

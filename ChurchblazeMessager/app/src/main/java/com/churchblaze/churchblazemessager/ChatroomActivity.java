@@ -116,7 +116,8 @@ public class ChatroomActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
-        //mQueryPostChats = mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).orderByChild("post_key").equalTo(mPostKey);
+        mQueryPostChats = mDatabasePostChats.child(mAuth.getCurrentUser().getUid()).orderByChild("post_key").equalTo(mPostKey);
+        mQueryChats = mDatabasePostChats.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
 
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
@@ -173,7 +174,7 @@ public class ChatroomActivity extends AppCompatActivity {
                         final String username2 = (String) dataSnapshot.child("name").getValue();
                         final TextView name2 = (TextView) findViewById(R.id.post_name2);
 
-                        mDatabase.addValueEventListener(new ValueEventListener() {
+                        mQueryPostChats.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() == null){
@@ -247,10 +248,10 @@ public class ChatroomActivity extends AppCompatActivity {
             //pushing chats into chatroom on the database inside my uid
 
             //sender chat screen
-            final DatabaseReference newPost = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
+            final DatabaseReference newPost = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).push();
 
             // reciever chat screen
-            final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).push();
+            //final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).push();
 
 
             mDatabaseUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
@@ -272,11 +273,10 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("image").setValue(dataSnapshot.child("image").getValue());
                             newPost.child("sender_uid").setValue(mCurrentUser.getUid());
                             newPost.child("reciever_uid").setValue(reciever_uid);
-                            newPost.child("reciever_uid").setValue(mCurrentUser.getUid());
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
 
-
+/*
                             //current user (sender) chat
                             newPost2.child("message").setValue(message_val);
                             newPost2.child("uid").setValue(mCurrentUser.getUid());
@@ -287,7 +287,7 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost2.child("reciever_uid").setValue(mCurrentUser.getUid());
                             newPost2.child("date").setValue(stringDate);
                             newPost2.child("post_key").setValue(mPostKey);
-
+*/
                         }
 
                         @Override
@@ -319,7 +319,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 Chat.class,
                 R.layout.chat_row,
                 CommentViewHolder.class,
-                mDatabase
+                mQueryPostChats
 
 
         ) {
@@ -345,7 +345,7 @@ public class ChatroomActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
                                 final String post_photo = (String) dataSnapshot.child("photo").getValue();
-                                final String user_uid = (String) dataSnapshot.child("uid").getValue();
+                                final String reciever_uid = (String) dataSnapshot.child("reciever_uid").getValue();
 
                                 if (post_photo != null) {
 
@@ -353,12 +353,16 @@ public class ChatroomActivity extends AppCompatActivity {
                                     viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
 
                                     // if card has my uid, then change chat balloon shape
-                                } else if (user_uid == current_user_uid){
+                                } else {
+
+                                }
+
+                                if (reciever_uid == null){
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
                                     viewHolder.liny.setVisibility(View.GONE);
 
-                                } else if (user_uid != current_user_uid){
+                                } else {
 
                                     viewHolder.rely.setVisibility(View.GONE);
                                     viewHolder.liny.setVisibility(View.VISIBLE);
@@ -533,7 +537,14 @@ public class ChatroomActivity extends AppCompatActivity {
                     Intent cardonClick = new Intent(ChatroomActivity.this, SendPhotoActivity.class);
                     cardonClick.putExtra("heartraise_id", mPostKey );
                     startActivity(cardonClick);
+                } else  if(id == R.id.action_call) {
+
+                    Intent cardonClick = new Intent(ChatroomActivity.this, CallActivity.class);
+                    cardonClick.putExtra("recipient_id", mPostKey );
+                    cardonClick.putExtra("caller_id", mCurrentUser.getUid() );
+                    startActivity(cardonClick);
                 }
+
 
                 return super.onOptionsItemSelected(item);
         }

@@ -47,6 +47,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
-
+    compile files('libs/sinch-android-rtc-3.11.0/docs/sinch-android-rtc-3.11.0-javadoc.jar')
 }
 apply plugin: 'com.google.gms.google-services'

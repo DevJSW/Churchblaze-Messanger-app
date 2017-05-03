@@ -127,7 +127,7 @@ public class SendPhotoActivity extends AppCompatActivity {
 
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    final DatabaseReference newPost = mDatabaseComment.push();
+                    final DatabaseReference newPost = mDatabaseComment.child(mAuth.getCurrentUser().getUid()).push();
 
                     mDatabasePostUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
                         @Override

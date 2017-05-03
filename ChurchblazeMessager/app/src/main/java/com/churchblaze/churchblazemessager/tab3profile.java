@@ -35,6 +35,14 @@ public class tab3profile extends Fragment {
             }
         });
 
+        LinearLayout openNotification = (LinearLayout) v.findViewById(R.id.lin_notifications);
+        openNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(new Intent(getActivity(), NotificationActivity.class)));
+            }
+        });
+
         LinearLayout openShare = (LinearLayout) v.findViewById(R.id.lin_share);
         openShare.setOnClickListener(new View.OnClickListener() {
             @Override
