@@ -116,7 +116,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
-        mQueryPostChats = mDatabasePostChats.child(mAuth.getCurrentUser().getUid()).orderByChild("post_key").equalTo(mPostKey);
+        mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
         mQueryChats = mDatabasePostChats.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
 
         mCurrentUser = mAuth.getCurrentUser();
@@ -216,7 +216,6 @@ public class ChatroomActivity extends AppCompatActivity {
     }
 
 
-
     void refreshItems() {
         // Load items
         // ...
@@ -248,7 +247,7 @@ public class ChatroomActivity extends AppCompatActivity {
             //pushing chats into chatroom on the database inside my uid
 
             //sender chat screen
-            final DatabaseReference newPost = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).push();
+            final DatabaseReference newPost = mDatabaseChatroom.push();
 
             // reciever chat screen
             //final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).push();
@@ -338,6 +337,7 @@ public class ChatroomActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         final String current_user_uid = (String) dataSnapshot.child("uid").getValue();
+                        final String current_user_name = (String) dataSnapshot.child("name").getValue();
 
                         mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
 
@@ -357,15 +357,57 @@ public class ChatroomActivity extends AppCompatActivity {
 
                                 }
 
-                                if (reciever_uid == null){
+                                if (reciever_uid == null) {
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
                                     viewHolder.liny.setVisibility(View.GONE);
 
+                                    // if card has my uid, then change chat balloon shape
                                 } else {
 
                                     viewHolder.rely.setVisibility(View.GONE);
                                     viewHolder.liny.setVisibility(View.VISIBLE);
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                mDatabaseUser.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+
+                        final String current_user_uid = (String) snapshot.child("uid").getValue();
+
+                        mDatabaseComment.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+
+                                final String reciever_uid = (String) snapshot.child("uid").getValue();
+
+
+                                if (snapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                    //viewHolder.rely.setVisibility(View.VISIBLE);
+                                    //viewHolder.liny.setVisibility(View.GONE);
+
+                                } else {
+
+                                   // viewHolder.rely.setVisibility(View.GONE);
+                                   // viewHolder.liny.setVisibility(View.VISIBLE);
                                 }
 
                             }

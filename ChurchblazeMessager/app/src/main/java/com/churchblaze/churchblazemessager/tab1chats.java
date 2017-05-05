@@ -1,6 +1,7 @@
 package com.churchblaze.churchblazemessager;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +48,7 @@ public class tab1chats extends Fragment {
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
     private ProgressBar mProgressBar;
+    //final Context context = this;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +70,7 @@ public class tab1chats extends Fragment {
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mQueryPostChats = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).orderByChild("post_key").equalTo(mAuth.getCurrentUser().getUid());
+        mQueryPostChats = mDatabaseChatroom.orderByChild("post_key").equalTo(mAuth.getCurrentUser().getUid());
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
@@ -104,7 +106,6 @@ public class tab1chats extends Fragment {
         super.onStart();
 
 
-
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
@@ -121,6 +122,7 @@ public class tab1chats extends Fragment {
                 //final String PostKey = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
+                viewHolder.setDate(model.getDate());
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setImage(getContext(), model.getImage());
 
@@ -129,7 +131,7 @@ public class tab1chats extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        final String PostKey = (String) dataSnapshot.child("post_key").getValue();
+                        final String PostKey = (String) dataSnapshot.child("uid").getValue();
 
                         // open chatroom activity
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -151,51 +153,80 @@ public class tab1chats extends Fragment {
 
 
                 viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+
                     @Override
                     public boolean onLongClick(View v) {
 
-                        AlertDialog diaBox = AskOption();
-                        diaBox.show();
+                        final Context context = getActivity();
+
+                        // custom dialog
+                        final Dialog dialog = new Dialog(context);
+                        dialog.setContentView(R.layout.popup_dialog);
+
+                        // set the custom dialog components - text, image and button
+
+                        final TextView delete = (TextView) dialog.findViewById(R.id.delete);
+                        delete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertDialog diaBox = AskOption();
+                                diaBox.show();
+                                dialog.dismiss();
+                            }
+                        });
+
+                        // final EditText explanation_input = (EditText) dialog.findViewById(R.id.exInput);
+
+
+                        // if button is clicked, close the custom dialog
+
+                        dialog.show();
                         return false;
                     }
 
-                    private AlertDialog AskOption() {
-
-                        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
-                                //set message, title, and icon
-                                .setTitle("Delete")
-                                .setMessage("Do you want to Delete this post?")
-
-                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        //your deleting code
-
-                                        // mDatabase.child(post_key).removeValue();
-
-                                        dialog.dismiss();
-                                    }
-
-                                })
-
-
-
-                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        dialog.dismiss();
-
-                                    }
-                                })
-                                .create();
-                        return myQuittingDialogBox;
-
-
-                    }
                 });
 
 
             }
+
+
+
+            private AlertDialog AskOption() {
+
+                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
+                        //set message, title, and icon
+                        .setTitle("Delete")
+                        .setMessage("Do you want to Delete this post?")
+
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                //your deleting code
+
+                                mDatabaseChatroom.child(post_key).removeValue();
+
+                                dialog.dismiss();
+                            }
+
+                        })
+
+
+
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+
+                            }
+                        })
+                        .create();
+                return myQuittingDialogBox;
+
+
+            }
+
+
+
 
         };
 
@@ -280,6 +311,11 @@ public class tab1chats extends Fragment {
             post_name.setText(name);
         }
 
+        public void setDate(String date) {
+
+            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
+            post_date.setText(date);
+        }
 
         public void setMessage(String message) {
 

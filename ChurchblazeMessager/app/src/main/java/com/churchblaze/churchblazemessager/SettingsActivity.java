@@ -251,6 +251,10 @@ public class SettingsActivity extends AppCompatActivity {
     //sign out method
     public void signOut() {
         auth.signOut();
+        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
 
     }
 

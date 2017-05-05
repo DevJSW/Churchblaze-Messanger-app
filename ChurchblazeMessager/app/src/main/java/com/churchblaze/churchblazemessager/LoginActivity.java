@@ -138,6 +138,10 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+        /****************************** facebook SIGN IN*************************/
+
+
+
 
         /*************************** GOOGLE SIGN IN*****************************/
 
