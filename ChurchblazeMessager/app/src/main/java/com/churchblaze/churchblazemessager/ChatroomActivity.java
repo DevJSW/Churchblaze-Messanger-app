@@ -272,18 +272,7 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
 
-/*
-                            //current user (sender) chat
-                            newPost2.child("message").setValue(message_val);
-                            newPost2.child("uid").setValue(mCurrentUser.getUid());
-                            newPost2.child("name").setValue(dataSnapshot.child("name").getValue());
-                            newPost2.child("image").setValue(dataSnapshot.child("image").getValue());
-                            newPost2.child("sender_uid").setValue(mCurrentUser.getUid());
-                            newPost2.child("reciever_uid").setValue(reciever_uid);
-                            newPost2.child("reciever_uid").setValue(mCurrentUser.getUid());
-                            newPost2.child("date").setValue(stringDate);
-                            newPost2.child("post_key").setValue(mPostKey);
-*/
+
                         }
 
                         @Override

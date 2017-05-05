@@ -248,6 +248,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
             //sender chat screen
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey).child(mCurrentUser.getUid()).push();
+            final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey);
 
 
             mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
@@ -271,6 +272,9 @@ public class Chatroom2Activity extends AppCompatActivity {
                             newPost.child("sender_uid").setValue(mCurrentUser.getUid());
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
+
+                            //update messege showing on tab1 chats activity
+                            newPost2.child("message").setValue(message_val);
 
 
                         }
@@ -330,7 +334,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
                                 final String post_photo = (String) dataSnapshot.child("photo").getValue();
-                                final String reciever_uid = (String) dataSnapshot.child("reciever_uid").getValue();
+                                final String sender_uid = (String) dataSnapshot.child("uid").getValue();
 
                                 if (post_photo != null) {
 
@@ -342,7 +346,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                                 }
 
-                                if (reciever_uid == current_user_uid) {
+                                if (mPostKey != current_user_uid) {
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
                                     viewHolder.liny.setVisibility(View.GONE);
