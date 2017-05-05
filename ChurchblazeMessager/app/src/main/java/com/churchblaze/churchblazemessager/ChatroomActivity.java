@@ -356,7 +356,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                 } else {
 
                                 }
-
+/*
                                 if (reciever_uid == null) {
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
@@ -368,7 +368,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                     viewHolder.rely.setVisibility(View.GONE);
                                     viewHolder.liny.setVisibility(View.VISIBLE);
                                 }
-
+*/
                             }
 
                             @Override

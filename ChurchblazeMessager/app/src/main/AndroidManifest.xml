@@ -80,11 +80,14 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EditProfileActivity"
-            android:label="Edit"/>
+            android:label="Edit" />
         <activity android:name=".CallActivity" />
         <activity
             android:name=".NotificationActivity"
-            android:label="Notifications"/>
+            android:label="Notifications" />
+        <activity
+            android:name=".StatusActivity"
+            android:label="Status"/>
     </application>
 
 </manifest>
