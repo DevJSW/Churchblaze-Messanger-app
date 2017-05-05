@@ -318,14 +318,13 @@ public class Chatroom2Activity extends AppCompatActivity {
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
-                mDatabaseUser.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                mDatabaseUser.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         final String current_user_uid = (String) dataSnapshot.child("uid").getValue();
-                        final String current_user_name = (String) dataSnapshot.child("name").getValue();
 
-                        mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
+                        mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).addValueEventListener(new ValueEventListener() {
 
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -342,8 +341,8 @@ public class Chatroom2Activity extends AppCompatActivity {
                                 } else {
 
                                 }
-/*
-                                if (reciever_uid == null) {
+
+                                if (reciever_uid == current_user_uid) {
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
                                     viewHolder.liny.setVisibility(View.GONE);
@@ -354,7 +353,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                                     viewHolder.rely.setVisibility(View.GONE);
                                     viewHolder.liny.setVisibility(View.VISIBLE);
                                 }
-*/
+
                             }
 
                             @Override
