@@ -87,7 +87,8 @@
             android:label="Notifications" />
         <activity
             android:name=".StatusActivity"
-            android:label="Status"/>
+            android:label="Status" />
+        <activity android:name=".Chatroom2Activity"></activity>
     </application>
 
 </manifest>

@@ -247,18 +247,16 @@ public class ChatroomActivity extends AppCompatActivity {
             //pushing chats into chatroom on the database inside my uid
 
             //sender chat screen
-            final DatabaseReference newPost = mDatabaseChatroom.push();
-
-            // reciever chat screen
-            //final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).push();
+            final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey);
 
 
-            mDatabaseUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
+            mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    // getting user uid
-                    final String reciever_uid = (String) dataSnapshot.child("uid").getValue();
+                    // getting user details
+                    final String reciever_name = (String) dataSnapshot.child("name").getValue();
+                    final String reciever_image = (String) dataSnapshot.child("image").getValue();
 
                     mDatabaseUser.addValueEventListener(new ValueEventListener() {
 
@@ -270,8 +268,9 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("uid").setValue(mCurrentUser.getUid());
                             newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                             newPost.child("image").setValue(dataSnapshot.child("image").getValue());
+                            newPost.child("reciever_name").setValue(dataSnapshot.child(reciever_name).getValue());
+                            newPost.child("reciever_image").setValue(dataSnapshot.child(reciever_image).getValue());
                             newPost.child("sender_uid").setValue(mCurrentUser.getUid());
-                            newPost.child("reciever_uid").setValue(reciever_uid);
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
 
