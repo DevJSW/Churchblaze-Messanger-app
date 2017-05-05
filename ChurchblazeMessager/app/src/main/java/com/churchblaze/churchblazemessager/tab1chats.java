@@ -70,7 +70,7 @@ public class tab1chats extends Fragment {
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mQueryPostChats = mDatabaseChatroom.orderByChild("sender_ui").equalTo(mAuth.getCurrentUser().getUid());
+        mQueryPostChats = mDatabaseChatroom.orderByChild("sender_uid").equalTo(mAuth.getCurrentUser().getUid());
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
