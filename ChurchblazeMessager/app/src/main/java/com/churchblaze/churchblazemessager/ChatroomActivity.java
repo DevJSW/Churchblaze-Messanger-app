@@ -258,7 +258,7 @@ public class ChatroomActivity extends AppCompatActivity {
                     final String reciever_name = (String) dataSnapshot.child("name").getValue();
                     final String reciever_image = (String) dataSnapshot.child("image").getValue();
 
-                    mDatabaseUser.addValueEventListener(new ValueEventListener() {
+                    mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -268,8 +268,6 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("uid").setValue(mCurrentUser.getUid());
                             newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                             newPost.child("image").setValue(dataSnapshot.child("image").getValue());
-                            newPost.child("reciever_name").setValue(dataSnapshot.child(reciever_name).getValue());
-                            newPost.child("reciever_image").setValue(dataSnapshot.child(reciever_image).getValue());
                             newPost.child("sender_uid").setValue(mCurrentUser.getUid());
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);

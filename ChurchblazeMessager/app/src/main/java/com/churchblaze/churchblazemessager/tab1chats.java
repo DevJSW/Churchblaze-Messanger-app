@@ -70,7 +70,7 @@ public class tab1chats extends Fragment {
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mQueryPostChats = mDatabaseChatroom.orderByChild("sender_uid").equalTo(mAuth.getCurrentUser().getUid());
+        mQueryPostChats = mDatabaseChatroom.orderByChild("sender_ui").equalTo(mAuth.getCurrentUser().getUid());
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
@@ -121,10 +121,10 @@ public class tab1chats extends Fragment {
                 final String post_key = getRef(position).getKey();
                 //final String PostKey = getRef(position).getKey();
 
-                viewHolder.setReciever_name(model.getName());
+                viewHolder.setName(model.getName());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setMessage(model.getMessage());
-                viewHolder.setReciever_image(getContext(), model.getImage());
+                viewHolder.setImage(getContext(), model.getImage());
 
 
                 mDatabaseChatroom.child(post_key).addValueEventListener(new ValueEventListener() {
@@ -305,10 +305,10 @@ public class tab1chats extends Fragment {
 
         }
 
-        public void setReciever_name(String reciever_name) {
+        public void setName(String name) {
 
             TextView post_name = (TextView) mView.findViewById(R.id.post_name);
-            post_name.setText(reciever_name);
+            post_name.setText(name);
         }
 
         public void setDate(String date) {
@@ -323,11 +323,11 @@ public class tab1chats extends Fragment {
             post_message.setText(message);
         }
 
-        public void setReciever_image(final Context ctx, final String reciever_image) {
+        public void setImage(final Context ctx, final String image) {
 
             final CircleImageView civ = (CircleImageView) mView.findViewById(R.id.post_image);
 
-            Picasso.with(ctx).load(reciever_image).networkPolicy(NetworkPolicy.OFFLINE).into(civ, new Callback() {
+            Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(civ, new Callback() {
                 @Override
                 public void onSuccess() {
 
@@ -337,7 +337,7 @@ public class tab1chats extends Fragment {
                 public void onError() {
 
 
-                    Picasso.with(ctx).load(reciever_image).into(civ);
+                    Picasso.with(ctx).load(image).into(civ);
                 }
             });
         }
