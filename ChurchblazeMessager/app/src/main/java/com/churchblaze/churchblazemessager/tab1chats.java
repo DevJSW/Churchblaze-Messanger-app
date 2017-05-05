@@ -119,7 +119,7 @@ public class tab1chats extends Fragment {
             protected void populateViewHolder(final LetterViewHolder viewHolder, final People model, int position) {
 
                 final String post_key = getRef(position).getKey();
-                //final String PostKey = getRef(position).getKey();
+                final String PostKey = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
                 viewHolder.setDate(model.getDate());
@@ -137,8 +137,8 @@ public class tab1chats extends Fragment {
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
-                                cardonClick.putExtra("heartraise_id", PostKey );
+                                Intent cardonClick = new Intent(getActivity(), Chatroom2Activity.class);
+                                cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);
                             }
                         });

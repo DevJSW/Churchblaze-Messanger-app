@@ -88,7 +88,10 @@
         <activity
             android:name=".StatusActivity"
             android:label="Status" />
-        <activity android:name=".Chatroom2Activity"></activity>
+        <activity
+            android:name=".Chatroom2Activity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
