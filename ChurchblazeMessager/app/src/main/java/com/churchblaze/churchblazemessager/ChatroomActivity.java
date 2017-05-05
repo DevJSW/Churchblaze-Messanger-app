@@ -248,9 +248,10 @@ public class ChatroomActivity extends AppCompatActivity {
 
             //sender chat screen
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey);
+            final DatabaseReference newPost2 = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid());
 
 
-            mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
+            mDatabaseUser.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -272,7 +273,13 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
 
-
+                            newPost2.child("message").setValue(message_val);
+                            newPost2.child("uid").setValue(mCurrentUser.getUid());
+                            newPost2.child("name").setValue(reciever_name);
+                            newPost2.child("image").setValue(reciever_image);
+                            newPost2.child("sender_uid").setValue(mPostKey);
+                            newPost2.child("date").setValue(stringDate);
+                            newPost2.child("post_key").setValue(mPostKey);
                         }
 
                         @Override
@@ -342,19 +349,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                 } else {
 
                                 }
-/*
-                                if (reciever_uid == null) {
 
-                                    viewHolder.rely.setVisibility(View.VISIBLE);
-                                    viewHolder.liny.setVisibility(View.GONE);
-
-                                    // if card has my uid, then change chat balloon shape
-                                } else {
-
-                                    viewHolder.rely.setVisibility(View.GONE);
-                                    viewHolder.liny.setVisibility(View.VISIBLE);
-                                }
-*/
                             }
 
                             @Override

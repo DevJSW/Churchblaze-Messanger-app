@@ -248,6 +248,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
             //sender chat screen
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey).child(mCurrentUser.getUid()).push();
+            final DatabaseReference newPost3 = mDatabaseChatroom.child(mCurrentUser.getUid()).child(mPostKey).push();
             final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey);
 
 
@@ -277,6 +278,13 @@ public class Chatroom2Activity extends AppCompatActivity {
                             newPost2.child("message").setValue(message_val);
 
 
+                            newPost3.child("message").setValue(message_val);
+                            newPost3.child("uid").setValue(mCurrentUser.getUid());
+                            newPost3.child("name").setValue(dataSnapshot.child("name").getValue());
+                            newPost3.child("image").setValue(dataSnapshot.child("image").getValue());
+                            newPost3.child("sender_uid").setValue(mCurrentUser.getUid());
+                            newPost3.child("date").setValue(stringDate);
+                            newPost3.child("post_key").setValue(mPostKey);
                         }
 
                         @Override

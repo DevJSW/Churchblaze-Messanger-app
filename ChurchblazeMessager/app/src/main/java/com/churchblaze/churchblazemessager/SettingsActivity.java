@@ -251,19 +251,9 @@ public class SettingsActivity extends AppCompatActivity {
     //sign out method
     public void signOut() {
 
+        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
+        finish();
         auth.signOut();
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
-                    startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
-                    finish();
-                }
-            }
-        };
 
     }
 
