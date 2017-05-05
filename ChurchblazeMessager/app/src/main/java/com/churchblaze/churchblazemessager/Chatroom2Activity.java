@@ -258,7 +258,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                     final String reciever_name = (String) dataSnapshot.child("name").getValue();
                     final String reciever_image = (String) dataSnapshot.child("image").getValue();
 
-                    mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
+                    mDatabaseUser.addValueEventListener(new ValueEventListener() {
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
