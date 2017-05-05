@@ -48,7 +48,7 @@ public class tab1chats extends Fragment {
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
     private ProgressBar mProgressBar;
-    //final Context context = this;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +76,7 @@ public class tab1chats extends Fragment {
         mMembersList.setHasFixedSize(true);
         mDatabaseChatroom.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
+
 
         mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override
