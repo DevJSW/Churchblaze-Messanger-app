@@ -162,6 +162,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
                 toolbar_username.setText(username);
 
+
                 mDatabaseUser2.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -169,28 +170,13 @@ public class ChatroomActivity extends AppCompatActivity {
                         final String username2 = (String) dataSnapshot.child("name").getValue();
                         final TextView name2 = (TextView) findViewById(R.id.post_name2);
 
-                        mQueryPostChats.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.getValue() == null){
-                                    Picasso.with(ChatroomActivity.this).load(userimg).into(civ);
-                                    name.setText(username);
-                                    name2.setText(username2);
-                                    hello.setVisibility(View.VISIBLE);
+                        Picasso.with(ChatroomActivity.this).load(userimg).into(civ);
+                        name.setText(username);
+                        name2.setText(username2);
+                        hello.setVisibility(View.VISIBLE);
 
-                                } else {
-                                    Picasso.with(ChatroomActivity.this).load(userimg).into(civ);
-                                    name.setText(username);
-                                    name2.setText(username2);
-                                    hello.setVisibility(View.VISIBLE);
-                                }
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
 
                     }
 
