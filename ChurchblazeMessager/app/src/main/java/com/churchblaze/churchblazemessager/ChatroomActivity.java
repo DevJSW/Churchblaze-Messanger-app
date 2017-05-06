@@ -280,7 +280,6 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost2.child("sender_uid").setValue(mPostKey);
                             newPost2.child("date").setValue(stringDate);
                             newPost2.child("post_key").setValue(mPostKey);
-                            newPost2.child("change_chat_icon").setValue("true");
                         }
 
                         @Override
