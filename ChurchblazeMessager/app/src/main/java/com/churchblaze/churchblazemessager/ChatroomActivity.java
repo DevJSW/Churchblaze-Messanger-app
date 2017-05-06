@@ -176,8 +176,6 @@ public class ChatroomActivity extends AppCompatActivity {
                         hello.setVisibility(View.VISIBLE);
 
 
-
-
                     }
 
                     @Override
@@ -264,6 +262,11 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost2.child("sender_uid").setValue(mPostKey);
                             newPost2.child("date").setValue(stringDate);
                             newPost2.child("post_key").setValue(mPostKey);
+
+
+                            Intent intent = new Intent(ChatroomActivity.this, tab1chats.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                         }
 
                         @Override
