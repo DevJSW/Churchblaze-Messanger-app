@@ -157,6 +157,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                 final String userimg = (String) dataSnapshot.child("image").getValue();
                 final String username = (String) dataSnapshot.child("name").getValue();
+                final String last_seen_date = (String) dataSnapshot.child("last_active_date").getValue();
                 final CircleImageView civ = (CircleImageView) findViewById(R.id.post_image);
                 final TextView name = (TextView) findViewById(R.id.post_name);
 
@@ -168,7 +169,8 @@ public class Chatroom2Activity extends AppCompatActivity {
                 TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
                 toolbar_username.setText(username);
 
-
+                TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
+                toolbar_last_seen.setText(last_seen_date);
 
             }
 
@@ -219,6 +221,9 @@ public class Chatroom2Activity extends AppCompatActivity {
             final DatabaseReference newPost3 = mDatabaseChatroom.child(mCurrentUser.getUid()).child(mPostKey).push();
             final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey);
 
+            // post last active date to user data
+            final DatabaseReference newPost4 = mDatabaseUser;
+
 
             mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -244,6 +249,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                             //update messege showing on tab1 chats activity
                             newPost2.child("message").setValue(message_val);
+                            newPost4.child("last_active_date").setValue(stringDate);
 
                             newPost3.child("message").setValue(message_val);
                             newPost3.child("uid").setValue(mCurrentUser.getUid());

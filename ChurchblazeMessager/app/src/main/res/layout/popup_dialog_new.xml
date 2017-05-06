@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
-    android:orientation="horizontal"
-    android:background="@color/colorPrimary">
+    android:layout_margin="10dp"
+    android:orientation="horizontal">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,17 +14,18 @@
         android:orientation="horizontal"
         android:weightSum="3">
 
-        <ImageView android:id="@+id/googleBtn"
+        <ImageView android:id="@+id/favouriteBtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_star_icon"
             android:layout_weight="1"
-            android:padding="13dp"
+            android:padding="16dp"
             android:layout_gravity="left" />
-        <ImageView android:id="@+id/fbBtn"
+        <ImageView
+            android:id="@+id/delete"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="13dp"
+            android:padding="16dp"
             android:layout_weight="1"
             android:textColor="#ffffff"
             android:layout_gravity="center"
@@ -34,7 +35,7 @@
             android:id="@+id/twitterBtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="13dp"
+            android:padding="16dp"
             android:layout_weight="1"
             android:layout_gravity="right"
             android:src="@drawable/ic_block_icon" />

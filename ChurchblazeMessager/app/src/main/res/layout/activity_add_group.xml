@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.churchblaze.churchblazemessager.AddGroupActivity">
 
     <RelativeLayout
@@ -53,9 +54,65 @@
         </RelativeLayout>
 
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/top_liny"
+            android:layout_below="@+id/liny"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rely_img"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/post_image"
+                    android:layout_marginLeft="5dp"
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="#fff"
+                    android:src="@drawable/placeholder_image"/>
+
+
+
+            </RelativeLayout>
+
+
+
+            <EditText
+                android:id="@+id/group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter group name"
+                android:layout_toRightOf="@+id/rely_img"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#121111"
+                android:textColor="#121111" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_toRightOf="@+id/rely_img"
+                android:layout_marginTop="6dp"
+                android:layout_below="@+id/rely_img"
+                android:layout_marginRight="10dp"
+                android:background="#9b9999"/>
+
+
+        </RelativeLayout>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
-            android:layout_below="@+id/liny"
+            android:layout_below="@+id/top_liny"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

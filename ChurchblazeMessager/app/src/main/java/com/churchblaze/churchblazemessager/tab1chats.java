@@ -49,6 +49,9 @@ public class tab1chats extends Fragment {
     private Query mQueryPostChats;
     private ProgressBar mProgressBar;
 
+    private Boolean mProcessFavourite = false;
+    private DatabaseReference mDatabaseFavourite;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +66,8 @@ public class tab1chats extends Fragment {
                 refreshItems();
             }
         });
+
+        mDatabaseFavourite = FirebaseDatabase.getInstance().getReference().child("Favourites");
 
         mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
@@ -126,6 +131,83 @@ public class tab1chats extends Fragment {
                 viewHolder.setDate(model.getDate());
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setImage(getContext(), model.getImage());
+               // viewHolder.setFavouriteBtn(post_key);
+
+
+                viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+
+                    @Override
+                    public boolean onLongClick(View v) {
+
+
+                        final Context context = getActivity();
+
+                        // custom dialog
+                        final Dialog dialog = new Dialog(context);
+                        dialog.setContentView(R.layout.popup_dialog_new);
+                        dialog.setTitle("Chat options");
+
+                        // set the custom dialog components - text, image and button
+
+                        final ImageView favouriteBtn = (ImageView) dialog.findViewById(R.id.favouriteBtn);
+                        favouriteBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                viewHolder.mFavouriteBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        mProcessFavourite = true;
+
+                                        mDatabaseFavourite.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                if(mProcessFavourite) {
+
+                                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                                        mDatabaseFavourite.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                                        mProcessFavourite = false;
+                                                    }else {
+
+                                                        mDatabaseFavourite.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                                        mProcessFavourite = false;
+
+                                                    }
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+
+                                    }
+                                });
+
+
+
+
+                                dialog.dismiss();
+                            }
+                        });
+
+                        // final EditText explanation_input = (EditText) dialog.findViewById(R.id.exInput);
+
+
+                        // if button is clicked, close the custom dialog
+
+                        dialog.show();
+                        return false;
+                    }
+
+
+                });
 
 
                 mDatabaseChatroom.child(post_key).addValueEventListener(new ValueEventListener() {
@@ -164,10 +246,11 @@ public class tab1chats extends Fragment {
                         // custom dialog
                         final Dialog dialog = new Dialog(context);
                         dialog.setContentView(R.layout.popup_dialog_new);
+                        dialog.setTitle("Chat options");
 
                         // set the custom dialog components - text, image and button
 
-                        final TextView delete = (TextView) dialog.findViewById(R.id.delete);
+                        final ImageView delete = (ImageView) dialog.findViewById(R.id.delete);
                         delete.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -176,8 +259,6 @@ public class tab1chats extends Fragment {
                                 dialog.dismiss();
                             }
                         });
-
-                        // final EditText explanation_input = (EditText) dialog.findViewById(R.id.exInput);
 
 
                         // if button is clicked, close the custom dialog
@@ -190,10 +271,7 @@ public class tab1chats extends Fragment {
                 });
 
 
-
-
             }
-
 
 
             private AlertDialog AskOption() {
@@ -229,7 +307,6 @@ public class tab1chats extends Fragment {
 
 
             }
-
 
 
 
@@ -294,9 +371,10 @@ public class tab1chats extends Fragment {
 
         View mView;
 
-        ImageView mConnected;
+        ImageView mFavouriteBtn;
         Button mChatBtn;
-
+        DatabaseReference mDatabaseFavourite, mDatabaseUnlike;
+        FirebaseAuth mAuth;
         ProgressBar mProgressBar;
 
         public LetterViewHolder(View itemView) {
@@ -305,10 +383,37 @@ public class tab1chats extends Fragment {
             mView = itemView;
 
             mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
+            mFavouriteBtn = (ImageView) mView.findViewById(R.id.favourite);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
+            mDatabaseFavourite = FirebaseDatabase.getInstance().getReference().child("Favourites");
+            mDatabaseFavourite.keepSynced(true);
             Query mQueryPostChats;
 
         }
+/*
+        public void setFavouriteBtn(final String post_key) {
+
+            mDatabaseFavourite.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mFavouriteBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        mFavouriteBtn.setVisibility(View.GONE);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+*/
 
         public void setName(String name) {
 

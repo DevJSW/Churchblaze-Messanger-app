@@ -152,6 +152,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 final String userimg = (String) dataSnapshot.child("image").getValue();
                 final String username = (String) dataSnapshot.child("name").getValue();
                 final CircleImageView civ = (CircleImageView) findViewById(R.id.post_image);
+                final String last_seen_date = (String) dataSnapshot.child("last_active_date").getValue();
                 final TextView name = (TextView) findViewById(R.id.post_name);
 
                 // load image on toolbar
@@ -161,6 +162,9 @@ public class ChatroomActivity extends AppCompatActivity {
                 // set username on toolbar
                 TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
                 toolbar_username.setText(username);
+
+                TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
+                toolbar_last_seen.setText(last_seen_date);
 
 
                 mDatabaseUser2.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
@@ -232,6 +236,9 @@ public class ChatroomActivity extends AppCompatActivity {
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey);
             final DatabaseReference newPost2 = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid());
 
+            // post last active date to user data
+            final DatabaseReference newPost4 = mDatabaseUser;
+
 
             mDatabaseUser.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -254,6 +261,8 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost.child("sender_uid").setValue(mCurrentUser.getUid());
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
+
+                            newPost4.child("last_active_date").setValue(stringDate);
 
                             newPost2.child("message").setValue(message_val);
                             newPost2.child("uid").setValue(mCurrentUser.getUid());

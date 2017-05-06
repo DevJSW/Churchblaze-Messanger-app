@@ -18,12 +18,39 @@
         android:id="@+id/toolbarImg"
         android:src="@drawable/placeholder_image" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:id="@+id/toolbar_username"
-        android:paddingLeft="10dp"
-        android:text="name"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:id="@+id/toolbar_username"
+            android:paddingLeft="10dp"
+            android:text="name"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="LAST ACTIVE"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="date"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/toolbar_last_seen_date"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.v7.widget.Toolbar>
