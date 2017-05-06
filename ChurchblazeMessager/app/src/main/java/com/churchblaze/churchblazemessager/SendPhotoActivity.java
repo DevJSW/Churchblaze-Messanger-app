@@ -127,7 +127,8 @@ public class SendPhotoActivity extends AppCompatActivity {
 
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    final DatabaseReference newPost = mDatabaseComment.push();
+                    final DatabaseReference newPost = mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).push();
+                    final DatabaseReference newPost2 =mDatabaseComment.child(mCurrentUser.getUid()).child(mPostKey).push();
 
                     mDatabasePostUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
                         @Override
@@ -150,6 +151,15 @@ public class SendPhotoActivity extends AppCompatActivity {
                                     newPost.child("reciever_uid").setValue(reciever_uid);
                                     newPost.child("date").setValue(stringDate);
                                     newPost.child("post_key").setValue(mPostKey);
+
+                                    newPost2.child("message").setValue(caption_val);
+                                    newPost2.child("photo").setValue(downloadUrl.toString());
+                                    newPost2.child("uid").setValue(mAuth.getCurrentUser().getUid());
+                                    newPost2.child("name").setValue(dataSnapshot.child("name").getValue());
+                                    newPost2.child("image").setValue(dataSnapshot.child("image").getValue());
+                                    newPost2.child("reciever_uid").setValue(reciever_uid);
+                                    newPost2.child("date").setValue(stringDate);
+                                    newPost2.child("post_key").setValue(mPostKey);
 
                                 }
 
