@@ -57,6 +57,7 @@ public class Chatroom2Activity extends AppCompatActivity {
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
     private Query mQueryPostChats;
+    private Query mQueryPostChats2;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mAuth;
     private ImageView mSendBtn;
@@ -117,6 +118,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
+        mQueryPostChats2 = mDatabasePostChats.orderByChild(mPostKey).equalTo(mCurrentUser.getUid());
         mQueryChats = mDatabasePostChats.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
 
         mCurrentUser = mAuth.getCurrentUser();
@@ -175,6 +177,26 @@ public class Chatroom2Activity extends AppCompatActivity {
                         final TextView name2 = (TextView) findViewById(R.id.post_name2);
 
                         mQueryPostChats.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() == null){
+                                    Picasso.with(Chatroom2Activity.this).load(userimg).into(civ);
+                                    name.setText(username);
+                                    name2.setText(username2);
+                                    hello.setVisibility(View.VISIBLE);
+
+                                } else {
+                                    hello.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        mQueryPostChats2.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() == null){
