@@ -118,7 +118,6 @@ public class Chatroom2Activity extends AppCompatActivity {
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
-        mQueryPostChats2 = mDatabasePostChats.orderByChild(mPostKey).equalTo(mCurrentUser.getUid());
         mQueryChats = mDatabasePostChats.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
 
         mCurrentUser = mAuth.getCurrentUser();
@@ -196,25 +195,6 @@ public class Chatroom2Activity extends AppCompatActivity {
                             }
                         });
 
-                        mQueryPostChats2.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.getValue() == null){
-                                    Picasso.with(Chatroom2Activity.this).load(userimg).into(civ);
-                                    name.setText(username);
-                                    name2.setText(username2);
-                                    hello.setVisibility(View.VISIBLE);
-
-                                } else {
-                                    hello.setVisibility(View.GONE);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
 
                     }
 
@@ -364,7 +344,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
                                 final String post_photo = (String) dataSnapshot.child("photo").getValue();
-                                final String sender_uid = (String) dataSnapshot.child("uid").getValue();
+                                final String chat_icon = (String) dataSnapshot.child("change_chat_icon").getValue();
 
                                 if (post_photo != null) {
 
@@ -376,7 +356,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                                 }
 
-                                if (mPostKey != current_user_uid) {
+                                if (chat_icon != null) {
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
                                     viewHolder.liny.setVisibility(View.GONE);

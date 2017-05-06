@@ -21,12 +21,6 @@
             android:layout_marginBottom="25dp"
             android:src="@drawable/splash" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/cb_talker"/>
     </LinearLayout>
 
 </LinearLayout>
