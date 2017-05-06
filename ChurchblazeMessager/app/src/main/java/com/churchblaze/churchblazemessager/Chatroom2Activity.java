@@ -80,7 +80,7 @@ public class Chatroom2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chatroom);
+        setContentView(R.layout.activity_chatroom2);
         Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarChat);
         setSupportActionBar(my_toolbar);
         rootView = findViewById(R.id.root_view);
@@ -168,41 +168,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                 TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
                 toolbar_username.setText(username);
 
-                mDatabaseUser2.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        final String username2 = (String) dataSnapshot.child("name").getValue();
-                        final TextView name2 = (TextView) findViewById(R.id.post_name2);
-
-                        mQueryPostChats.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.getValue() == null){
-                                    Picasso.with(Chatroom2Activity.this).load(userimg).into(civ);
-                                    name.setText(username);
-                                    name2.setText(username2);
-                                    hello.setVisibility(View.VISIBLE);
-
-                                } else {
-                                    hello.setVisibility(View.GONE);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
             }
 
@@ -279,7 +245,6 @@ public class Chatroom2Activity extends AppCompatActivity {
                             //update messege showing on tab1 chats activity
                             newPost2.child("message").setValue(message_val);
 
-
                             newPost3.child("message").setValue(message_val);
                             newPost3.child("uid").setValue(mCurrentUser.getUid());
                             newPost3.child("name").setValue(dataSnapshot.child("name").getValue());
@@ -287,7 +252,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                             newPost3.child("sender_uid").setValue(mCurrentUser.getUid());
                             newPost3.child("date").setValue(stringDate);
                             newPost3.child("post_key").setValue(mPostKey);
-                            newPost2.child("change_chat_icon").setValue("true");
+                            newPost3.child("change_chat_icon").setValue(mPostKey);
                         }
 
                         @Override
@@ -339,7 +304,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                         final String current_user_uid = (String) dataSnapshot.child("uid").getValue();
 
-                        mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).addValueEventListener(new ValueEventListener() {
+                        mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).child(post_key).addValueEventListener(new ValueEventListener() {
 
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -357,7 +322,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                                 }
 
-                                if (chat_icon != null) {
+                                if (chat_icon == null) {
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
                                     viewHolder.liny.setVisibility(View.GONE);
@@ -384,6 +349,47 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                     }
                 });
+
+
+                mDatabaseComment.child(mCurrentUser.getUid()).child(mPostKey).child(post_key).addValueEventListener(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String post_photo = (String) dataSnapshot.child("photo").getValue();
+                        final String chat_icon = (String) dataSnapshot.child("change_chat_icon").getValue();
+
+                        if (post_photo != null) {
+
+                            viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
+                            viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
+
+                            // if card has my uid, then change chat balloon shape
+                        } else {
+
+                        }
+
+                        if (chat_icon == null) {
+
+                            viewHolder.rely.setVisibility(View.VISIBLE);
+                            viewHolder.liny.setVisibility(View.GONE);
+
+                            // if card has my uid, then change chat balloon shape
+                        } else {
+
+                            viewHolder.rely.setVisibility(View.GONE);
+                            viewHolder.liny.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
 
                 mDatabaseUser.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
