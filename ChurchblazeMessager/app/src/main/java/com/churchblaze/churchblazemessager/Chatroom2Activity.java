@@ -57,7 +57,7 @@ public class Chatroom2Activity extends AppCompatActivity {
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
     private Query mQueryPostChats;
-    private Query mQueryPostChats2;
+    private Query mQueryInAscending;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mAuth;
     private ImageView mSendBtn;
@@ -133,7 +133,7 @@ public class Chatroom2Activity extends AppCompatActivity {
         mDatabaseUser.keepSynced(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child(mAuth.getCurrentUser().getUid());
-
+        mQueryInAscending = mDatabase.orderByChild("date").startAt(-1 * new Date().getTime());
         mSendBtn = (ImageView) findViewById(R.id.sendBtn);
         mSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -284,7 +284,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                 Chat.class,
                 R.layout.chat_row,
                 CommentViewHolder.class,
-                mDatabase
+                mQueryInAscending
 
 
         ) {

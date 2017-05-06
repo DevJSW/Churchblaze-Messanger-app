@@ -158,11 +158,12 @@ public class tab1chats extends Fragment {
                     @Override
                     public boolean onLongClick(View v) {
 
+
                         final Context context = getActivity();
 
                         // custom dialog
                         final Dialog dialog = new Dialog(context);
-                        dialog.setContentView(R.layout.popup_dialog);
+                        dialog.setContentView(R.layout.popup_dialog_new);
 
                         // set the custom dialog components - text, image and button
 
@@ -185,7 +186,10 @@ public class tab1chats extends Fragment {
                         return false;
                     }
 
+
                 });
+
+
 
 
             }

@@ -264,7 +264,7 @@ public class ChatroomActivity extends AppCompatActivity {
                             newPost2.child("post_key").setValue(mPostKey);
 
 
-                            Intent intent = new Intent(ChatroomActivity.this, tab1chats.class);
+                            Intent intent = new Intent(ChatroomActivity.this, Main2Activity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                         }

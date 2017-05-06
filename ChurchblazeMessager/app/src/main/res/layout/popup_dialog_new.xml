@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:orientation="horizontal"
+    android:background="@color/colorPrimary">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <ImageView android:id="@+id/googleBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_star_icon"
+            android:layout_weight="1"
+            android:padding="13dp"
+            android:layout_gravity="left" />
+        <ImageView android:id="@+id/fbBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="13dp"
+            android:layout_weight="1"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_delete_icon" />
+
+        <ImageView
+            android:id="@+id/twitterBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="13dp"
+            android:layout_weight="1"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_block_icon" />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
