@@ -17,12 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,8 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -184,7 +179,10 @@ public class ChatroomActivity extends AppCompatActivity {
                                     hello.setVisibility(View.VISIBLE);
 
                                 } else {
-                                    hello.setVisibility(View.GONE);
+                                    Picasso.with(ChatroomActivity.this).load(userimg).into(civ);
+                                    name.setText(username);
+                                    name2.setText(username2);
+                                    hello.setVisibility(View.VISIBLE);
                                 }
                             }
 
@@ -302,239 +300,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
 
-        FirebaseRecyclerAdapter<Chat, CommentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Chat, CommentViewHolder>(
-
-                Chat.class,
-                R.layout.chat_row,
-                CommentViewHolder.class,
-                mQueryPostChats
-
-
-        ) {
-            @Override
-            protected void populateViewHolder(final CommentViewHolder viewHolder, final Chat model, int position) {
-
-                final String post_key = getRef(position).getKey();
-
-                viewHolder.setMessage(model.getMessage());
-                viewHolder.setDate(model.getDate());
-                viewHolder.setName(model.getName());
-                viewHolder.setImage(getApplicationContext(), model.getImage());
-
-                mDatabaseUser.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        final String current_user_uid = (String) dataSnapshot.child("uid").getValue();
-                        final String current_user_name = (String) dataSnapshot.child("name").getValue();
-
-                        mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
-
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                final String post_photo = (String) dataSnapshot.child("photo").getValue();
-                                final String reciever_uid = (String) dataSnapshot.child("reciever_uid").getValue();
-
-                                if (post_photo != null) {
-
-                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                                    viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
-
-                                    // if card has my uid, then change chat balloon shape
-                                } else {
-
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-                mDatabaseUser.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-
-                        final String current_user_uid = (String) snapshot.child("uid").getValue();
-
-                        mDatabaseComment.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
-
-                            @Override
-                            public void onDataChange(DataSnapshot snapshot) {
-
-                                final String reciever_uid = (String) snapshot.child("uid").getValue();
-
-
-                                if (snapshot.hasChild(mAuth.getCurrentUser().getUid())) {
-
-                                    //viewHolder.rely.setVisibility(View.VISIBLE);
-                                    //viewHolder.liny.setVisibility(View.GONE);
-
-                                } else {
-
-                                   // viewHolder.rely.setVisibility(View.GONE);
-                                   // viewHolder.liny.setVisibility(View.VISIBLE);
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
-
-                viewHolder.mCardPhoto.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent cardonClick = new Intent(ChatroomActivity.this, OpenPhotoActivity.class);
-                        cardonClick.putExtra("heartraise_id", post_key );
-                        startActivity(cardonClick);
-
-                    }
-                });
-
-
-            }
-        };
-
-        mCommentList.setAdapter(firebaseRecyclerAdapter);
-
-    }
-
-    public static class CommentViewHolder extends RecyclerView.ViewHolder {
-
-        View mView;
-
-        DatabaseReference mDatabaseUser;
-        FirebaseAuth mAuth;
-        ImageView mCardPhoto, mImage;
-        RelativeLayout rely;
-        LinearLayout liny;
-        ProgressBar mProgressBar;
-
-        public CommentViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-
-            mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
-            mImage = (ImageView) mView.findViewById(R.id.post_image);
-            liny = (LinearLayout) mView.findViewById(R.id.liny);
-            rely = (RelativeLayout) mView.findViewById(R.id.rely);
-
-        }
-
-        public void setMessage(String message) {
-
-            TextView post_message = (TextView) mView.findViewById(R.id.post_message);
-            post_message.setText(message);
-
-            TextView post_message2 = (TextView) mView.findViewById(R.id.post_message2);
-            post_message2.setText(message);
-
-        }
-
-        public void setName(String name) {
-
-            TextView post_name = (TextView) mView.findViewById(R.id.post_name);
-            post_name.setText(name);
-
-
-        }
-
-
-        public void setDate(String date) {
-
-            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
-            post_date.setText(date);
-
-            TextView post_date2 = (TextView) mView.findViewById(R.id.post_date2);
-            post_date2.setText(date);
-        }
-
-        public void setImage(final Context ctx, final String image) {
-            final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
-
-            Picasso.with(ctx)
-                    .load(image)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(post_image, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-
-
-                            Picasso.with(ctx).load(image).into(post_image);
-                        }
-                    });
-            final ImageView post_image2 = (ImageView) mView.findViewById(R.id.post_image2);
-
-            Picasso.with(ctx)
-                    .load(image)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(post_image2, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-
-
-                            Picasso.with(ctx).load(image).into(post_image2);
-                        }
-                    });
-        }
-
-        public void setPhoto(final Context ctx, final String photo) {
-            final ImageView post_photo = (ImageView) mView.findViewById(R.id.post_photo);
-
-            Picasso.with(ctx).load(photo).networkPolicy(NetworkPolicy.OFFLINE).into(post_photo, new Callback() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onError() {
-
-
-                    Picasso.with(ctx).load(photo).into(post_photo);
-                }
-            });
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
