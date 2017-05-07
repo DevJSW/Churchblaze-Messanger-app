@@ -259,6 +259,11 @@ public class Chatroom2Activity extends AppCompatActivity {
                             newPost3.child("date").setValue(stringDate);
                             newPost3.child("post_key").setValue(mPostKey);
                             newPost3.child("change_chat_icon").setValue(mPostKey);
+
+                            //clear edit text after message has been sent
+                            EditText edit = (EditText)findViewById(R.id.emojicon_edit_text);
+                            edit.setText(null);
+
                         }
 
                         @Override
