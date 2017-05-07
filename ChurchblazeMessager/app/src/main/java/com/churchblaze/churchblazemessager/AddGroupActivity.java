@@ -1,27 +1,40 @@
 package com.churchblaze.churchblazemessager;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -31,10 +44,17 @@ public class AddGroupActivity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
     private FirebaseAuth mAuth;
-    private ImageView searchBtn, backBtn;
-    private EditText searchInput;
+    private ImageView searchBtn, backBtn, groupIcon;
+    private Button mSendBtn;
+    private EditText searchInput, groupName;
     private Query mQueryMembers;
     private RecyclerView mMembersList;
+    private ProgressDialog mprogress;
+    private Boolean mProcessSelecting = false;
+    private DatabaseReference mDatabaseCreatingGroup;
+    private StorageReference mStorage;
+    private Uri mImageUri = null;
+    private static int GALLERY_REQUEST =1;
 
 
     @Override
@@ -50,6 +70,17 @@ public class AddGroupActivity extends AppCompatActivity {
             }
         });
 
+        // pushing group info to database
+        mSendBtn = (Button) findViewById(R.id.sendBtn);
+        mSendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createGroup();
+            }
+        });
+
+        groupName = (EditText) findViewById(R.id.group_name);
+        mprogress = new ProgressDialog(this);
         backBtn = (ImageView) findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +90,18 @@ public class AddGroupActivity extends AppCompatActivity {
             }
         });
 
+        //adding image to icon
+        groupIcon = (ImageView) findViewById(R.id.post_image);
+        groupIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, GALLERY_REQUEST);
+            }
+        });
+        mDatabaseCreatingGroup = FirebaseDatabase.getInstance().getReference().child("CreatingGroup").child(mAuth.getCurrentUser().getUid());
         searchInput = (EditText) findViewById(R.id.searchInput);
         searchBtn = (ImageView) findViewById(R.id.searchBtn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +129,59 @@ public class AddGroupActivity extends AppCompatActivity {
         mMembersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
+    }
+
+    // post data to database
+    private void createGroup() {
+
+        final String name = groupName.getText().toString().trim();
+
+        Date date = new Date();
+        final String stringDate = DateFormat.getDateInstance().format(date);
+
+        //final String user_id = auth.getCurrentUser().getUid();
+
+        if (TextUtils.isEmpty(name)) {
+            Toast.makeText(getApplicationContext(), "Enter group name!", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+        if ( mImageUri == null) {
+
+            Toast.makeText(getApplicationContext(), "Select group profile image!", Toast.LENGTH_SHORT).show();
+        }
+
+
+        //create user
+                      mprogress.setMessage("Creating group, please wait...");
+                            mprogress.show();
+
+                            StorageReference filepath = mStorage.child("Profile_images").child(mImageUri.getLastPathSegment());
+
+
+                            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    final DatabaseReference newPost = mDatabaseCreatingGroup;
+
+                                    newPost.child("name").setValue(name);
+                                    newPost.child("image").setValue(downloadUrl.toString());
+                                    newPost.child("date").setValue(stringDate);
+                                    newPost.child("uid").setValue(mAuth.getCurrentUser().getUid());
+
+                                    Intent cardonClick = new Intent(AddGroupActivity.this, Main2Activity.class);
+                                    cardonClick.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(cardonClick);
+
+                                }
+                            });
+
+
+
     }
 
     void refreshItems() {
@@ -131,6 +227,44 @@ public class AddGroupActivity extends AppCompatActivity {
 
                 // open chatroom activity
 
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mProcessSelecting = true;
+
+                        mDatabaseCreatingGroup.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessSelecting) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+
+                                        mDatabaseCreatingGroup.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        viewHolder.selectedIcon.setVisibility(View.GONE);
+                                        mProcessSelecting = false;
+                                    }else {
+
+                                        mDatabaseCreatingGroup.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        viewHolder.selectedIcon.setVisibility(View.VISIBLE);
+                                        mProcessSelecting = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                });
 
             }
 
@@ -148,6 +282,7 @@ public class AddGroupActivity extends AppCompatActivity {
 
         Button mChatBtn;
 
+        ImageView selectedIcon;
         ProgressBar mProgressBar;
 
         public LetterViewHolder(View itemView) {
@@ -157,6 +292,7 @@ public class AddGroupActivity extends AppCompatActivity {
 
             mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
+            selectedIcon = (ImageView) mView.findViewById(R.id.selected);
 
         }
 
@@ -192,6 +328,16 @@ public class AddGroupActivity extends AppCompatActivity {
         }
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+
+            mImageUri = data.getData();
+            groupIcon.setImageURI(mImageUri);
+
+        }
+    }
 
 }
