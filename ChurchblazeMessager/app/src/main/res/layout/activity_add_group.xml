@@ -84,19 +84,28 @@
             </RelativeLayout>
 
 
-
-            <EditText
-                android:id="@+id/group_name"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter group name"
                 android:layout_toRightOf="@+id/rely_img"
                 android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColorHint="#121111"
-                android:textColor="#121111" />
+                android:layout_gravity="center_horizontal">
+
+                <EditText
+                    android:id="@+id/group_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter group name"
+                    android:layout_toRightOf="@+id/rely_img"
+                    android:layout_marginRight="10dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <View
                 android:layout_width="match_parent"

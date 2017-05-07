@@ -8,8 +8,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -28,6 +28,7 @@
                     app:civ_border_width="1dp"
                     app:civ_border_color="#fff"
                     android:src="@drawable/placeholder_image"/>
+
 
 
         </RelativeLayout>
@@ -65,6 +66,8 @@
 
         </LinearLayout>
 
+
+
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
@@ -89,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="4dp"
             android:layout_below="@+id/rely_img"
             android:layout_marginRight="10dp"
             android:background="#9b9999"/>

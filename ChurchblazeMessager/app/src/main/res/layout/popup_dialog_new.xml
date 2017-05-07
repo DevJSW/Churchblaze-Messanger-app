@@ -6,40 +6,64 @@
     android:layout_margin="10dp"
     android:orientation="horizontal">
 
+
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:orientation="vertical">
 
-        <ImageView android:id="@+id/favouriteBtn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_star_icon"
-            android:layout_weight="1"
-            android:padding="16dp"
-            android:layout_gravity="left" />
-        <ImageView
-            android:id="@+id/delete"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="16dp"
-            android:layout_weight="1"
-            android:textColor="#ffffff"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_delete_icon" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteLiny"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_delete_icon" />
 
-        <ImageView
-            android:id="@+id/twitterBtn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="16dp"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:src="@drawable/ic_block_icon" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:textSize="16dp"
+                android:text="Delete chat."/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#b3b0b0"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/block"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_block_icon" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:textSize="16dp"
+                android:text="Block this user."/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+        </LinearLayout>
     </LinearLayout>
 
 

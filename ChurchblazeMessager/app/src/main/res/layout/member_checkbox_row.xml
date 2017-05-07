@@ -29,6 +29,18 @@
                 app:civ_border_color="#fff"
                 android:src="@drawable/placeholder_image"/>
 
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/dselected"
+                android:layout_alignBottom="@id/post_image"
+                android:layout_alignRight="@id/post_image"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_added_group_icon"
+                android:adjustViewBounds="true"
+                android:background="#00ffffff" />
+
 
 
         </RelativeLayout>
