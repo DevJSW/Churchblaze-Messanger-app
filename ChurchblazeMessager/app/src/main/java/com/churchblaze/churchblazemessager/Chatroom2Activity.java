@@ -309,11 +309,11 @@ public class Chatroom2Activity extends AppCompatActivity {
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
-                mDatabaseUser.addValueEventListener(new ValueEventListener() {
+                mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        final String current_user_uid = (String) dataSnapshot.child("uid").getValue();
+                        final String group_uid = (String) dataSnapshot.child("this_is_a_group").getValue();
 
                         mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).child(post_key).addValueEventListener(new ValueEventListener() {
 
@@ -344,6 +344,8 @@ public class Chatroom2Activity extends AppCompatActivity {
                                     viewHolder.rely.setVisibility(View.GONE);
                                     viewHolder.liny.setVisibility(View.VISIBLE);
                                 }
+
+
 
                             }
 
@@ -391,6 +393,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                             viewHolder.rely.setVisibility(View.GONE);
                             viewHolder.liny.setVisibility(View.VISIBLE);
                         }
+
 
                     }
 
@@ -470,7 +473,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
         DatabaseReference mDatabaseUser;
         FirebaseAuth mAuth;
-        ImageView mCardPhoto, mImage;
+        ImageView mCardPhoto, mImage, groupIcon;
         RelativeLayout rely;
         LinearLayout liny;
         ProgressBar mProgressBar;
@@ -481,6 +484,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
+            groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
 

@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Callback;
@@ -51,7 +52,7 @@ public class AddGroupActivity extends AppCompatActivity {
     private RecyclerView mMembersList;
     private ProgressDialog mprogress;
     private Boolean mProcessSelecting = false;
-    private DatabaseReference mDatabaseCreatingGroup;
+    private DatabaseReference mDatabaseCreatingGroup, mDatabaseChatroom;
     private StorageReference mStorage;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
@@ -101,7 +102,10 @@ public class AddGroupActivity extends AppCompatActivity {
                 startActivityForResult(galleryIntent, GALLERY_REQUEST);
             }
         });
-        mDatabaseCreatingGroup = FirebaseDatabase.getInstance().getReference().child("CreatingGroup").child(mAuth.getCurrentUser().getUid());
+
+        mStorage = FirebaseStorage.getInstance().getReference().child("Profile_Images");
+        mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseCreatingGroup = FirebaseDatabase.getInstance().getReference().child("CreatingGroup");
         searchInput = (EditText) findViewById(R.id.searchInput);
         searchBtn = (ImageView) findViewById(R.id.searchBtn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +157,7 @@ public class AddGroupActivity extends AppCompatActivity {
         }
 
 
-        //create user
+        //create group
                       mprogress.setMessage("Creating group, please wait...");
                             mprogress.show();
 
@@ -166,12 +170,38 @@ public class AddGroupActivity extends AppCompatActivity {
 
                                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                                    final DatabaseReference newPost = mDatabaseCreatingGroup;
+                                    mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                    newPost.child("name").setValue(name);
-                                    newPost.child("image").setValue(downloadUrl.toString());
-                                    newPost.child("date").setValue(stringDate);
-                                    newPost.child("uid").setValue(mAuth.getCurrentUser().getUid());
+                                            String post_uid = dataSnapshot.getKey();
+
+                                            final DatabaseReference newPost2 = mDatabaseChatroom.push();
+                                            //final DatabaseReference newPost = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
+
+                                            newPost2.child("name").setValue(name);
+                                            newPost2.child("image").setValue(downloadUrl.toString());
+                                            newPost2.child("date").setValue(stringDate);
+                                            newPost2.child("this_is_a_group").setValue("true");
+                                            newPost2.child("sender_uid").setValue(mAuth.getCurrentUser().getUid());
+                                            newPost2.child("uid").setValue(mAuth.getCurrentUser().getUid());
+/*
+                                            newPost.child("name").setValue(name);
+                                            newPost.child("image").setValue(downloadUrl.toString());
+                                            newPost.child("date").setValue(stringDate);
+                                            newPost.child("this_is_a_group").setValue("true");
+                                            newPost.child("sender_uid").setValue(post_uid);
+                                            newPost.child("uid").setValue(mAuth.getCurrentUser().getUid());
+*/
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
 
                                     Intent cardonClick = new Intent(AddGroupActivity.this, Main2Activity.class);
                                     cardonClick.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -242,12 +272,12 @@ public class AddGroupActivity extends AppCompatActivity {
                                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
 
-                                        mDatabaseCreatingGroup.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).removeValue();
                                         viewHolder.selectedIcon.setVisibility(View.GONE);
                                         mProcessSelecting = false;
                                     }else {
 
-                                        mDatabaseCreatingGroup.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).setValue(mAuth.getCurrentUser().getUid());
                                         viewHolder.selectedIcon.setVisibility(View.VISIBLE);
                                         mProcessSelecting = false;
 

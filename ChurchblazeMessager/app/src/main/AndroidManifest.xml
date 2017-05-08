@@ -91,7 +91,11 @@
         <activity
             android:name=".Chatroom2Activity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SelectChurchActivity" />
+        <activity
+            android:name=".BlockedUsersActivity"
+            android:label="Blocked users"/>
     </application>
 
 </manifest>

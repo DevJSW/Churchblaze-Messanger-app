@@ -42,7 +42,7 @@ public class tab1chats extends Fragment {
     private TextView mNoPostTxt;
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private DatabaseReference mDatabaseUsers;
+    private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser;
     private DatabaseReference mDatabaseChatroom, mDatabaseChatroomsShot;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
@@ -65,7 +65,7 @@ public class tab1chats extends Fragment {
             }
         });
 
-
+        mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
         mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
@@ -171,6 +171,18 @@ public class tab1chats extends Fragment {
                         dialog.setTitle("Chat options");
 
                         // set the custom dialog components - text, image and button
+                        // send current user uid to block user child
+                        LinearLayout blockLiny = (LinearLayout) dialog.findViewById(R.id.blockLiny);
+                        blockLiny.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                // push uid to block user child in database
+                                AlertDialog diaBox = AskOption2();
+                                diaBox.show();
+                                dialog.dismiss();
+                            }
+                        });
 
                         LinearLayout deleteLiny = (LinearLayout) dialog.findViewById(R.id.deleteLiny);
                         deleteLiny.setOnClickListener(new View.OnClickListener() {
@@ -208,8 +220,41 @@ public class tab1chats extends Fragment {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 //your deleting code
 
-                                mDatabaseChatroom.child(post_key).removeValue();
+                                mDatabaseChatroom.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
 
+                                dialog.dismiss();
+                            }
+
+                        })
+
+
+
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+
+                            }
+                        })
+                        .create();
+                return myQuittingDialogBox;
+
+
+            }
+
+            private AlertDialog AskOption2() {
+
+                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
+                        //set message, title, and icon
+                        .setTitle("Block request")
+                        .setMessage("When you block this user, they will not be able to send you a message?")
+
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                // push uid to block user child in database
+                                mDatabaseBlockThisUser.child(mAuth.getCurrentUser().getUid()).child(post_key).setValue("Block");
                                 dialog.dismiss();
                             }
 
@@ -252,7 +297,6 @@ public class tab1chats extends Fragment {
                 if (!dataSnapshot.hasChild(user_id)) {
 
                     mProgressBar.setVisibility(View.GONE);
-
 
                 }else {
 

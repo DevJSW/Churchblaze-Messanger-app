@@ -27,6 +27,14 @@ public class tab3profile extends Fragment {
             }
         });
 
+        LinearLayout openBlockUsers = (LinearLayout) v.findViewById(R.id.lin_block_user);
+        openBlockUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), BlockedUsersActivity.class));
+            }
+        });
+
         LinearLayout openEditProfile = (LinearLayout) v.findViewById(R.id.lin_editprofile);
         openEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override

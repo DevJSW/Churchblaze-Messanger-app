@@ -165,6 +165,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/lin_block_user"
                     android:orientation="horizontal">
 
                     <ImageView

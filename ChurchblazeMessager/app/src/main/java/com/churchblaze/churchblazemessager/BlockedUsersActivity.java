@@ -1,18 +1,14 @@
 package com.churchblaze.churchblazemessager;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -20,35 +16,37 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by John on 25-Apr-17.
- */
-public class tab2members extends Fragment {
+public class BlockedUsersActivity extends AppCompatActivity {
 
     String post_key = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
-    private DatabaseReference mDatabaseChats;
+    private DatabaseReference mDatabaseBlockedUsers;
+    private TextView mNoPostTxt;
+    private ImageView mNoPostImg;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
-    private Query mQueryPostChats;
+    private Query mQueryBlockedUsers;
     private ProgressBar mProgressBar;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tab2members, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_blocked_users);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -57,21 +55,71 @@ public class tab2members extends Fragment {
             }
         });
 
-        mDatabaseChats = FirebaseDatabase.getInstance().getReference().child("Chats");
-        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
+        mNoPostImg = (ImageView) findViewById(R.id.noPostChat);
+        mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+
+        mDatabaseBlockedUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null){
+
+                    mNoPostImg.setVisibility(View.VISIBLE);
+                    mNoPostTxt.setVisibility(View.VISIBLE);
+                } else {
+                    mNoPostImg.setVisibility(View.GONE);
+                    mNoPostTxt.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabaseBlockedUsers = FirebaseDatabase.getInstance().getReference().child("BlockThisUser").child(mAuth.getCurrentUser().getUid());
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        //mQueryPostChats = mDatabaseChats.orderByChild("post_key").equalTo(post_key);
-        mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
-        mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mMembersList = (RecyclerView) findViewById(R.id.Members_list);
+        mMembersList.setLayoutManager(new LinearLayoutManager(this));
         mMembersList.setHasFixedSize(true);
-        mDatabaseChats.keepSynced(true);
+        mDatabaseBlockedUsers.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
 
-
-
-        return v;
+        checkUserExists();
     }
+
+    private void checkUserExists() {
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        final String user_id = mAuth.getCurrentUser().getUid();
+
+        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                if (!dataSnapshot.hasChild(user_id)) {
+
+                    mProgressBar.setVisibility(View.GONE);
+
+                }else {
+
+                    mProgressBar.setVisibility(View.GONE);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
 
     @Override
     public void onStart() {
@@ -84,7 +132,7 @@ public class tab2members extends Fragment {
                 People.class,
                 R.layout.member2_row,
                 LetterViewHolder.class,
-                mDatabaseUsers
+                mDatabaseBlockedUsers
 
 
         ) {
@@ -96,88 +144,56 @@ public class tab2members extends Fragment {
 
                 viewHolder.setName(model.getName());
                 viewHolder.setStatus(model.getStatus());
-                viewHolder.setImage(getContext(), model.getImage());
+                viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 // open chatroom activity
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
-                        cardonClick.putExtra("heartraise_id", PostKey );
-                        startActivity(cardonClick);
-                    }
-                });
-
                 viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
 
-                        final Context context = getActivity();
-                        // custom dialog
-                        final Dialog dialog = new Dialog(context);
-                        dialog.setContentView(R.layout.popup_dialog);
-
-                        // set the custom dialog components - text, image and button
-
-                         final TextView delete = (TextView) dialog.findViewById(R.id.delete);
-                        delete.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
                                 AlertDialog diaBox = AskOption();
                                 diaBox.show();
-                                dialog.dismiss();
-                            }
-                        });
 
-                        // final EditText explanation_input = (EditText) dialog.findViewById(R.id.exInput);
-
-
-                        // if button is clicked, close the custom dialog
-
-                        dialog.show();
                         return false;
+
                     }
 
                 });
 
-
             }
 
+            private AlertDialog AskOption() {
 
+                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(BlockedUsersActivity.this)
+                        //set message, title, and icon
+                        .setTitle("Unblock this user")
+                        .setMessage("Do you want to remove this user from block list")
 
-                    private AlertDialog AskOption() {
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
-                        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
-                                //set message, title, and icon
-                                .setTitle("Delete")
-                                .setMessage("Do you want to Delete this post?")
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                //your deleting code
 
-                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                mDatabaseBlockedUsers.child(post_key).removeValue();
+                                dialog.dismiss();
+                            }
 
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        //your deleting code
-
-                                         mDatabaseChats.child(post_key).removeValue();
-
-                                        dialog.dismiss();
-                                    }
-
-                                })
+                        })
 
 
 
-                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
 
-                                        dialog.dismiss();
+                                dialog.dismiss();
 
-                                    }
-                                })
-                                .create();
-                        return myQuittingDialogBox;
+                            }
+                        })
+                        .create();
+                return myQuittingDialogBox;
 
 
-                    }
+            }
 
 
 
@@ -261,5 +277,6 @@ public class tab2members extends Fragment {
         }
 
     }
+
 
 }

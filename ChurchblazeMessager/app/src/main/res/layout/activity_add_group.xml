@@ -88,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/rely_img"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center_horizontal">
@@ -119,9 +119,18 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/top_liny"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:id="@+id/text"
+            android:text="Provide a group subject and icon"/>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
-            android:layout_below="@+id/top_liny"
+            android:layout_below="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

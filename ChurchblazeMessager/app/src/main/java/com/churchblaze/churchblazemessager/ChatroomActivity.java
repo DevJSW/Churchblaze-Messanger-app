@@ -236,6 +236,7 @@ public class ChatroomActivity extends AppCompatActivity {
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey);
             final DatabaseReference newPost2 = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid());
 
+
             // post last active date to user data
             final DatabaseReference newPost4 = mDatabaseUser;
 
@@ -247,6 +248,7 @@ public class ChatroomActivity extends AppCompatActivity {
                     // getting user details
                     final String reciever_name = (String) dataSnapshot.child("name").getValue();
                     final String reciever_image = (String) dataSnapshot.child("image").getValue();
+
 
                     mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
 
