@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // set the view now
         setContentView(R.layout.activity_login);
-
+/*
         mGoogleBtn = (ImageView) findViewById(R.id.googleBtn);
         mGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
             }
         });
-
+*/
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);

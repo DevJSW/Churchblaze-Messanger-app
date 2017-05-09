@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,10 +32,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BlockedUsersActivity extends AppCompatActivity {
 
-    String post_key = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
-    private DatabaseReference mDatabaseBlockedUsers;
+    private DatabaseReference mDatabaseBlockedUsers, mDatabaseBlockedUsers2;
+    private FirebaseUser mCurrentUser;
     private TextView mNoPostTxt;
     private ImageView mNoPostImg;
     private FirebaseAuth mAuth;
@@ -60,26 +62,10 @@ public class BlockedUsersActivity extends AppCompatActivity {
         mNoPostImg = (ImageView) findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
 
-        mDatabaseBlockedUsers.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null){
-
-                    mNoPostImg.setVisibility(View.VISIBLE);
-                    mNoPostTxt.setVisibility(View.VISIBLE);
-                } else {
-                    mNoPostImg.setVisibility(View.GONE);
-                    mNoPostTxt.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         mDatabaseBlockedUsers = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
+        mDatabaseBlockedUsers2 = FirebaseDatabase.getInstance().getReference().child("BlockThisUser").child(mCurrentUser.getUid());
+        mCurrentUser = mAuth.getCurrentUser();
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -134,7 +120,7 @@ public class BlockedUsersActivity extends AppCompatActivity {
                 People.class,
                 R.layout.member2_row,
                 LetterViewHolder.class,
-                mDatabaseBlockedUsers
+                mDatabaseBlockedUsers2
 
 
         ) {
@@ -148,6 +134,8 @@ public class BlockedUsersActivity extends AppCompatActivity {
                 viewHolder.setStatus(model.getStatus());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
+
+
                 // open chatroom activity
                 viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -160,45 +148,41 @@ public class BlockedUsersActivity extends AppCompatActivity {
 
                     }
 
+                    private AlertDialog AskOption() {
+
+                        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(BlockedUsersActivity.this)
+                                //set message, title, and icon
+                                .setTitle("Unblock this user")
+                                .setMessage("Do you want to remove this user from block list")
+
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        //your deleting code
+
+                                        mDatabaseBlockedUsers.child(mAuth.getCurrentUser().getUid()).child(post_key).removeValue();
+                                        dialog.dismiss();
+                                    }
+
+                                })
+
+
+
+                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        dialog.dismiss();
+
+                                    }
+                                })
+                                .create();
+                        return myQuittingDialogBox;
+
+                    }
+
                 });
 
             }
-
-            private AlertDialog AskOption() {
-
-                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(BlockedUsersActivity.this)
-                        //set message, title, and icon
-                        .setTitle("Unblock this user")
-                        .setMessage("Do you want to remove this user from block list")
-
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                //your deleting code
-
-                                mDatabaseBlockedUsers.child(post_key).removeValue();
-                                dialog.dismiss();
-                            }
-
-                        })
-
-
-
-                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                dialog.dismiss();
-
-                            }
-                        })
-                        .create();
-                return myQuittingDialogBox;
-
-
-            }
-
-
-
 
 
 
@@ -279,6 +263,18 @@ public class BlockedUsersActivity extends AppCompatActivity {
         }
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 
 }

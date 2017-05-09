@@ -38,7 +38,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class tab1chats extends Fragment {
 
     String myCurrentChats = null;
-    String post_key = null;
     private TextView mNoPostTxt;
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -48,6 +47,8 @@ public class tab1chats extends Fragment {
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
     private ProgressBar mProgressBar;
+    private Boolean mProcessLike = false;
+    private DatabaseReference mDatabaseLike;
 
 
 
@@ -66,6 +67,7 @@ public class tab1chats extends Fragment {
         });
 
         mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
+        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
         mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
@@ -78,6 +80,7 @@ public class tab1chats extends Fragment {
         mMembersList.setHasFixedSize(true);
         mDatabaseChatroom.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
+        mDatabaseLike.keepSynced(true);
 
 
         mQueryPostChats.addValueEventListener(new ValueEventListener() {
@@ -128,6 +131,7 @@ public class tab1chats extends Fragment {
                 viewHolder.setDate(model.getDate());
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setImage(getContext(), model.getImage());
+                //viewHolder.setLikeBtn(post_key);
 
 
 
@@ -156,6 +160,97 @@ public class tab1chats extends Fragment {
                     }
                 });
 
+                viewHolder.mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                            viewHolder.mLikeBtn.setVisibility(View.VISIBLE);
+                        } else {
+                            viewHolder.mLikeBtn.setVisibility(View.INVISIBLE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                viewHolder.mPostImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mProcessLike = true;
+
+                        mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessLike) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        viewHolder.mLikeBtn.setVisibility(View.GONE);
+                                        mProcessLike = false;
+                                    }else {
+
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        viewHolder.mLikeBtn.setVisibility(View.VISIBLE);
+                                        mProcessLike = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                });
+
+                viewHolder.mLikeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mProcessLike = true;
+
+                        mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessLike) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessLike = false;
+                                    }else {
+
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mProcessLike = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                });
 
                 viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
 
@@ -178,6 +273,8 @@ public class tab1chats extends Fragment {
                             public void onClick(View v) {
 
                                 // push uid to block user child in database
+                                final DatabaseReference newPost = mDatabaseBlockThisUser;
+                                newPost.child(mAuth.getCurrentUser().getUid()).child(post_key).setValue("Block");
                                 AlertDialog diaBox = AskOption2();
                                 diaBox.show();
                                 dialog.dismiss();
@@ -188,6 +285,7 @@ public class tab1chats extends Fragment {
                         deleteLiny.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
                                 AlertDialog diaBox = AskOption();
                                 diaBox.show();
                                 dialog.dismiss();
@@ -201,43 +299,40 @@ public class tab1chats extends Fragment {
                         return false;
                     }
 
+                    private AlertDialog AskOption() {
+
+                            AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
+                                    //set message, title, and icon
+                                    .setTitle("Delete Alert!")
+                                    .setMessage("Are you sure you want to remove this chat!")
+
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            //your deleting code
+
+                                            mDatabaseChatroom.child(post_key).removeValue();
+                                            dialog.dismiss();
+                                        }
+
+                                    })
+
+
+
+                                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            dialog.dismiss();
+
+                                        }
+                                    })
+                                    .create();
+                            return myQuittingDialogBox;
+
+                    }
+
 
                 });
-
-
-            }
-
-
-            private AlertDialog AskOption() {
-
-                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
-                        //set message, title, and icon
-                        .setTitle("Delete")
-                        .setMessage("Do you want to Delete this post?")
-
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                //your deleting code
-
-                                mDatabaseChatroom.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-
-                                dialog.dismiss();
-                            }
-
-                        })
-
-
-
-                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                dialog.dismiss();
-
-                            }
-                        })
-                        .create();
-                return myQuittingDialogBox;
 
 
             }
@@ -246,29 +341,18 @@ public class tab1chats extends Fragment {
 
                 AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
                         //set message, title, and icon
-                        .setTitle("Block request")
-                        .setMessage("When you block this user, they will not be able to send you a message?")
+                        .setTitle("Block Alert!")
+                        .setMessage("You will no longer recieve messages from this user?")
 
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                // push uid to block user child in database
-                                mDatabaseBlockThisUser.child(mAuth.getCurrentUser().getUid()).child(post_key).setValue("Block");
                                 dialog.dismiss();
                             }
 
                         })
 
-
-
-                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                dialog.dismiss();
-
-                            }
-                        })
                         .create();
                 return myQuittingDialogBox;
 
@@ -337,8 +421,9 @@ public class tab1chats extends Fragment {
 
         View mView;
 
-        ImageView mFavouriteBtn;
-        DatabaseReference mDatabaseFavourite;
+        CircleImageView mPostImg;
+        ImageView mLikeBtn;
+        DatabaseReference mDatabaseLike;
         FirebaseAuth mAuth;
         ProgressBar mProgressBar;
 
@@ -348,11 +433,14 @@ public class tab1chats extends Fragment {
             mView = itemView;
 
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
-            mDatabaseFavourite = FirebaseDatabase.getInstance().getReference().child("Favourites");
-            mDatabaseFavourite.keepSynced(true);
+            mLikeBtn = (ImageView) mView.findViewById(R.id.like);
+            mPostImg = (CircleImageView) mView.findViewById(R.id.post_image);
+            mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            mDatabaseLike.keepSynced(true);
             Query mQueryPostChats;
 
         }
+
 
 
         public void setName(String name) {

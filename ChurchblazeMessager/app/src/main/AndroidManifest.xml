@@ -73,7 +73,6 @@
             android:label="Chat" />
         <activity
             android:name=".Main2Activity"
-            android:label="cb talker"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddGroupActivity"

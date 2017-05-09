@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
 
@@ -17,63 +18,15 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:id="@+id/topImg"
-            android:layout_marginTop="35dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/icon"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="60dp"
             android:scaleType="fitXY" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"
-            android:text="Sign in with"/>
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="3">
 
-            <ImageView android:id="@+id/googleBtn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/google_btn_img_on"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:layout_gravity="left" />
 
-            <ImageView android:id="@+id/fbBtn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:padding="5dp"
-                android:layout_weight="1"
-                android:textColor="#ffffff"
-                android:layout_gravity="center"
-                android:src="@drawable/fb_btn_img" />
 
-            <ImageView
-                android:id="@+id/twitterBtn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:padding="5dp"
-                android:layout_weight="1"
-                android:layout_gravity="right"
-                android:src="@drawable/twitter_btn_img" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:textStyle="bold"
-            android:text="or"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -137,7 +90,7 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 

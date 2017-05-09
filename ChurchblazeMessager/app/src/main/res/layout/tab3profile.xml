@@ -20,13 +20,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
                     android:id="@+id/lin_editprofile"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginTop="7dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
                         android:id="@+id/profile_image"
                         android:layout_margin="20dp"
@@ -36,7 +37,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/post_image"
-                        android:layout_marginTop="15dp"
+                        android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
@@ -45,7 +46,6 @@
                             android:id="@+id/meBtn"
                             android:textSize="15dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginTop="8dp"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
                             android:text="Edit profile"/>
@@ -73,13 +73,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
                     android:id="@+id/lin_settings"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginTop="7dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
                         android:id="@+id/settings_image"
                         android:layout_margin="20dp"
@@ -89,7 +90,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/post_image"
-                        android:layout_marginTop="15dp"
+                        android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
@@ -98,7 +99,6 @@
                             android:id="@+id/settingsBtn"
                             android:textSize="15dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginTop="8dp"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
                             android:text="Settings"/>
@@ -125,13 +125,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
                     android:id="@+id/lin_notifications"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginTop="7dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
                         android:id="@+id/notification_image"
                         android:layout_margin="20dp"
@@ -141,7 +142,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/post_image"
-                        android:layout_marginTop="15dp"
+                        android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
@@ -150,7 +151,6 @@
                             android:id="@+id/notificationBtn"
                             android:textSize="15dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginTop="8dp"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
                             android:text="Notification &amp; Sounds"/>
@@ -165,13 +165,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:id="@+id/lin_block_user"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginTop="7dp"
+                        android:layout_gravity="center_vertical"
                         android:scaleType="fitXY"
                         android:layout_marginRight="5dp"
                         android:id="@+id/blocked_users_image"
@@ -182,7 +183,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/post_image"
-                        android:layout_marginTop="15dp"
+                        android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
@@ -191,7 +192,6 @@
                             android:id="@+id/blockedusersBtn"
                             android:textSize="15dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginTop="8dp"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
                             android:text="Blocked users"/>
@@ -218,13 +218,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
                     android:id="@+id/lin_share"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginTop="7dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
                         android:id="@+id/shareapp_image"
                         android:layout_margin="20dp"
@@ -234,7 +235,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/post_image"
-                        android:layout_marginTop="15dp"
+                        android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
@@ -243,7 +244,6 @@
                             android:id="@+id/shareBtn"
                             android:textSize="15dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginTop="7dp"
                             android:layout_marginLeft="4dp"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
@@ -272,14 +272,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/lin_privacy"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginTop="7dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
-                        android:id="@+id/privacy_image"
+                        android:id="@+id/post_image2"
                         android:layout_margin="20dp"
                         android:scaleType="fitXY"
                         android:src="@drawable/ic_privacy_icon"/>
@@ -287,8 +289,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/lin_privacy"
-                        android:layout_marginTop="15dp"
+                        android:layout_toRightOf="@+id/post_image2"
+                        android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
@@ -297,7 +299,6 @@
                             android:id="@+id/privacyBtn"
                             android:textSize="15dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginTop="10dp"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
                             android:text="Privacy policy"/>

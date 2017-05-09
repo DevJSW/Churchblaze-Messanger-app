@@ -532,6 +532,8 @@ public class Chatroom2Activity extends AppCompatActivity {
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
 
+
+
         }
 
         public void setMessage(String message) {

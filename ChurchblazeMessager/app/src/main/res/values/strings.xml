@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">"cb talker "</string>
+    <string name="app_name">"BlazeChat "</string>
     <string name="facebook_application_id" translatable="false">431062297247349</string>
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
