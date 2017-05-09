@@ -82,6 +82,8 @@ public class Chatroom2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom2);
         Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarChat);
+        //keep layout on top of keyboard
+
         setSupportActionBar(my_toolbar);
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
@@ -214,7 +216,11 @@ public class Chatroom2Activity extends AppCompatActivity {
 
             //mProgress.show();
 
-            //pushing chats into chatroom on the database inside my uid
+            //pushing chats into chat's tab
+
+            final DatabaseReference newPostTap = mDatabaseChatroom.child(mPostKey);
+            final DatabaseReference newPostTab2 = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid());
+
 
             //sender chat screen
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey).child(mCurrentUser.getUid()).push();
@@ -237,6 +243,25 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            // reciever chat
+                            newPostTap.child("message").setValue(message_val);
+                            newPostTap.child("uid").setValue(mCurrentUser.getUid());
+                            newPostTap.child("name").setValue(reciever_name);
+                            newPostTap.child("image").setValue(reciever_image);
+                            newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
+                            newPostTap.child("date").setValue(stringDate);
+                            newPostTap.child("post_key").setValue(mPostKey);
+
+                            newPost4.child("last_active_date").setValue(stringDate);
+
+                            newPostTab2.child("message").setValue(message_val);
+                            newPostTab2.child("uid").setValue(mCurrentUser.getUid());
+                            newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
+                            newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
+                            newPostTab2.child("sender_uid").setValue(mPostKey);
+                            newPostTab2.child("date").setValue(stringDate);
+                            newPostTab2.child("post_key").setValue(mPostKey);
 
                             // reciever chat
                             newPost.child("message").setValue(message_val);
@@ -290,7 +315,7 @@ public class Chatroom2Activity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<Chat, CommentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Chat, CommentViewHolder>(
+        final FirebaseRecyclerAdapter<Chat, CommentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Chat, CommentViewHolder>(
 
                 Chat.class,
                 R.layout.chat_row,
@@ -462,8 +487,27 @@ public class Chatroom2Activity extends AppCompatActivity {
 
             }
         };
-
+        final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mCommentList.setAdapter(firebaseRecyclerAdapter);
+
+        firebaseRecyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                int friendlyMessageCount = firebaseRecyclerAdapter.getItemCount();
+                int lastVisiblePosition =
+                        mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+                // If the recycler view is initially being loaded or the
+                // user is at the bottom of the list, scroll to the bottom
+                // of the list to show the newly added message.
+                if (lastVisiblePosition == -1 ||
+                        (positionStart >= (friendlyMessageCount - 1) &&
+                                lastVisiblePosition == (positionStart - 1))) {
+                    mCommentList.scrollToPosition(positionStart);
+                }
+            }
+        });
 
     }
 

@@ -45,6 +45,8 @@ public class BlockedUsersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blocked_users);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -77,7 +79,7 @@ public class BlockedUsersActivity extends AppCompatActivity {
             }
         });
 
-        mDatabaseBlockedUsers = FirebaseDatabase.getInstance().getReference().child("BlockThisUser").child(mAuth.getCurrentUser().getUid());
+        mDatabaseBlockedUsers = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");

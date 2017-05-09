@@ -40,7 +40,7 @@ public class tab2members extends Fragment {
     private DatabaseReference mDatabaseChats;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
-    private Query mQueryPostChats;
+    private Query mQueryUsers;
     private ProgressBar mProgressBar;
 
     @Override
@@ -61,7 +61,7 @@ public class tab2members extends Fragment {
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        //mQueryPostChats = mDatabaseChats.orderByChild("post_key").equalTo(post_key);
+        mQueryUsers = mDatabaseUsers.orderByChild("uid");
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
@@ -102,7 +102,7 @@ public class tab2members extends Fragment {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
+                        Intent cardonClick = new Intent(getActivity(), Chatroom2Activity.class);
                         cardonClick.putExtra("heartraise_id", PostKey );
                         startActivity(cardonClick);
                     }
