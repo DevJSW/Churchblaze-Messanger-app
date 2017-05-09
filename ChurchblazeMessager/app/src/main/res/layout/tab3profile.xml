@@ -282,12 +282,12 @@
                         android:id="@+id/privacy_image"
                         android:layout_margin="20dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_contacts_icon"/>
+                        android:src="@drawable/ic_privacy_icon"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/post_image"
+                        android:layout_toRightOf="@+id/lin_privacy"
                         android:layout_marginTop="15dp"
                         android:orientation="vertical">
 
@@ -300,7 +300,7 @@
                             android:layout_marginTop="10dp"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
-                            android:text="Share with contacts"/>
+                            android:text="Privacy policy"/>
 
 
 
