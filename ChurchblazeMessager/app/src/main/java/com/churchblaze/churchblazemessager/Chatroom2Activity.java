@@ -85,6 +85,8 @@ public class Chatroom2Activity extends AppCompatActivity {
         Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarChat);
         //keep layout on top of keyboard
 
+        // Font path
+
         setSupportActionBar(my_toolbar);
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
@@ -247,7 +249,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                             mProcessStopChat = true;
 
-                            if(mProcessStopChat) {
+                            if (mProcessStopChat) {
 
                                 // reciever chat
                                 newPostTap.child("message").setValue(message_val);
@@ -257,7 +259,6 @@ public class Chatroom2Activity extends AppCompatActivity {
                                 newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
                                 newPostTap.child("date").setValue(stringDate);
                                 newPostTap.child("post_key").setValue(mPostKey);
-
 
                                 newPostTab2.child("message").setValue(message_val);
                                 newPostTab2.child("uid").setValue(mCurrentUser.getUid());
@@ -277,8 +278,8 @@ public class Chatroom2Activity extends AppCompatActivity {
                                 newPost.child("post_key").setValue(mPostKey);
 
                                 //update messege showing on tab1 chats activity
-                                newPost2.child("message").setValue(message_val);
-                                newPost4.child("last_active_date").setValue(stringDate);
+                               // newPost2.child("message").setValue(message_val);
+                               // newPost4.child("last_active_date").setValue(stringDate);
 
                                 newPost3.child("message").setValue(message_val);
                                 newPost3.child("uid").setValue(mCurrentUser.getUid());
@@ -289,12 +290,14 @@ public class Chatroom2Activity extends AppCompatActivity {
                                 newPost3.child("post_key").setValue(mPostKey);
                                 newPost3.child("change_chat_icon").setValue(mPostKey);
 
-                                mProcessStopChat = false;
-                            }
 
-                            //clear edit text after message has been sent
-                            EditText edit = (EditText)findViewById(R.id.emojicon_edit_text);
-                            edit.setText(null);
+                                //clear edit text after message has been sent
+                                EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);
+                                edit.setText(null);
+
+                                mProcessStopChat = false;
+
+                            }
 
                         }
 

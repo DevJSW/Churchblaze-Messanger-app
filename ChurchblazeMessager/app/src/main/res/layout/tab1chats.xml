@@ -60,6 +60,18 @@
         android:layout_margin="5dp"
         android:id="@+id/noPostTxt"
         android:textColor="@color/colorPrimary"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/startChat"
+        android:visibility="gone"
+        android:background="@color/colorPrimary"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/noPostTxt"
+        android:textColor="#ffffff"
+        android:text="Start chat"/>
 
 
 </RelativeLayout>

@@ -7,12 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -38,6 +40,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class tab1chats extends Fragment {
 
     String myCurrentChats = null;
+    private Button mStartBtn;
     private TextView mNoPostTxt;
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -50,7 +53,7 @@ public class tab1chats extends Fragment {
     private Boolean mProcessLike = false;
     private DatabaseReference mDatabaseLike;
 
-
+    private ViewPager mViewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +68,10 @@ public class tab1chats extends Fragment {
                 refreshItems();
             }
         });
+
+        mStartBtn = (Button) v.findViewById(R.id.startChat);
+        mViewPager = (ViewPager) v.findViewById(R.id.container);
+
 
         mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
