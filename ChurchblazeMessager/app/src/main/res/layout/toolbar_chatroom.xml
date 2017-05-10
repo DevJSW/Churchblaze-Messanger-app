@@ -34,20 +34,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="LAST ACTIVE"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="date"
                 android:textSize="11dp"
-                android:layout_marginLeft="5dp"
+
                 android:id="@+id/toolbar_last_seen_date"/>
 
         </LinearLayout>

@@ -64,6 +64,7 @@ public class Chatroom2Activity extends AppCompatActivity {
     private EditText mCommentField;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
+    private Boolean mProcessStopChat = false;
     private Menu menu;
     Context context = this;
 
@@ -244,46 +245,52 @@ public class Chatroom2Activity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            // reciever chat
-                            newPostTap.child("message").setValue(message_val);
-                            newPostTap.child("uid").setValue(mCurrentUser.getUid());
-                            newPostTap.child("name").setValue(reciever_name);
-                            newPostTap.child("image").setValue(reciever_image);
-                            newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
-                            newPostTap.child("date").setValue(stringDate);
-                            newPostTap.child("post_key").setValue(mPostKey);
+                            mProcessStopChat = true;
 
-                            newPost4.child("last_active_date").setValue(stringDate);
+                            if(mProcessStopChat) {
 
-                            newPostTab2.child("message").setValue(message_val);
-                            newPostTab2.child("uid").setValue(mCurrentUser.getUid());
-                            newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
-                            newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
-                            newPostTab2.child("sender_uid").setValue(mPostKey);
-                            newPostTab2.child("date").setValue(stringDate);
-                            newPostTab2.child("post_key").setValue(mPostKey);
+                                // reciever chat
+                                newPostTap.child("message").setValue(message_val);
+                                newPostTap.child("uid").setValue(mCurrentUser.getUid());
+                                newPostTap.child("name").setValue(reciever_name);
+                                newPostTap.child("image").setValue(reciever_image);
+                                newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
+                                newPostTap.child("date").setValue(stringDate);
+                                newPostTap.child("post_key").setValue(mPostKey);
 
-                            // reciever chat
-                            newPost.child("message").setValue(message_val);
-                            newPost.child("uid").setValue(mCurrentUser.getUid());
-                            newPost.child("name").setValue(dataSnapshot.child("name").getValue());
-                            newPost.child("image").setValue(dataSnapshot.child("image").getValue());
-                            newPost.child("sender_uid").setValue(mCurrentUser.getUid());
-                            newPost.child("date").setValue(stringDate);
-                            newPost.child("post_key").setValue(mPostKey);
 
-                            //update messege showing on tab1 chats activity
-                            newPost2.child("message").setValue(message_val);
-                            newPost4.child("last_active_date").setValue(stringDate);
+                                newPostTab2.child("message").setValue(message_val);
+                                newPostTab2.child("uid").setValue(mCurrentUser.getUid());
+                                newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
+                                newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
+                                newPostTab2.child("sender_uid").setValue(mPostKey);
+                                newPostTab2.child("date").setValue(stringDate);
+                                newPostTab2.child("post_key").setValue(mPostKey);
 
-                            newPost3.child("message").setValue(message_val);
-                            newPost3.child("uid").setValue(mCurrentUser.getUid());
-                            newPost3.child("name").setValue(dataSnapshot.child("name").getValue());
-                            newPost3.child("image").setValue(dataSnapshot.child("image").getValue());
-                            newPost3.child("sender_uid").setValue(mCurrentUser.getUid());
-                            newPost3.child("date").setValue(stringDate);
-                            newPost3.child("post_key").setValue(mPostKey);
-                            newPost3.child("change_chat_icon").setValue(mPostKey);
+                                // reciever chat
+                                newPost.child("message").setValue(message_val);
+                                newPost.child("uid").setValue(mCurrentUser.getUid());
+                                newPost.child("name").setValue(dataSnapshot.child("name").getValue());
+                                newPost.child("image").setValue(dataSnapshot.child("image").getValue());
+                                newPost.child("sender_uid").setValue(mCurrentUser.getUid());
+                                newPost.child("date").setValue(stringDate);
+                                newPost.child("post_key").setValue(mPostKey);
+
+                                //update messege showing on tab1 chats activity
+                                newPost2.child("message").setValue(message_val);
+                                newPost4.child("last_active_date").setValue(stringDate);
+
+                                newPost3.child("message").setValue(message_val);
+                                newPost3.child("uid").setValue(mCurrentUser.getUid());
+                                newPost3.child("name").setValue(dataSnapshot.child("name").getValue());
+                                newPost3.child("image").setValue(dataSnapshot.child("image").getValue());
+                                newPost3.child("sender_uid").setValue(mCurrentUser.getUid());
+                                newPost3.child("date").setValue(stringDate);
+                                newPost3.child("post_key").setValue(mPostKey);
+                                newPost3.child("change_chat_icon").setValue(mPostKey);
+
+                                mProcessStopChat = false;
+                            }
 
                             //clear edit text after message has been sent
                             EditText edit = (EditText)findViewById(R.id.emojicon_edit_text);
