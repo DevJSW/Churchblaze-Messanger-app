@@ -562,8 +562,8 @@ public class Chatroom2Activity extends AppCompatActivity {
                                 //send notification for stopped typing event
                                 TextView typing = (TextView) findViewById(R.id.typing_watcher);
                                 TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                                typing.setVisibility(View.GONE);
-                                toolbar_last_seen.setVisibility(View.VISIBLE);
+                               // typing.setVisibility(View.GONE);
+                                //toolbar_last_seen.setVisibility(View.VISIBLE);
                                 isTyping = false;
                             }
                         },
