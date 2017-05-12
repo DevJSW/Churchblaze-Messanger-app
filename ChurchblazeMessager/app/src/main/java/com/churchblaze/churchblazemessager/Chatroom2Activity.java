@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +39,8 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -522,6 +526,51 @@ public class Chatroom2Activity extends AppCompatActivity {
             }
         });
 
+        //checking if a user is typing
+        emojiconEditText.addTextChangedListener(new TextWatcher() {
+
+            boolean isTyping = false;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            private Timer timer = new Timer();
+            private final long DELAY = 5000; // milliseconds
+
+            @Override
+            public void afterTextChanged(final Editable s) {
+                Log.d("", "");
+                if(!isTyping) {
+                    Log.d(TAG, "started typing");
+                    // Send notification for start typing event
+                    TextView typing = (TextView) findViewById(R.id.typing_watcher);
+                    TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
+                    typing.setVisibility(View.VISIBLE);
+                    toolbar_last_seen.setVisibility(View.GONE);
+                    isTyping = true;
+                }
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+
+                                Log.d(TAG, "stopped typing");
+                                //send notification for stopped typing event
+                                TextView typing = (TextView) findViewById(R.id.typing_watcher);
+                                TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
+                                typing.setVisibility(View.GONE);
+                                toolbar_last_seen.setVisibility(View.VISIBLE);
+                                isTyping = false;
+                            }
+                        },
+                        DELAY
+                );
+            }
+        });
 
     }
 
