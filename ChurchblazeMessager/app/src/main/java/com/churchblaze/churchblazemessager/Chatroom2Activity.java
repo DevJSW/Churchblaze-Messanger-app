@@ -69,7 +69,6 @@ public class Chatroom2Activity extends AppCompatActivity {
     Context context = this;
 
     private LinearLayoutManager mLayoutManager;
-
     EmojiconEditText emojiconEditText;
     EmojiconTextView textView;
     ImageView emojiImageView;
@@ -183,10 +182,13 @@ public class Chatroom2Activity extends AppCompatActivity {
             }
         });
 
+
+
         mDatabaseComment.keepSynced(true);
 
 
     }
+
 
 
     private void startPosting() {
@@ -349,6 +351,9 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                                     viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                                     viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
+
+                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
+                                    viewHolder.mCardPhoto2.setVisibility(View.VISIBLE);
 
                                     // if card has my uid, then change chat balloon shape
                                 } else {
@@ -526,7 +531,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
         DatabaseReference mDatabaseUser;
         FirebaseAuth mAuth;
-        ImageView mCardPhoto, mImage, groupIcon;
+        ImageView mCardPhoto, mImage, mCardPhoto2, mImage2, groupIcon;
         RelativeLayout rely;
         LinearLayout liny;
         ProgressBar mProgressBar;
@@ -537,6 +542,8 @@ public class Chatroom2Activity extends AppCompatActivity {
 
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
+            mCardPhoto2 = (ImageView) mView.findViewById(R.id.post_photo2);
+            mImage2 = (ImageView) mView.findViewById(R.id.post_image2);
             groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
@@ -614,7 +621,10 @@ public class Chatroom2Activity extends AppCompatActivity {
         public void setPhoto(final Context ctx, final String photo) {
             final ImageView post_photo = (ImageView) mView.findViewById(R.id.post_photo);
 
-            Picasso.with(ctx).load(photo).networkPolicy(NetworkPolicy.OFFLINE).into(post_photo, new Callback() {
+            Picasso.with(ctx)
+                    .load(photo)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(post_photo, new Callback() {
                 @Override
                 public void onSuccess() {
 
@@ -627,7 +637,27 @@ public class Chatroom2Activity extends AppCompatActivity {
                     Picasso.with(ctx).load(photo).into(post_photo);
                 }
             });
+
+            final ImageView post_photo2 = (ImageView) mView.findViewById(R.id.post_photo2);
+
+            Picasso.with(ctx)
+                    .load(photo)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(post_photo2, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+
+
+                    Picasso.with(ctx).load(photo).into(post_photo2);
+                }
+            });
         }
+
     }
 
     @Override

@@ -43,8 +43,15 @@
                 android:layout_height="wrap_content"
                 android:text="date"
                 android:textSize="11dp"
-
                 android:id="@+id/toolbar_last_seen_date"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Typing..."
+                android:textSize="11dp"
+                android:id="@+id/typing_watcher"/>
 
         </LinearLayout>
 
