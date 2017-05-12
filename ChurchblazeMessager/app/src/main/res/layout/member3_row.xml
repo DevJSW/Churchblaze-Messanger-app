@@ -29,16 +29,6 @@
                     app:civ_border_color="#fff"
                     android:src="@drawable/placeholder_image"/>
 
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_marginBottom="2dp"
-                android:id="@+id/like"
-                android:layout_alignBottom="@id/post_image"
-                android:layout_alignRight="@id/post_image"
-                android:scaleType="fitXY"
-
-                android:adjustViewBounds="true" />
 
 
         </RelativeLayout>
@@ -79,8 +69,6 @@
             android:layout_below="@+id/post_name2"
             android:orientation="horizontal">
 
-
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,16 +82,30 @@
 
 
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:id="@+id/favourite"
-            android:src="@drawable/ic_favourite"
-            android:visibility="gone"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="4dp"
+        <RelativeLayout
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/relly"/>
+            android:id="@+id/counter"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/purple_counter"
+            android:layout_marginRight="10dp"
+            android:layout_below="@+id/relly">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="1"
+                android:textSize="12dp"
+                android:layout_centerInParent="true"
+                android:textColor="#fff"
+                android:id="@+id/unreadCounter"
+                android:lines="1"/>
+
+
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -118,8 +120,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="4dp"
-            android:layout_below="@+id/rely_img"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/counter"
             android:layout_marginRight="10dp"
             android:background="#cecccc"/>
     </RelativeLayout>

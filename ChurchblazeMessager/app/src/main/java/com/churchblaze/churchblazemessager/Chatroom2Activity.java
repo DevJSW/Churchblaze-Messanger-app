@@ -251,7 +251,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                                 newPostTap.child("post_key").setValue(mPostKey);
 
                                 // unread
-                               // newPost2Unread.child("message").setValue(message_val);
+                                newPost2Unread.child("message").setValue(message_val);
 
                                 newPostTab2.child("message").setValue(message_val);
                                 newPostTab2.child("uid").setValue(mCurrentUser.getUid());
@@ -435,7 +435,6 @@ public class Chatroom2Activity extends AppCompatActivity {
                 });
 
 
-
                 mDatabaseUser.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -557,14 +556,10 @@ public class Chatroom2Activity extends AppCompatActivity {
                         new TimerTask() {
                             @Override
                             public void run() {
-
+                                isTyping = false;
                                 Log.d(TAG, "stopped typing");
                                 //send notification for stopped typing event
-                                TextView typing = (TextView) findViewById(R.id.typing_watcher);
-                                TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                               // typing.setVisibility(View.GONE);
-                                //toolbar_last_seen.setVisibility(View.VISIBLE);
-                                isTyping = false;
+
                             }
                         },
                         DELAY

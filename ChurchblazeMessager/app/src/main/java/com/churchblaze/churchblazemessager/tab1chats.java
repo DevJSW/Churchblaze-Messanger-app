@@ -205,24 +205,7 @@ public class tab1chats extends Fragment {
 
 
 
-                viewHolder.mDatabaseLike.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
-
-                            viewHolder.mLikeBtn.setVisibility(View.VISIBLE);
-                        } else {
-                            viewHolder.mLikeBtn.setVisibility(View.INVISIBLE);
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
                 viewHolder.mPostImg.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -260,42 +243,7 @@ public class tab1chats extends Fragment {
                     }
                 });
 
-                viewHolder.mLikeBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
 
-                        mProcessLike = true;
-
-                        mDatabaseLike.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                if(mProcessLike) {
-
-                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
-
-
-                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                        mProcessLike = false;
-                                    }else {
-
-                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                        mProcessLike = false;
-
-                                    }
-
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-
-                    }
-                });
 
                 viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
 
@@ -478,7 +426,6 @@ public class tab1chats extends Fragment {
             mView = itemView;
 
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
-            mLikeBtn = (ImageView) mView.findViewById(R.id.like);
             mPostImg = (CircleImageView) mView.findViewById(R.id.post_image);
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
             mDatabaseLike.keepSynced(true);
