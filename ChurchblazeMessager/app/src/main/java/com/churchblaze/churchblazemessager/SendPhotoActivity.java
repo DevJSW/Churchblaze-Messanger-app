@@ -127,6 +127,9 @@ public class SendPhotoActivity extends AppCompatActivity {
 
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
+                    final DatabaseReference newPostTap = mDatabaseComment.child(mPostKey);
+                    final DatabaseReference newPostTab2 = mDatabaseComment.child(mAuth.getCurrentUser().getUid());
+
                     final DatabaseReference newPost = mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).push();
                     final DatabaseReference newPost2 =mDatabaseComment.child(mCurrentUser.getUid()).child(mPostKey).push();
 
@@ -134,7 +137,10 @@ public class SendPhotoActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            // getting user uid
+                            // getting user details
+                            final String reciever_name = (String) dataSnapshot.child("name").getValue();
+                            final String reciever_image = (String) dataSnapshot.child("image").getValue();
+
                             final String reciever_uid = (String) dataSnapshot.child("uid").getValue();
 
 
@@ -142,6 +148,27 @@ public class SendPhotoActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    // reciever chat
+                                    newPostTap.child("message").setValue(caption_val);
+                                    newPostTap.child("uid").setValue(mCurrentUser.getUid());
+                                    newPostTap.child("name").setValue(reciever_name);
+                                    newPostTap.child("image").setValue(reciever_image);
+                                    newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
+                                    newPostTap.child("date").setValue(stringDate);
+                                    newPostTap.child("post_key").setValue(mPostKey);
+
+                                    // unread
+                                    // newPost2Unread.child("message").setValue(message_val);
+
+                                    newPostTab2.child("message").setValue(caption_val);
+                                    newPostTab2.child("uid").setValue(mCurrentUser.getUid());
+                                    newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
+                                    newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
+                                    newPostTab2.child("sender_uid").setValue(mPostKey);
+                                    newPostTab2.child("date").setValue(stringDate);
+                                    newPostTab2.child("post_key").setValue(mPostKey);
+
 
                                     newPost.child("message").setValue(caption_val);
                                     newPost.child("photo").setValue(downloadUrl.toString());
@@ -151,6 +178,7 @@ public class SendPhotoActivity extends AppCompatActivity {
                                     newPost.child("reciever_uid").setValue(reciever_uid);
                                     newPost.child("date").setValue(stringDate);
                                     newPost.child("post_key").setValue(mPostKey);
+
 
                                     newPost2.child("message").setValue(caption_val);
                                     newPost2.child("photo").setValue(downloadUrl.toString());
