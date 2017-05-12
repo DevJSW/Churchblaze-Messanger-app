@@ -44,7 +44,7 @@ public class tab1chats extends Fragment {
     private TextView mNoPostTxt;
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser;
+    private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread;
     private DatabaseReference mDatabaseChatroom, mDatabaseChatroomsShot;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
@@ -74,6 +74,7 @@ public class tab1chats extends Fragment {
 
 
         mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
+        mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
         mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
@@ -88,6 +89,7 @@ public class tab1chats extends Fragment {
         mDatabaseChatroom.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
         mDatabaseLike.keepSynced(true);
+        mDatabaseUnread.keepSynced(true);
 
 
         mQueryPostChats.addValueEventListener(new ValueEventListener() {
@@ -166,6 +168,42 @@ public class tab1chats extends Fragment {
 
                     }
                 });
+
+                // open chatroom activity
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mDatabaseUnread.child(PostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
+                    }
+                });
+
+                mDatabaseUnread.child(post_key).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String PostKey = (String) dataSnapshot.child("uid").getValue();
+
+                        // open chatroom activity
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent cardonClick = new Intent(getActivity(), Chatroom2Activity.class);
+                                cardonClick.putExtra("heartraise_id", post_key );
+                                startActivity(cardonClick);
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
 
                 viewHolder.mDatabaseLike.addValueEventListener(new ValueEventListener() {
                     @Override

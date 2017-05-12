@@ -52,7 +52,7 @@ public class Chatroom2Activity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment, mDatabaseChatroom;
+    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
@@ -67,6 +67,8 @@ public class Chatroom2Activity extends AppCompatActivity {
     private Boolean mProcessStopChat = false;
     private Menu menu;
     Context context = this;
+
+    private LinearLayoutManager mLayoutManager;
 
     EmojiconEditText emojiconEditText;
     EmojiconTextView textView;
@@ -108,20 +110,13 @@ public class Chatroom2Activity extends AppCompatActivity {
         //mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
         final RelativeLayout hello = (RelativeLayout) findViewById(R.id.hello);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Refresh items
-                refreshItems();
-            }
-        });
 
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
         mQueryChats = mDatabasePostChats.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -130,12 +125,15 @@ public class Chatroom2Activity extends AppCompatActivity {
         mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Users");
         mCommentList = (RecyclerView) findViewById(R.id.comment_list);
         mCommentList.setHasFixedSize(true);
+
+
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseComment.keepSynced(true);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseChatroom.keepSynced(true);
         mDatabaseUser.keepSynced(true);
+        mDatabaseUnread.keepSynced(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child(mAuth.getCurrentUser().getUid());
         mQueryInAscending = mDatabase.orderByChild("date").startAt(-1 * new Date().getTime());
@@ -191,23 +189,6 @@ public class Chatroom2Activity extends AppCompatActivity {
     }
 
 
-    void refreshItems() {
-        // Load items
-        // ...
-
-        // Load complete
-        onItemsLoadComplete();
-    }
-
-    void onItemsLoadComplete() {
-        // Update the adapter and notify data set changed
-        // ...
-
-        // Stop refresh animation
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-
     private void startPosting() {
         // mProgress.setMessage("Posting...");
 
@@ -229,6 +210,9 @@ public class Chatroom2Activity extends AppCompatActivity {
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey).child(mCurrentUser.getUid()).push();
             final DatabaseReference newPost3 = mDatabaseChatroom.child(mCurrentUser.getUid()).child(mPostKey).push();
             final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey);
+
+            //post message to unread child
+            final DatabaseReference newPost2Unread = mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
 
             // post last active date to user data
             final DatabaseReference newPost4 = mDatabaseUser;
@@ -259,6 +243,9 @@ public class Chatroom2Activity extends AppCompatActivity {
                                 newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
                                 newPostTap.child("date").setValue(stringDate);
                                 newPostTap.child("post_key").setValue(mPostKey);
+
+                                // unread
+                               // newPost2Unread.child("message").setValue(message_val);
 
                                 newPostTab2.child("message").setValue(message_val);
                                 newPostTab2.child("uid").setValue(mCurrentUser.getUid());
@@ -330,7 +317,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                 Chat.class,
                 R.layout.chat_row,
                 CommentViewHolder.class,
-                mQueryInAscending
+                mDatabase
 
 
         ) {
@@ -499,6 +486,15 @@ public class Chatroom2Activity extends AppCompatActivity {
         };
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         mCommentList.setAdapter(firebaseRecyclerAdapter);
+       // mLinearLayoutManager.setReverseLayout(false);
+        //mLinearLayoutManager.setStackFromEnd(true);
+
+        mLayoutManager = new LinearLayoutManager(Chatroom2Activity.this);
+       // mLayoutManager.setReverseLayout(false);
+       // mLayoutManager.setStackFromEnd(true);
+
+        // Now set the layout manager and the adapter to the RecyclerView
+        mCommentList.setLayoutManager(mLayoutManager);
 
         firebaseRecyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
@@ -508,16 +504,19 @@ public class Chatroom2Activity extends AppCompatActivity {
                 int friendlyMessageCount = firebaseRecyclerAdapter.getItemCount();
                 int lastVisiblePosition =
                         mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+
                 // If the recycler view is initially being loaded or the
                 // user is at the bottom of the list, scroll to the bottom
                 // of the list to show the newly added message.
                 if (lastVisiblePosition == -1 ||
                         (positionStart >= (friendlyMessageCount - 1) &&
                                 lastVisiblePosition == (positionStart - 1))) {
+                    mLayoutManager.setStackFromEnd(true);
                     mCommentList.scrollToPosition(positionStart);
                 }
             }
         });
+
 
     }
 
@@ -541,7 +540,6 @@ public class Chatroom2Activity extends AppCompatActivity {
             groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
-
 
 
         }
