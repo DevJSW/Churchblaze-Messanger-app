@@ -356,7 +356,7 @@ public class tab1chats extends Fragment {
                                         public void onClick(DialogInterface dialog, int whichButton) {
                                             //your deleting code
 
-                                           // mDatabaseChatroom.child(post_key).removeValue();
+                                            mDatabaseChatroom.child(post_key).removeValue();
                                             dialog.dismiss();
                                         }
 
