@@ -61,9 +61,10 @@
                 android:src="@drawable/ic_groupchat_"/>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:id="@+id/relly"
             android:layout_toRightOf="@+id/rely_img"
             android:layout_below="@+id/post_name2"
@@ -74,38 +75,42 @@
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
                 android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/counter"
+                android:layout_alignParentLeft="true"
                 android:singleLine="true"
                 android:id="@+id/post_message"
                 android:text="Message"/>
 
-        </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/counter"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/purple_counter"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textSize="12dp"
+                    android:layout_centerInParent="true"
+                    android:textColor="#fff"
+                    android:id="@+id/unreadCounter"
+                    android:lines="1"/>
 
 
 
-        <RelativeLayout
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:id="@+id/counter"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/purple_counter"
-            android:layout_marginRight="10dp"
-            android:layout_below="@+id/relly">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="1"
-                android:textSize="12dp"
-                android:layout_centerInParent="true"
-                android:textColor="#fff"
-                android:id="@+id/unreadCounter"
-                android:lines="1"/>
-
+            </RelativeLayout>
 
 
         </RelativeLayout>
+
+
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -120,8 +125,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="5dp"
-            android:layout_below="@+id/counter"
+            android:layout_marginTop="7dp"
+            android:layout_below="@+id/rely_img"
             android:layout_marginRight="10dp"
             android:background="#cecccc"/>
     </RelativeLayout>

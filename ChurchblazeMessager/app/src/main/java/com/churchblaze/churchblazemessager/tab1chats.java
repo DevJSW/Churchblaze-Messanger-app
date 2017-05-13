@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -52,6 +53,7 @@ public class tab1chats extends Fragment {
     private ProgressBar mProgressBar;
     private Boolean mProcessLike = false;
     private DatabaseReference mDatabaseLike;
+    private Query mQueryUnread;
 
     private ViewPager mViewPager;
 
@@ -143,7 +145,39 @@ public class tab1chats extends Fragment {
                 //viewHolder.setLikeBtn(post_key);
 
 
+                //IF USER HAS NO UNREAD MESSAGE, MAKE COUNTER GONE
+                mDatabaseUnread.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
+                        if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                            viewHolder.counterTxt.setVisibility(View.VISIBLE);
+                        } else {
+                            viewHolder.counterTxt.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+                //counting number of unread messages
+                mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.mUnreadTxt.setText(dataSnapshot.getChildrenCount() + "");
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
                 mDatabaseChatroom.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
@@ -155,6 +189,7 @@ public class tab1chats extends Fragment {
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                                 Intent cardonClick = new Intent(getActivity(), Chatroom2Activity.class);
                                 cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);
@@ -169,12 +204,12 @@ public class tab1chats extends Fragment {
                     }
                 });
 
-                // open chatroom activity
+                // ON OPEN MESSAGE, CLEAR ALL UNREAD MESSAGE
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        mDatabaseUnread.child(PostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
+                        mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                     }
                 });
 
@@ -188,6 +223,7 @@ public class tab1chats extends Fragment {
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                                 Intent cardonClick = new Intent(getActivity(), Chatroom2Activity.class);
                                 cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);
@@ -416,7 +452,9 @@ public class tab1chats extends Fragment {
 
         CircleImageView mPostImg;
         ImageView mLikeBtn;
+        TextView mUnreadTxt;
         DatabaseReference mDatabaseLike;
+        RelativeLayout counterTxt;
         FirebaseAuth mAuth;
         ProgressBar mProgressBar;
 
@@ -428,6 +466,8 @@ public class tab1chats extends Fragment {
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
             mPostImg = (CircleImageView) mView.findViewById(R.id.post_image);
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            mUnreadTxt = (TextView) mView.findViewById(R.id.unreadCounter);
+            counterTxt = (RelativeLayout) mView.findViewById(R.id.counter);
             mDatabaseLike.keepSynced(true);
             Query mQueryPostChats;
 

@@ -175,7 +175,7 @@ public class SendPhotoActivity extends AppCompatActivity {
                                     newPost.child("uid").setValue(mAuth.getCurrentUser().getUid());
                                     newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                                     newPost.child("image").setValue(dataSnapshot.child("image").getValue());
-                                    newPost.child("reciever_uid").setValue(reciever_uid);
+                                    newPost.child("sender_uid").setValue(mCurrentUser.getUid());
                                     newPost.child("date").setValue(stringDate);
                                     newPost.child("post_key").setValue(mPostKey);
 
@@ -185,9 +185,11 @@ public class SendPhotoActivity extends AppCompatActivity {
                                     newPost2.child("uid").setValue(mAuth.getCurrentUser().getUid());
                                     newPost2.child("name").setValue(dataSnapshot.child("name").getValue());
                                     newPost2.child("image").setValue(dataSnapshot.child("image").getValue());
-                                    newPost2.child("reciever_uid").setValue(reciever_uid);
+                                    newPost2.child("sender_uid").setValue(mCurrentUser.getUid());
                                     newPost2.child("date").setValue(stringDate);
                                     newPost2.child("post_key").setValue(mPostKey);
+                                    newPost2.child("change_chat_icon").setValue(mPostKey);
+
 
                                 }
 
