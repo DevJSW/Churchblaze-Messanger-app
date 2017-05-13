@@ -273,7 +273,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                                 //update messege showing on tab1 chats activity
                                // newPost2.child("message").setValue(message_val);
-                               // newPost4.child("last_active_date").setValue(stringDate);
+                                newPost4.child("last_active_date").setValue(stringDate);
 
                                 newPost3.child("message").setValue(message_val);
                                 newPost3.child("uid").setValue(mCurrentUser.getUid());
@@ -337,6 +337,29 @@ public class Chatroom2Activity extends AppCompatActivity {
                 viewHolder.setDate(model.getDate());
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
+
+                //check if message is read then show double ticks
+                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.hasChild(post_key)) {
+
+                            // IF MESSSAGE IS UNREAD SHOW SINGLE TICK
+                            viewHolder.mSingleTick.setVisibility(View.VISIBLE);
+                            viewHolder.mDoubleTick.setVisibility(View.GONE);
+                        } else {
+                            // IF MESSAGE IS READ SHOW DOUBLE TICKS
+                            viewHolder.mDoubleTick.setVisibility(View.VISIBLE);
+                            viewHolder.mSingleTick.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
                 //DELETE UNREAD MESSAGES WHILE SCROLLING
                 mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -647,9 +670,9 @@ public class Chatroom2Activity extends AppCompatActivity {
 
         View mView;
 
-        DatabaseReference mDatabaseUser;
+        DatabaseReference mDatabaseUnread;
         FirebaseAuth mAuth;
-        ImageView mCardPhoto, mImage, mCardPhoto2, mImage2, groupIcon;
+        ImageView mCardPhoto, mImage, mCardPhoto2, mImage2, groupIcon, mSingleTick, mDoubleTick;
         RelativeLayout rely;
         LinearLayout liny;
         ProgressBar mProgressBar;
@@ -665,6 +688,9 @@ public class Chatroom2Activity extends AppCompatActivity {
             groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
+            mSingleTick = (ImageView)mView.findViewById(R.id.singleTick);
+            mDoubleTick = (ImageView)mView.findViewById(R.id.doubleTick);
+            mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
 
 
         }
@@ -750,7 +776,6 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                 @Override
                 public void onError() {
-
 
                     Picasso.with(ctx).load(photo).into(post_photo);
                 }

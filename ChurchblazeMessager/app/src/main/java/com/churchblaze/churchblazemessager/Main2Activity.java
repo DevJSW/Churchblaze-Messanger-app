@@ -77,6 +77,10 @@ public class Main2Activity extends AppCompatActivity {
 
             Intent cardonClick = new Intent(Main2Activity.this, StatusActivity.class);
             startActivity(cardonClick);
+        } else if (id == R.id.action_add_group){
+
+            Intent cardonClick = new Intent(Main2Activity.this, AddGroupActivity.class);
+            startActivity(cardonClick);
         }
 
         return super.onOptionsItemSelected(item);

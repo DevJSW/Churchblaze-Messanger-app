@@ -168,8 +168,19 @@
                <ImageView
                    android:layout_width="15dp"
                    android:layout_height="20dp"
+                   android:id="@+id/singleTick"
                    android:scaleType="fitXY"
-                   android:src="@drawable/ic_check_white"
+                   android:visibility="gone"
+                   android:src="@drawable/ic_done_white"
+                   android:paddingBottom="3dp"
+                   android:layout_toRightOf="@+id/post_date2"/>
+               <ImageView
+                   android:layout_width="15dp"
+                   android:layout_height="20dp"
+                   android:id="@+id/doubleTick"
+                   android:scaleType="fitXY"
+                   android:visibility="gone"
+                   android:src="@drawable/ic_done_all_white"
                    android:paddingBottom="3dp"
                    android:layout_toRightOf="@+id/post_date2"/>
 
