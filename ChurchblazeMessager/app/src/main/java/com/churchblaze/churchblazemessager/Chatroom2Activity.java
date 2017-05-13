@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -128,7 +129,8 @@ public class Chatroom2Activity extends AppCompatActivity {
         mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Users");
         mCommentList = (RecyclerView) findViewById(R.id.comment_list);
         mCommentList.setHasFixedSize(true);
-
+       // clear unread messages
+        mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
 
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
@@ -337,6 +339,24 @@ public class Chatroom2Activity extends AppCompatActivity {
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
+                //DELETE UNREAD MESSAGES WHILE SCROLLING
+                mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+
+                        if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                            // Do something
+                            mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                        } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                            // Do something
+                            mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                        } else {
+                            // Do something
+                        }
+                    }
+                });
+
                 mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -476,8 +496,6 @@ public class Chatroom2Activity extends AppCompatActivity {
                     }
                 });
 
-
-
                 viewHolder.mCardPhoto.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -499,7 +517,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(Chatroom2Activity.this);
        // mLayoutManager.setReverseLayout(false);
-       // mLayoutManager.setStackFromEnd(true);
+        mLayoutManager.setStackFromEnd(true);
 
         // Now set the layout manager and the adapter to the RecyclerView
         mCommentList.setLayoutManager(mLayoutManager);
@@ -540,6 +558,8 @@ public class Chatroom2Activity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(final Editable s) {
+
+
                 Log.d("", "");
                 if(!isTyping) {
                     Log.d(TAG, "started typing");
@@ -550,6 +570,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                     toolbar_last_seen.setVisibility(View.GONE);
                     isTyping = true;
                 }
+
                 timer.cancel();
                 timer = new Timer();
                 timer.schedule(
@@ -564,6 +585,38 @@ public class Chatroom2Activity extends AppCompatActivity {
                         },
                         DELAY
                 );
+
+            }
+
+        });
+
+        // if recyclerview is at the bottom, clear any unread messages
+        final boolean[] loading = {true};
+        final int[] pastVisiblesItems = new int[1];
+        final int[] visibleItemCount = new int[1];
+        final int[] totalItemCount = new int[1];
+
+        mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                if(dy > 0) //check for scroll down
+                {
+                    visibleItemCount[0] = mLayoutManager.getChildCount();
+                    totalItemCount[0] = mLayoutManager.getItemCount();
+                    pastVisiblesItems[0] = mLayoutManager.findFirstVisibleItemPosition();
+
+                    if (loading[0])
+                    {
+                        if ( (visibleItemCount[0] + pastVisiblesItems[0]) >= totalItemCount[0])
+                        {
+                            loading[0] = false;
+                            Log.v("...", "Last Item Wow !");
+                            mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
+                        }
+                    }
+                }
             }
         });
 

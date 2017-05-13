@@ -86,6 +86,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
+                android:visibility="gone"
                 android:id="@+id/counter"
                 android:layout_marginTop="1dp"
                 android:background="@drawable/purple_counter"
