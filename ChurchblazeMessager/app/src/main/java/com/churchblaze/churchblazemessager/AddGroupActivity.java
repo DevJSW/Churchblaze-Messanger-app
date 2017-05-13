@@ -91,6 +91,9 @@ public class AddGroupActivity extends AppCompatActivity {
             }
         });
 
+        //clean up add group database
+        mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).removeValue();
+
         //adding image to icon
         groupIcon = (ImageView) findViewById(R.id.post_image);
         groupIcon.setOnClickListener(new View.OnClickListener() {
@@ -270,7 +273,6 @@ public class AddGroupActivity extends AppCompatActivity {
                                 if(mProcessSelecting) {
 
                                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
-
 
                                         mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).removeValue();
                                         viewHolder.selectedIcon.setVisibility(View.GONE);
