@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,8 +41,6 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -543,52 +542,74 @@ public class Chatroom2Activity extends AppCompatActivity {
             }
         });
 
-        //checking if a user is typing
-        emojiconEditText.addTextChangedListener(new TextWatcher() {
 
-            boolean isTyping = false;
+        final long delay = 1000; // 1 seconds after user stops typing
+        final long[] last_text_edit = {0};
+        final Handler handler = new Handler();
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            private Timer timer = new Timer();
-            private final long DELAY = 5000; // milliseconds
-
-            @Override
-            public void afterTextChanged(final Editable s) {
-
-
-                Log.d("", "");
-                if(!isTyping) {
-                    Log.d(TAG, "started typing");
-                    // Send notification for start typing event
+         final Runnable input_finish_checker = new Runnable() {
+            public void run() {
+                if (System.currentTimeMillis() > (last_text_edit[0] + delay - 500)) {
+                    // TODO: do what you need here
+                    // ............
+                    // ............
                     TextView typing = (TextView) findViewById(R.id.typing_watcher);
                     TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
                     typing.setVisibility(View.VISIBLE);
                     toolbar_last_seen.setVisibility(View.GONE);
-                    isTyping = true;
                 }
+            }
+        };
 
-                timer.cancel();
-                timer = new Timer();
-                timer.schedule(
-                        new TimerTask() {
-                            @Override
-                            public void run() {
-                                isTyping = false;
-                                Log.d(TAG, "stopped typing");
-                                //send notification for stopped typing event
+        mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            }
-                        },
-                        DELAY
-                );
+                if (dataSnapshot.hasChild(mPostKey)) {
+
+                    //checking if a user is typing
+                    EditText editText = (EditText) findViewById(R.id.emojicon_edit_text);
+                    editText.addTextChangedListener(new TextWatcher() {
+                                                        @Override
+                                                        public void beforeTextChanged (CharSequence s,int start, int count,
+                                                                                       int after){
+                                                        }
+                                                        @Override
+                                                        public void onTextChanged ( final CharSequence s, int start, int before,
+                                                                                    int count){
+                                                            //You need to remove this to run only once
+                                                            handler.removeCallbacks(input_finish_checker);
+
+                                                        }
+                                                        @Override
+                                                        public void afterTextChanged ( final Editable s){
+                                                            //avoid triggering event when text is empty
+                                                            if (s.length() > 0) {
+                                                                last_text_edit[0] = System.currentTimeMillis();
+                                                                handler.postDelayed(input_finish_checker, delay);
+                                                            } else {
+
+                                                                TextView typing = (TextView) findViewById(R.id.typing_watcher);
+                                                                TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
+                                                                typing.setVisibility(View.GONE);
+                                                                toolbar_last_seen.setVisibility(View.VISIBLE);
+
+                                                            }
+                                                        }
+                                                    }
+
+                    );
+
+                }
 
             }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
+
 
         // if recyclerview is at the bottom, clear any unread messages
         final boolean[] loading = {true};

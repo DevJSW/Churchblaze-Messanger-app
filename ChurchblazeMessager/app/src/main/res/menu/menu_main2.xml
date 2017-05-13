@@ -13,6 +13,11 @@
         android:title="Status"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_add_group"
+        android:orderInCategory="100"
+        android:title="New group"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_search"
