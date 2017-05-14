@@ -144,6 +144,26 @@ public class tab1chats extends Fragment {
                 viewHolder.setImage(getContext(), model.getImage());
                 //viewHolder.setLikeBtn(post_key);
 
+                //CHECK IF POST Is A GROUP POST AND SET THE GROUP ICON VISIBLE
+                mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(post_key).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String group_icon = (String) dataSnapshot.child("this_is_a_group").getValue();
+                        if (group_icon == null) {
+
+                            viewHolder.groupIcon.setVisibility(View.VISIBLE);
+                        } else {
+
+                            viewHolder.groupIcon.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
                 //IF USER HAS NO UNREAD MESSAGE, MAKE COUNTER GONE
                 mDatabaseUnread.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -162,8 +182,6 @@ public class tab1chats extends Fragment {
 
                     }
                 });
-
-
 
                 //counting number of unread messages
                 mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -237,11 +255,6 @@ public class tab1chats extends Fragment {
 
                     }
                 });
-
-
-
-
-
 
                 viewHolder.mPostImg.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -360,9 +373,7 @@ public class tab1chats extends Fragment {
 
                     }
 
-
                 });
-
 
             }
 
@@ -451,7 +462,7 @@ public class tab1chats extends Fragment {
         View mView;
 
         CircleImageView mPostImg;
-        ImageView mLikeBtn;
+        ImageView mLikeBtn, groupIcon;
         TextView mUnreadTxt;
         DatabaseReference mDatabaseLike;
         RelativeLayout counterTxt;
@@ -468,6 +479,7 @@ public class tab1chats extends Fragment {
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
             mUnreadTxt = (TextView) mView.findViewById(R.id.unreadCounter);
             counterTxt = (RelativeLayout) mView.findViewById(R.id.counter);
+            groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             mDatabaseLike.keepSynced(true);
             Query mQueryPostChats;
 

@@ -92,7 +92,7 @@ public class AddGroupActivity extends AppCompatActivity {
         });
 
         //clean up add group database
-        mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).removeValue();
+       // mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).removeValue();
 
         //adding image to icon
         groupIcon = (ImageView) findViewById(R.id.post_image);
@@ -173,29 +173,36 @@ public class AddGroupActivity extends AppCompatActivity {
 
                                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                                    mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                                    mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                            String post_uid = dataSnapshot.getKey();
+                                            String post_uid = dataSnapshot.getChildren().toString();
 
-                                            final DatabaseReference newPost2 = mDatabaseChatroom.push();
-                                            //final DatabaseReference newPost = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
+                                            //push to group members chat fragment
+                                            final DatabaseReference newPost2 = mDatabaseChatroom.child(post_uid).push();
+                                            final DatabaseReference newPost = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
 
+                                            //post to group members chat fragment
                                             newPost2.child("name").setValue(name);
                                             newPost2.child("image").setValue(downloadUrl.toString());
                                             newPost2.child("date").setValue(stringDate);
                                             newPost2.child("this_is_a_group").setValue("true");
-                                            newPost2.child("sender_uid").setValue(mAuth.getCurrentUser().getUid());
+                                            newPost2.child("sender_uid").setValue(post_uid);
                                             newPost2.child("uid").setValue(mAuth.getCurrentUser().getUid());
-/*
+                                            newPost2.child("post_key").setValue(mPostKey);
+
                                             newPost.child("name").setValue(name);
                                             newPost.child("image").setValue(downloadUrl.toString());
                                             newPost.child("date").setValue(stringDate);
                                             newPost.child("this_is_a_group").setValue("true");
                                             newPost.child("sender_uid").setValue(post_uid);
                                             newPost.child("uid").setValue(mAuth.getCurrentUser().getUid());
-*/
+                                            newPost2.child("post_key").setValue(mPostKey);
+
+                                            // clean up
+                                            mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).removeValue();
+
                                         }
 
                                         @Override

@@ -194,8 +194,6 @@ public class Chatroom2Activity extends AppCompatActivity {
 
     }
 
-
-
     private void startPosting() {
         // mProgress.setMessage("Posting...");
 
@@ -211,7 +209,6 @@ public class Chatroom2Activity extends AppCompatActivity {
 
             final DatabaseReference newPostTap = mDatabaseChatroom.child(mPostKey);
             final DatabaseReference newPostTab2 = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid());
-
 
             //sender chat screen
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey).child(mCurrentUser.getUid()).push();
@@ -273,7 +270,7 @@ public class Chatroom2Activity extends AppCompatActivity {
 
                                 //update messege showing on tab1 chats activity
                                // newPost2.child("message").setValue(message_val);
-                                newPost4.child("last_active_date").setValue(stringDate);
+                                //newPost4.child("last_active_date").setValue(stringDate);
 
                                 newPost3.child("message").setValue(message_val);
                                 newPost3.child("uid").setValue(mCurrentUser.getUid());
@@ -339,7 +336,7 @@ public class Chatroom2Activity extends AppCompatActivity {
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 //check if message is read then show double ticks
-                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addValueEventListener(new ValueEventListener() {
+                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
