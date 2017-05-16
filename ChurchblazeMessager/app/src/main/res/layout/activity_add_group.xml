@@ -111,8 +111,10 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/top"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
+                android:layout_marginBottom="5dp"
                 android:layout_below="@+id/groupy"
                 android:orientation="horizontal">
 
@@ -133,7 +135,7 @@
                 android:layout_height="1dp"
                 android:layout_toRightOf="@+id/rely_img"
                 android:layout_marginTop="6dp"
-                android:layout_below="@+id/rely_img"
+                android:layout_below="@+id/top"
                 android:layout_marginRight="10dp"
                 android:background="#9b9999"/>
 

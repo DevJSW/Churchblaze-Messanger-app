@@ -569,7 +569,6 @@ public class Chatroom2Activity extends AppCompatActivity {
          final Runnable input_finish_checker = new Runnable() {
             public void run() {
                 if (System.currentTimeMillis() > (last_text_edit[0] + delay - 500)) {
-                    // TODO: do what you need here
                     // ............
                     // ............
                     TextView typing = (TextView) findViewById(R.id.typing_watcher);

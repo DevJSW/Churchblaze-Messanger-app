@@ -266,6 +266,25 @@ public class AddGroupActivity extends AppCompatActivity {
 
                 // open chatroom activity
 
+                mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot == null) {
+
+                            mSendBtn.setVisibility(View.GONE);
+                        } else {
+
+                            mSendBtn.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -282,18 +301,31 @@ public class AddGroupActivity extends AppCompatActivity {
 
                                     if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).hasChild(post_key)) {
 
-                                        count++;
-                                        TextView counter = (TextView) findViewById(R.id.counter);
-                                        counter.setText(String.valueOf(count));
+                                        final TextView counter = (TextView) findViewById(R.id.counter);
 
                                         mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).removeValue();
                                         viewHolder.selectedIcon.setVisibility(View.GONE);
+
+                                        mDatabaseCreatingGroup.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                if (dataSnapshot.equals(post_key)) {
+                                                    counter.setText(dataSnapshot.getChildrenCount() + "");
+
+                                                } else {
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+
                                         mProcessSelecting = false;
                                     }else {
-
-                                        count--;
-                                        TextView counter = (TextView) findViewById(R.id.counter);
-                                        counter.setText(String.valueOf(count));
 
                                         mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).setValue(mAuth.getCurrentUser().getUid());
                                         viewHolder.selectedIcon.setVisibility(View.VISIBLE);
