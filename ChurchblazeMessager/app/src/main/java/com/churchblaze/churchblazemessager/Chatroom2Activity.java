@@ -335,13 +335,11 @@ public class Chatroom2Activity extends AppCompatActivity {
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 //check if message is read then show double ticks
-                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).child(post_key).addValueEventListener(new ValueEventListener() {
+                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        final String message = (String) dataSnapshot.child("message").getValue();
-
-                        if (message == null) {
+                        if (dataSnapshot.child(mPostKey).hasChild(post_key)) {
 
                             // IF MESSSAGE IS UNREAD SHOW SINGLE TICK
                             viewHolder.mSingleTick.setVisibility(View.VISIBLE);

@@ -280,7 +280,7 @@ public class AddGroupActivity extends AppCompatActivity {
 
                                     int count = 0;
 
-                                    if (dataSnapshot.child(mAuth.getCurrentUser().getUid())).hasChild(post_key) {
+                                    if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).hasChild(post_key)) {
 
                                         count++;
                                         TextView counter = (TextView) findViewById(R.id.counter);
