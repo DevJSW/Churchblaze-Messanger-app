@@ -94,7 +94,10 @@
         <activity android:name=".SelectChurchActivity" />
         <activity
             android:name=".BlockedUsersActivity"
-            android:label="Blocked users"/>
+            android:label="Blocked users" />
+        <activity
+            android:name=".GroupChatActivity"
+            android:label="Group chats"/>
     </application>
 
 </manifest>

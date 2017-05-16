@@ -52,7 +52,7 @@ public class AddGroupActivity extends AppCompatActivity {
     private RecyclerView mMembersList;
     private ProgressDialog mprogress;
     private Boolean mProcessSelecting = false;
-    private DatabaseReference mDatabaseCreatingGroup, mDatabaseChatroom;
+    private DatabaseReference mDatabaseCreatingGroup, mDatabaseGroupchat;
     private StorageReference mStorage;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
@@ -107,7 +107,7 @@ public class AddGroupActivity extends AppCompatActivity {
         });
 
         mStorage = FirebaseStorage.getInstance().getReference().child("Profile_Images");
-        mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseGroupchat = FirebaseDatabase.getInstance().getReference().child("Group_chat");
         mDatabaseCreatingGroup = FirebaseDatabase.getInstance().getReference().child("CreatingGroup");
         searchInput = (EditText) findViewById(R.id.searchInput);
         searchBtn = (ImageView) findViewById(R.id.searchBtn);
@@ -153,7 +153,6 @@ public class AddGroupActivity extends AppCompatActivity {
 
         }
 
-
         if ( mImageUri == null) {
 
             Toast.makeText(getApplicationContext(), "Select group profile image!", Toast.LENGTH_SHORT).show();
@@ -177,11 +176,11 @@ public class AddGroupActivity extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                            String post_uid = dataSnapshot.getChildren().toString();
+                                            String post_uid = dataSnapshot.getKey();
 
                                             //push to group members chat fragment
-                                            final DatabaseReference newPost2 = mDatabaseChatroom.child(post_uid).push();
-                                            final DatabaseReference newPost = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
+                                            final DatabaseReference newPost2 = mDatabaseGroupchat.push();
+                                            final DatabaseReference newPost = mDatabaseGroupchat.push();
 
                                             //post to group members chat fragment
                                             newPost2.child("name").setValue(name);
@@ -198,7 +197,7 @@ public class AddGroupActivity extends AppCompatActivity {
                                             newPost.child("this_is_a_group").setValue("true");
                                             newPost.child("sender_uid").setValue(post_uid);
                                             newPost.child("uid").setValue(mAuth.getCurrentUser().getUid());
-                                            newPost2.child("post_key").setValue(mPostKey);
+                                            //newPost2.child("post_key").setValue(mPostKey);
 
                                             // clean up
                                             mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).removeValue();
@@ -279,12 +278,22 @@ public class AddGroupActivity extends AppCompatActivity {
 
                                 if(mProcessSelecting) {
 
-                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+                                    int count = 0;
+
+                                    if (dataSnapshot.child(mAuth.getCurrentUser().getUid())).hasChild(post_key) {
+
+                                        count++;
+                                        TextView counter = (TextView) findViewById(R.id.counter);
+                                        counter.setText(String.valueOf(count));
 
                                         mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).removeValue();
                                         viewHolder.selectedIcon.setVisibility(View.GONE);
                                         mProcessSelecting = false;
                                     }else {
+
+                                        count--;
+                                        TextView counter = (TextView) findViewById(R.id.counter);
+                                        counter.setText(String.valueOf(count));
 
                                         mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).setValue(mAuth.getCurrentUser().getUid());
                                         viewHolder.selectedIcon.setVisibility(View.VISIBLE);

@@ -47,6 +47,7 @@ public class Main2Activity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
     }
 
     @Override
@@ -80,6 +81,10 @@ public class Main2Activity extends AppCompatActivity {
         } else if (id == R.id.action_add_group){
 
             Intent cardonClick = new Intent(Main2Activity.this, AddGroupActivity.class);
+            startActivity(cardonClick);
+        } else if (id == R.id.action_opengroup_page){
+
+            Intent cardonClick = new Intent(Main2Activity.this, GroupChatActivity.class);
             startActivity(cardonClick);
         }
 
@@ -118,6 +123,7 @@ public class Main2Activity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
+
             return 3;
         }
 

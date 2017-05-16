@@ -25,4 +25,11 @@
         android:icon="@drawable/search_icon"
         android:title="search"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_opengroup_page"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_group_white"
+        android:title="search"
+        app:showAsAction="always" />
 </menu>

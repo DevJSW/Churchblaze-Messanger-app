@@ -6,14 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,10 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by John on 25-Apr-17.
- */
-public class tab1chats extends Fragment {
+public class GroupChatActivity extends AppCompatActivity {
 
     String myCurrentChats = null;
     private Button mStartBtn;
@@ -55,14 +50,13 @@ public class tab1chats extends Fragment {
     private DatabaseReference mDatabaseLike;
     private Query mQueryUnread;
 
-    private ViewPager mViewPager;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tab1chats, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_group_chat);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -71,22 +65,20 @@ public class tab1chats extends Fragment {
             }
         });
 
-        mStartBtn = (Button) v.findViewById(R.id.startChat);
-        mViewPager = (ViewPager) v.findViewById(R.id.container);
-
+        mStartBtn = (Button) findViewById(R.id.startChat);
 
         mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
-        mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
-        mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
+        mNoPostImg = (ImageView) findViewById(R.id.noPostChat);
+        mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
-        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mQueryPostChats = mDatabaseChatroom.orderByChild("sender_uid").equalTo(mAuth.getCurrentUser().getUid());
-        mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
-        mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mMembersList = (RecyclerView) findViewById(R.id.Members_list);
+        mMembersList.setLayoutManager(new LinearLayoutManager(GroupChatActivity.this));
         mMembersList.setHasFixedSize(true);
         mDatabaseChatroom.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
@@ -115,7 +107,6 @@ public class tab1chats extends Fragment {
 
         mDatabaseChatroomsShot = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mAuth.getCurrentUser().getUid());
 
-        return v;
     }
 
     @Override
@@ -141,7 +132,7 @@ public class tab1chats extends Fragment {
                 viewHolder.setName(model.getName());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setMessage(model.getMessage());
-                viewHolder.setImage(getContext(), model.getImage());
+                viewHolder.setImage(GroupChatActivity.this, model.getImage());
                 //viewHolder.setLikeBtn(post_key);
 
                 //CHECK IF POST Is A GROUP POST AND SET THE GROUP ICON VISIBLE
@@ -208,7 +199,7 @@ public class tab1chats extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                Intent cardonClick = new Intent(getActivity(), Chatroom2Activity.class);
+                                Intent cardonClick = new Intent(GroupChatActivity.this, Chatroom2Activity.class);
                                 cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);
                             }
@@ -242,7 +233,7 @@ public class tab1chats extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                Intent cardonClick = new Intent(getActivity(), Chatroom2Activity.class);
+                                Intent cardonClick = new Intent(GroupChatActivity.this, Chatroom2Activity.class);
                                 cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);
                             }
@@ -300,7 +291,7 @@ public class tab1chats extends Fragment {
                     public boolean onLongClick(View v) {
 
 
-                        final Context context = getActivity();
+                        final Context context = GroupChatActivity.this;
 
                         // custom dialog
                         final Dialog dialog = new Dialog(context);
@@ -343,33 +334,33 @@ public class tab1chats extends Fragment {
 
                     private AlertDialog AskOption() {
 
-                            AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
-                                    //set message, title, and icon
-                                    .setTitle("Delete Alert!")
-                                    .setMessage("Are you sure you want to remove this chat!")
+                        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(GroupChatActivity.this)
+                                //set message, title, and icon
+                                .setTitle("Delete Alert!")
+                                .setMessage("Are you sure you want to remove this chat!")
 
-                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            //your deleting code
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        //your deleting code
 
-                                            mDatabaseChatroom.child(post_key).removeValue();
-                                            dialog.dismiss();
-                                        }
+                                        mDatabaseChatroom.child(post_key).removeValue();
+                                        dialog.dismiss();
+                                    }
 
-                                    })
+                                })
 
 
 
-                                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
+                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                                            dialog.dismiss();
+                                        dialog.dismiss();
 
-                                        }
-                                    })
-                                    .create();
-                            return myQuittingDialogBox;
+                                    }
+                                })
+                                .create();
+                        return myQuittingDialogBox;
 
                     }
 
@@ -379,7 +370,7 @@ public class tab1chats extends Fragment {
 
             private AlertDialog AskOption2() {
 
-                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
+                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(GroupChatActivity.this)
                         //set message, title, and icon
                         .setTitle("Block Alert!")
                         .setMessage("You will no longer recieve messages from this user?")
@@ -526,4 +517,17 @@ public class tab1chats extends Fragment {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 }

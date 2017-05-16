@@ -204,7 +204,6 @@ public class Chatroom2Activity extends AppCompatActivity {
         if (!TextUtils.isEmpty(message_val)) {
 
             //mProgress.show();
-
             //pushing chats into chat's tab
 
             final DatabaseReference newPostTap = mDatabaseChatroom.child(mPostKey);
@@ -336,11 +335,13 @@ public class Chatroom2Activity extends AppCompatActivity {
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 //check if message is read then show double ticks
-                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.hasChild(post_key)) {
+                        final String message = (String) dataSnapshot.child("message").getValue();
+
+                        if (message == null) {
 
                             // IF MESSSAGE IS UNREAD SHOW SINGLE TICK
                             viewHolder.mSingleTick.setVisibility(View.VISIBLE);
