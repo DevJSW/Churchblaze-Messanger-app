@@ -41,7 +41,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread;
-    private DatabaseReference mDatabaseChatroom, mDatabaseChatroomsShot;
+    private DatabaseReference mDatabaseChatroom,  mDatabaseGroupchat;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
@@ -73,6 +73,7 @@ public class GroupChatActivity extends AppCompatActivity {
         mNoPostImg = (ImageView) findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseGroupchat = FirebaseDatabase.getInstance().getReference().child("Group_chat");
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -82,6 +83,7 @@ public class GroupChatActivity extends AppCompatActivity {
         mMembersList.setHasFixedSize(true);
         mDatabaseChatroom.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
+        mDatabaseGroupchat.keepSynced(true);
         mDatabaseLike.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
 
@@ -105,7 +107,7 @@ public class GroupChatActivity extends AppCompatActivity {
             }
         });
 
-        mDatabaseChatroomsShot = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mAuth.getCurrentUser().getUid());
+        //mDatabaseChatroomsShot = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mAuth.getCurrentUser().getUid());
 
     }
 
@@ -119,7 +121,7 @@ public class GroupChatActivity extends AppCompatActivity {
                 People.class,
                 R.layout.member3_row,
                 LetterViewHolder.class,
-                mQueryPostChats
+                mDatabaseGroupchat
 
 
         ) {

@@ -181,7 +181,7 @@ public class AddGroupActivity extends AppCompatActivity {
                                             //push to group members chat fragment
                                             final DatabaseReference newPost2 = mDatabaseGroupchat.push();
                                             final DatabaseReference newPost = mDatabaseGroupchat.push();
-
+/*
                                             //post to group members chat fragment
                                             newPost2.child("name").setValue(name);
                                             newPost2.child("image").setValue(downloadUrl.toString());
@@ -190,7 +190,7 @@ public class AddGroupActivity extends AppCompatActivity {
                                             newPost2.child("sender_uid").setValue(post_uid);
                                             newPost2.child("uid").setValue(mAuth.getCurrentUser().getUid());
                                             newPost2.child("post_key").setValue(mPostKey);
-
+*/
                                             newPost.child("name").setValue(name);
                                             newPost.child("image").setValue(downloadUrl.toString());
                                             newPost.child("date").setValue(stringDate);
@@ -270,12 +270,12 @@ public class AddGroupActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot == null) {
-
-                            mSendBtn.setVisibility(View.GONE);
-                        } else {
+                        if (dataSnapshot.hasChildren()) {
 
                             mSendBtn.setVisibility(View.VISIBLE);
+                        } else {
+
+                            mSendBtn.setVisibility(View.GONE);
                         }
                     }
 
@@ -297,24 +297,22 @@ public class AddGroupActivity extends AppCompatActivity {
 
                                 if(mProcessSelecting) {
 
-                                    int count = 0;
+                                    final TextView counter = (TextView) findViewById(R.id.counter);
 
                                     if (dataSnapshot.child(mAuth.getCurrentUser().getUid()).hasChild(post_key)) {
 
-                                        final TextView counter = (TextView) findViewById(R.id.counter);
 
+                                       // final TextView counter = (TextView) findViewById(R.id.counter);
                                         mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).removeValue();
                                         viewHolder.selectedIcon.setVisibility(View.GONE);
 
-                                        mDatabaseCreatingGroup.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        // count number of participants selected
+                                        mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                if (dataSnapshot.equals(post_key)) {
-                                                    counter.setText(dataSnapshot.getChildrenCount() + "");
+                                                counter.setText(dataSnapshot.getChildrenCount() + "");
 
-                                                } else {
-                                                }
                                             }
 
                                             @Override
@@ -323,12 +321,29 @@ public class AddGroupActivity extends AppCompatActivity {
                                             }
                                         });
 
-
                                         mProcessSelecting = false;
                                     }else {
 
+                                       // final TextView counter = (TextView) findViewById(R.id.counter);
+
                                         mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).child(post_key).setValue(mAuth.getCurrentUser().getUid());
                                         viewHolder.selectedIcon.setVisibility(View.VISIBLE);
+
+                                             // count number of participants selected
+                                        mDatabaseCreatingGroup.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                counter.setText(dataSnapshot.getChildrenCount() + "");
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
                                         mProcessSelecting = false;
 
                                     }
